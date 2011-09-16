@@ -1,26 +1,21 @@
 package com.mostlymusic.downloader.client;
 
+import java.util.List;
+
 /**
  * @author ytaras
  *         Date: 9/16/11
  *         Time: 5:05 PM
  */
 public class TracksDto {
-    private String field;
+    private List<TrackDto> tracks;
 
-    public String getField() {
-        return field;
+    public List<TrackDto> getTracks() {
+        return tracks;
     }
 
-    public void setField(String field) {
-        this.field = field;
-    }
-
-    @Override
-    public String toString() {
-        return "TracksDto{" +
-                "field='" + field + '\'' +
-                '}';
+    public void setTracks(List<TrackDto> tracks) {
+        this.tracks = tracks;
     }
 
     @Override
@@ -30,12 +25,19 @@ public class TracksDto {
 
         TracksDto tracksDto = (TracksDto) o;
 
-        return !(field != null ? !field.equals(tracksDto.field) : tracksDto.field != null);
+        return !(tracks != null ? !tracks.equals(tracksDto.tracks) : tracksDto.tracks != null);
 
     }
 
     @Override
     public int hashCode() {
-        return field != null ? field.hashCode() : 0;
+        return tracks != null ? tracks.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "TracksDto{" +
+                "tracks=" + tracks +
+                '}';
     }
 }

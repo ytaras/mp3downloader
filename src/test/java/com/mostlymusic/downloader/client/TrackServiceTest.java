@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -52,7 +53,13 @@ public class TrackServiceTest {
 
     private TracksDto getMockDto() {
         TracksDto tracksDto = new TracksDto();
-        tracksDto.setField("value");
+        tracksDto.setTracks(new LinkedList<TrackDto>());
+        TrackDto trackDto = new TrackDto();
+        trackDto.setId(1);
+        trackDto.setAlbum("Album");
+        trackDto.setName("Name");
+        trackDto.setArtist("Artist");
+        tracksDto.getTracks().add(trackDto);
         return tracksDto;
     }
 
