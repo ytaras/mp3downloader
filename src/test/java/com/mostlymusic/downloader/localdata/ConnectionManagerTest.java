@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -15,15 +14,15 @@ import static org.fest.assertions.Assertions.assertThat;
  *         Date: 9/16/11
  *         Time: 6:05 PM
  */
-public class AccountsManagerTest {
+public class ConnectionManagerTest {
 
     @Test
     public void shouldCreateDatabaseAndTable() throws ClassNotFoundException, SQLException, IOException {
         // given
         ensureDatabaseFileNotExist();
         // when
-        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-        DriverManager.getConnection("jdbc:derby:" + System.getProperty("user.home") + "/.mostlymusic.db;create=true");
+        IConnectionManager manager = new ConnectionManager();
+        manager.getConnection();
 
         // then
         assertThat(getDbFile()).exists();
