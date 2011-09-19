@@ -1,8 +1,12 @@
 package com.mostlymusic.downloader.client;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mostlymusic.downloader.DownloaderModule;
 import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -18,16 +22,23 @@ import static org.fest.assertions.Assertions.assertThat;
  *         Time: 1:45 PM
  */
 public class ProductsServiceTest extends BaseHttpClientTestCase {
+
+    private IProductsService productsService;
+
     @Override
     protected void registerHandler() {
         localTestServer.register("/products", new ProductsHttpHandler());
     }
 
+    @Before
+    public void setUp() throws Exception {
+        Injector injector = Guice.createInjector(new DownloaderModule(serverUrl));
+        productsService = injector.getInstance(IProductsService.class);
+    }
+
     @Test
     public void shouldGetProductDescriptions() throws IOException {
         // given
-        IProductsService productsService = new ProductsService(serverUrl);
-
         // when
         List<ProductDto> products = productsService.getProducts(1, 2, 3);
 

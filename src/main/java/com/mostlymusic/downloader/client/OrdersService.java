@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.client;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.ServiceUrl;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -25,7 +26,7 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
     }.getType();
 
     @Inject
-    public OrdersService(String serviceUrl) {
+    public OrdersService(@ServiceUrl String serviceUrl) {
         this.serviceUrl = serviceUrl + "/orders/";
     }
 

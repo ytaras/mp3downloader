@@ -1,6 +1,8 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.reflect.TypeToken;
+import com.google.inject.Inject;
+import com.mostlymusic.downloader.ServiceUrl;
 import org.apache.http.client.methods.HttpGet;
 
 import java.io.IOException;
@@ -17,7 +19,11 @@ public class ProductsService extends JsonServiceClient implements IProductsServi
     private static final Type PRODUCTS_TYPE = new TypeToken<List<ProductDto>>() {
     }.getType();
 
-    public ProductsService(String serviceUrl) {
+    @Inject
+    public ProductsService(@ServiceUrl String serviceUrl) {
+        if (serviceUrl.isEmpty()) {
+            throw new RuntimeException("service url should not be null");
+        }
         this.serviceUrl = serviceUrl + "/products";
     }
 

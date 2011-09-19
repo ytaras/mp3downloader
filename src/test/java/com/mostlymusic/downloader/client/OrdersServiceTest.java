@@ -1,10 +1,14 @@
 package com.mostlymusic.downloader.client;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mostlymusic.downloader.DownloaderModule;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,6 +27,8 @@ import static org.junit.Assert.fail;
  */
 public class OrdersServiceTest extends BaseHttpClientTestCase {
 
+    private IOrdersService ordersService;
+
     @Override
     protected void registerHandler() {
         localTestServer.register("/orders/", new OrdersHttpHandler());
@@ -30,10 +36,16 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         localTestServer.register("/fail/orders/", new FailHttpHandler());
     }
 
+    @Before
+    public void createInstance() {
+        Injector injector = Guice.createInjector(new DownloaderModule(serverUrl));
+        ordersService = injector.getInstance(IOrdersService.class);
+    }
+
+
     @Test
     public void shouldGetWithoutParameters() throws IOException {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl);
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -47,7 +59,6 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldGetMetadataWithParameters() throws IOException {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl);
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -61,7 +72,6 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldReturnList() throws IOException {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl);
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -73,9 +83,9 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     }
 
     @Test
-    public void shouldThrowException() throws IOException {
+    public void shouldThrowException() throws Exception {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl + "/fail/");
+        localTestServer.register("/orders/", new FailHttpHandler());
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
