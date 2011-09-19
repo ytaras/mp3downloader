@@ -1,12 +1,15 @@
 package com.mostlymusic.downloader.client;
 
-import org.apache.http.HttpRequest;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mostlymusic.downloader.DownloaderModule;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,16 +21,23 @@ import static org.fest.assertions.Assertions.assertThat;
  *         Time: 1:45 PM
  */
 public class ProductsServiceTest extends BaseHttpClientTestCase {
+
+    private IProductsService productsService;
+
     @Override
     protected void registerHandler() {
         localTestServer.register("/products", new ProductsHttpHandler());
     }
 
+    @Before
+    public void setUp() throws Exception {
+        Injector injector = Guice.createInjector(new DownloaderModule(serverUrl));
+        productsService = injector.getInstance(IProductsService.class);
+    }
+
     @Test
     public void shouldGetProductDescriptions() throws IOException {
         // given
-        IProductsService productsService = new ProductsService(serverUrl + "/products");
-
         // when
         List<ProductDto> products = productsService.getProducts(1, 2, 3);
 
@@ -46,8 +56,8 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
 
     private class ProductsHttpHandler extends JsonHttpHandler {
         @Override
-        protected Object getObject(HttpRequest httpRequest) throws Exception {
-            List<NameValuePair> parse = URLEncodedUtils.parse(URI.create(httpRequest.getRequestLine().getUri()), null);
+        protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
+            List<NameValuePair> parse = URLEncodedUtils.parse(httpRequest.getEntity());
             for (NameValuePair pair : parse) {
                 if (pair.getName().equals(IProductsService.ID_PARAM_NAME)) {
                     String[] strIds = pair.getValue().split(",");

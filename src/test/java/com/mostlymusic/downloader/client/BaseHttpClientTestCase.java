@@ -1,10 +1,7 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import org.apache.http.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.localserver.LocalTestServer;
 import org.apache.http.protocol.HttpContext;
@@ -42,14 +39,17 @@ public abstract class BaseHttpClientTestCase {
     protected abstract static class JsonHttpHandler implements HttpRequestHandler {
         protected String reason;
 
-        protected abstract Object getObject(HttpRequest httpRequest) throws Exception;
+        protected abstract Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception;
 
         @Override
         public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext)
                 throws HttpException, IOException {
+            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
+                throw new RuntimeException("Should be POST");
+            }
             Object object;
             try {
-                object = getObject(httpRequest);
+                object = getObject((HttpEntityEnclosingRequest) httpRequest);
             } catch (Exception e) {
                 httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
                 httpResponse.setEntity(new StringEntity(e.getMessage()));
