@@ -5,9 +5,9 @@ import com.google.inject.Inject;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,8 +21,7 @@ import java.lang.reflect.Type;
  */
 public class JsonServiceClient {
 
-    private HttpClient httpClient;
-    // TODO Inject
+    private DefaultHttpClient httpClient;
     private Gson gson;
 
     protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException {
@@ -50,12 +49,12 @@ public class JsonServiceClient {
         return new InputStreamReader(entity.getContent(), encoding);
     }
 
-    public HttpClient getHttpClient() {
+    public DefaultHttpClient getHttpClient() {
         return httpClient;
     }
 
     @Inject
-    public void setHttpClient(HttpClient httpClient) {
+    public void setHttpClient(DefaultHttpClient httpClient) {
         this.httpClient = httpClient;
     }
 

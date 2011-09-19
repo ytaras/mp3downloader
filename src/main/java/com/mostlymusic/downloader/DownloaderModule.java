@@ -2,11 +2,8 @@ package com.mostlymusic.downloader;
 
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
-import com.mostlymusic.downloader.client.IOrdersService;
-import com.mostlymusic.downloader.client.IProductsService;
-import com.mostlymusic.downloader.client.OrdersService;
-import com.mostlymusic.downloader.client.ProductsService;
-import org.apache.http.client.HttpClient;
+import com.mostlymusic.downloader.client.*;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 
@@ -28,9 +25,12 @@ public class DownloaderModule extends AbstractModule {
         bindConstant().annotatedWith(ServiceUrl.class).to(serviceUrl);
 
         bind(Gson.class).toInstance(new Gson());
-        bind(HttpClient.class).toInstance(new DefaultHttpClient(new ThreadSafeClientConnManager()));
+        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        defaultHttpClient.setCookieStore(new BasicCookieStore());
+        bind(DefaultHttpClient.class).toInstance(defaultHttpClient);
 
         bind(IOrdersService.class).to(OrdersService.class);
         bind(IProductsService.class).to(ProductsService.class);
+        bind(IAuthService.class).to(AuthService.class);
     }
 }
