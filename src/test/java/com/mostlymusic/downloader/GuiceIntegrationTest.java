@@ -14,7 +14,7 @@ public class GuiceIntegrationTest {
 
     @Test
     public void shouldCreateInjector() throws Exception {
-        Injector injector = Guice.createInjector(new DownloaderModule("serviceUrl"));
+        Injector injector = Guice.createInjector(new DownloaderModule("serviceUrl"), new LocalStorageModule());
         IOrdersService instance = injector.getInstance(IOrdersService.class);
     }
 }
