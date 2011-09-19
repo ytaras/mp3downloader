@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -20,12 +21,14 @@ public class ConnectionManagerTest {
     public void shouldCreateDatabaseAndTable() throws ClassNotFoundException, SQLException, IOException {
         // given
         ensureDatabaseFileNotExist();
-        // when
         IConnectionManager manager = new ConnectionManager();
-        manager.getConnection();
+
+        // when
+        Connection connection = manager.getConnection();
 
         // then
         assertThat(getDbFile()).exists();
+        connection.createStatement().executeQuery("SELECT * FROM ACCOUNTS");
     }
 
     private void ensureDatabaseFileNotExist() throws IOException {
