@@ -44,7 +44,7 @@ public abstract class BaseHttpClientTestCase {
         @Override
         public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
             String json = new Gson().toJson(getObject(httpRequest));
-            httpResponse.setEntity(new StringEntity(json));
+            httpResponse.setEntity(new StringEntity(json, "UTF-8"));
         }
     }
 }

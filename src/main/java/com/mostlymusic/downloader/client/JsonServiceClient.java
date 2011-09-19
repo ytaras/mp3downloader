@@ -6,8 +6,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * @author ytaras
@@ -17,12 +17,14 @@ import java.io.IOException;
 public class JsonServiceClient {
     private HttpClient httpClient = new DefaultHttpClient();
 
-    protected <T> T getResult(HttpUriRequest get, Class<T> classOfT) throws IOException {
-        HttpResponse execute = httpClient.execute(get);
-        // TODO Deal with encodings
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        execute.getEntity().writeTo(byteArrayOutputStream);
-        String data = byteArrayOutputStream.toString();
-        return new Gson().fromJson(data, classOfT);
+    protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException {
+        HttpResponse response = httpClient.execute(get);
+        String encoding = "UTF-8";
+        if (response.getEntity().getContentEncoding() != null) {
+            encoding = response.getEntity().getContentEncoding().getValue();
+        }
+        InputStreamReader streamReader = new InputStreamReader(response.getEntity().getContent(),
+                encoding);
+        return new Gson().fromJson(streamReader, aClass);
     }
 }

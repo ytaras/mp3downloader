@@ -42,7 +42,7 @@ public class TrackServiceTest extends BaseHttpClientTestCase {
         tracksDto.setTracks(new LinkedList<TrackDto>());
         TrackDto trackDto = new TrackDto();
         trackDto.setId(1);
-        trackDto.setAlbum("Album");
+        trackDto.setAlbum("A\u1234lbum");
         trackDto.setName("Name");
         trackDto.setArtist("Artist");
         tracksDto.getTracks().add(trackDto);
