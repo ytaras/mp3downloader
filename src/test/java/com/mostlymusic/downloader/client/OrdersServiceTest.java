@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -22,6 +23,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Override
     protected void registerHandler() {
         localTestServer.register("/orders/", new OrdersHttpHandler());
+        localTestServer.register("/orders/list", new TracksHttpHandler());
     }
 
     @Test
@@ -54,6 +56,33 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
     }
 
+    @Test
+    public void shouldReturnList() throws IOException {
+        // given
+        OrdersService ordersService = new OrdersService();
+        ordersService.setServiceUrl(serverUrl + "/orders/");
+        assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
+
+        // when
+        List<TrackDto> dto = ordersService.getTracks();
+
+        // then
+        assertThat(dto).isEqualTo(getMockDto());
+        assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
+    }
+
+
+    private List<TrackDto> getMockDto() {
+        LinkedList<TrackDto> trackDtos = new LinkedList<TrackDto>();
+        TrackDto trackDto = new TrackDto();
+        trackDto.setId(1);
+        trackDto.setAlbum("A\u1234lbum");
+        trackDto.setName("Name");
+        trackDto.setArtist("Artist");
+        trackDtos.add(trackDto);
+        return trackDtos;
+    }
+
     private OrdersMetadataDto getMockOrdersMetadata(long lastOrderId) {
         return new OrdersMetadataDto(lastOrderId, 555);
     }
@@ -81,4 +110,11 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
             return getMockOrdersMetadata();
         }
     }
+    private class TracksHttpHandler extends JsonHttpHandler{
+        @Override
+        protected Object getObject(HttpRequest httpRequest) {
+            return getMockDto();
+        }
+    }
+
 }

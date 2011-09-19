@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.client;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author ytaras
@@ -21,4 +22,6 @@ public interface IOrdersService {
      * @return Orders list metadata like last order id and count of available orders after supplied last order
      */
     OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException;
+
+    List<TrackDto> getTracks() throws IOException;
 }
