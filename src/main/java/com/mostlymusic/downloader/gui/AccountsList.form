@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mostlymusic.downloader.gui.AccountsList">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="30351" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="7c183" class="javax.swing.JButton" binding="newAccount">
+            <constraints/>
+            <properties>
+              <text value="&amp;New"/>
+            </properties>
+          </component>
+          <component id="77846" class="javax.swing.JButton" binding="deleteAccount">
+            <constraints/>
+            <properties>
+              <text value="&amp;Delete"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <scrollpane id="637bb">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="7fa1a" class="javax.swing.JTable" binding="accountsTable">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>
