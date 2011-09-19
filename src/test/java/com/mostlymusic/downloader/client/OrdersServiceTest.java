@@ -4,7 +4,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
@@ -122,12 +121,8 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
 
     private class OrdersHttpHandler extends JsonHttpHandler {
         @Override
-        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException, IOException {
-            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
-                throw new RuntimeException("Should be POST");
-            }
-            HttpEntityEnclosingRequest entityEnclosingRequest = (HttpEntityEnclosingRequest) httpRequest;
-            for (NameValuePair pair : URLEncodedUtils.parse(entityEnclosingRequest.getEntity())) {
+        protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
+            for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
                 if (pair.getName().equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
                     Long aLong = Long.parseLong(pair.getValue());
                     return getMockOrdersMetadata(aLong);
@@ -140,15 +135,11 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     private class TracksHttpHandler extends JsonHttpHandler {
 
         @Override
-        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException, IOException {
-            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
-                throw new RuntimeException("Should be POST");
-            }
-            HttpEntityEnclosingRequest entityEnclosingRequest = (HttpEntityEnclosingRequest) httpRequest;
+        protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
             long lastOrderId = 0;
             int page = 0;
             int pageSize = 0;
-            for (NameValuePair pair : URLEncodedUtils.parse(entityEnclosingRequest.getEntity())) {
+            for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
                 String name = pair.getName();
                 if (name.equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
                     lastOrderId = Long.parseLong(pair.getValue());
@@ -172,7 +163,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     private class FailHttpHandler extends JsonHttpHandler {
 
         @Override
-        protected Object getObject(HttpRequest httpRequest) {
+        protected Object getObject(HttpEntityEnclosingRequest httpRequest) {
             throw new RuntimeException("Invalid request");
         }
     }

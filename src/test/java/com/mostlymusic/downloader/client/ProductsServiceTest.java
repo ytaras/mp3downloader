@@ -3,14 +3,13 @@ package com.mostlymusic.downloader.client;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
-import org.apache.http.HttpRequest;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,8 +56,8 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
 
     private class ProductsHttpHandler extends JsonHttpHandler {
         @Override
-        protected Object getObject(HttpRequest httpRequest) throws Exception {
-            List<NameValuePair> parse = URLEncodedUtils.parse(URI.create(httpRequest.getRequestLine().getUri()), null);
+        protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
+            List<NameValuePair> parse = URLEncodedUtils.parse(httpRequest.getEntity());
             for (NameValuePair pair : parse) {
                 if (pair.getName().equals(IProductsService.ID_PARAM_NAME)) {
                     String[] strIds = pair.getValue().split(",");
