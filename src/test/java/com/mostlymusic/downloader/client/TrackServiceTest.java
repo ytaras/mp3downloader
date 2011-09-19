@@ -1,15 +1,7 @@
 package com.mostlymusic.downloader.client;
 
-import com.google.gson.Gson;
-import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.localserver.LocalTestServer;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,18 +14,12 @@ import static org.fest.assertions.Assertions.assertThat;
  *         Date: 9/16/11
  *         Time: 3:32 PM
  */
-public class TrackServiceTest {
+public class TrackServiceTest extends BaseHttpClientTestCase {
 
-    private LocalTestServer localTestServer;
-    private String serverUrl;
-
-    @Before
-    public void startServer() throws Exception {
-        localTestServer = new LocalTestServer(null, null);
+    @Override
+    protected void registerHandler() {
         HttpRequestHandler tracksHandler = new TracksHttpHandler();
         localTestServer.register("/tracks/", tracksHandler);
-        localTestServer.start();
-        serverUrl = "http:/" + localTestServer.getServiceAddress();
     }
 
     @Test
@@ -64,19 +50,11 @@ public class TrackServiceTest {
     }
 
 
-    @After
-    public void stopServer() throws Exception {
-        localTestServer.stop();
-    }
 
-
-    private class TracksHttpHandler implements HttpRequestHandler {
+    private class TracksHttpHandler extends JsonHttpHandler{
         @Override
-        public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
-            Gson gson = new Gson();
-            httpResponse.setEntity(new StringEntity(gson.toJson(getMockDto())));
+        protected Object getObject(HttpRequest httpRequest) {
+            return getMockDto();
         }
-
-
     }
 }
