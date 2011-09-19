@@ -20,11 +20,8 @@ public class AccountsServiceTest extends StoragetTestBase {
     @Test
     public void shouldInitMyBatis() throws Exception {
         // given
-        ensureDatabaseFileNotExist();
-
         Injector injector = Guice.createInjector(new LocalStorageModule());
         AccountMapper accountMapper = injector.getInstance(AccountMapper.class);
-        accountMapper.createTable();
         // when
         List<Account> accounts = accountMapper.listAccounts();
         // then

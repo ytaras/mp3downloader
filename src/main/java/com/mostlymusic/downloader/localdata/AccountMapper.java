@@ -13,10 +13,13 @@ import java.util.List;
  */
 public interface AccountMapper {
 
-    @Select("SELECT * FROM accounts ORDER BY id")
+    String TABLE_NAME = "ACCOUNTS";
+
+    @Select("SELECT * FROM " + TABLE_NAME + " ORDER BY id")
     List<Account> listAccounts();
 
-    @Update("CREATE TABLE accounts (id INT NOT NULL PRIMARY KEY, username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL)")
+    @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY, " +
+            "username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL)")
     void createTable();
 
 }
