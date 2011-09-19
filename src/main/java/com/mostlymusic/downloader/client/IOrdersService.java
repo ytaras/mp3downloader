@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface IOrdersService {
     String LAST_ORDER_ID_PARAM_NAME = "lastOrderId";
+    String PAGE_PARAM_NAME = "page";
+    String PAGE_SIZE_PARAM_NAME = "pageSize";
 
     /**
      * @return Orders list metadata like last order id and count of available orders
@@ -17,11 +19,16 @@ public interface IOrdersService {
     OrdersMetadataDto getOrdersMetadata() throws IOException;
 
     /**
-     *
      * @param lastOrderId Last order id that we know about
      * @return Orders list metadata like last order id and count of available orders after supplied last order
      */
     OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException;
 
-    List<TrackDto> getTracks() throws IOException;
+    /**
+     * @param lastOrderId Last order id we know about
+     * @param page        page number
+     * @param pageSize    page size
+     * @return list of tracks on this page
+     */
+    List<TrackDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException;
 }

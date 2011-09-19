@@ -68,7 +68,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        List<TrackDto> dto = ordersService.getTracks();
+        List<TrackDto> dto = ordersService.getTracks(123, 2, 100);
 
         // then
         assertThat(dto).isEqualTo(getMockTracksDtos());
@@ -116,17 +116,11 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
 
     private class OrdersHttpHandler extends JsonHttpHandler {
         @Override
-        protected Object getObject(HttpRequest httpRequest) {
+        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException {
             String uri = httpRequest.getRequestLine().getUri();
-            List<NameValuePair> parse;
-            try {
-                parse = URLEncodedUtils.parse(new URI(uri), null);
-            } catch (URISyntaxException e) {
-                throw new RuntimeException(e);
-            }
-            for (NameValuePair nameValuePair : parse) {
-                if (nameValuePair.getName().equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
-                    Long aLong = Long.parseLong(nameValuePair.getValue());
+            for (NameValuePair pair : URLEncodedUtils.parse(new URI(uri), null)) {
+                if (pair.getName().equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
+                    Long aLong = Long.parseLong(pair.getValue());
                     return getMockOrdersMetadata(aLong);
                 }
             }
@@ -135,22 +129,39 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     }
 
     private class TracksHttpHandler extends JsonHttpHandler {
+
         @Override
-        protected Object getObject(HttpRequest httpRequest) {
+        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException {
+            String uri = httpRequest.getRequestLine().getUri();
+            long lastOrderId = 0;
+            int page = 0;
+            int pageSize = 0;
+            for (NameValuePair pair : URLEncodedUtils.parse(new URI(uri), null)) {
+                String name = pair.getName();
+                if (name.equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
+                    lastOrderId = Long.parseLong(pair.getValue());
+                } else if (IOrdersService.PAGE_PARAM_NAME.equals(name)) {
+                    page = Integer.parseInt(pair.getValue());
+                } else if (IOrdersService.PAGE_SIZE_PARAM_NAME.equals(name)) {
+                    pageSize = Integer.parseInt(pair.getValue());
+                }
+            }
+            if (0 == lastOrderId) {
+                throw new RuntimeException("lastOrderId should be set ");
+            } else if (0 == page) {
+                throw new RuntimeException("page should be set ");
+            } else if (0 == pageSize) {
+                throw new RuntimeException("pageSize should be set ");
+            }
             return getMockTracksDtos();
         }
     }
 
     private class FailHttpHandler extends JsonHttpHandler {
-        @Override
-        protected boolean requestValid(HttpRequest httpRequest) {
-            reason = "Invalid request";
-            return false;
-        }
 
         @Override
         protected Object getObject(HttpRequest httpRequest) {
-            return null;
+            throw new RuntimeException("Invalid request");
         }
     }
 

@@ -1,7 +1,10 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
-import org.apache.http.*;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.localserver.LocalTestServer;
 import org.apache.http.protocol.HttpContext;
@@ -39,21 +42,21 @@ public abstract class BaseHttpClientTestCase {
     protected abstract static class JsonHttpHandler implements HttpRequestHandler {
         protected String reason;
 
-        protected abstract Object getObject(HttpRequest httpRequest);
-
-        protected boolean requestValid(HttpRequest httpRequest) {
-            return true;
-        }
+        protected abstract Object getObject(HttpRequest httpRequest) throws Exception;
 
         @Override
-        public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
-            String json = new Gson().toJson(getObject(httpRequest));
-            if (requestValid(httpRequest)) {
-                httpResponse.setEntity(new StringEntity(json, "UTF-8"));
-            } else {
+        public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext)
+                throws HttpException, IOException {
+            Object object;
+            try {
+                object = getObject(httpRequest);
+            } catch (Exception e) {
                 httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
-                httpResponse.setEntity(new StringEntity(reason));
+                httpResponse.setEntity(new StringEntity(e.getMessage()));
+                return;
             }
+            String json = new Gson().toJson(object);
+            httpResponse.setEntity(new StringEntity(json, "UTF-8"));
         }
     }
 }
