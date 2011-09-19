@@ -9,4 +9,6 @@ import javax.swing.table.TableModel;
  */
 public interface ApplicationModel {
     TableModel getAccountsTableModel();
+
+    void createAccount(String text, char[] password);
 }

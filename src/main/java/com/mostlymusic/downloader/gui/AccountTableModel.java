@@ -3,6 +3,8 @@ package com.mostlymusic.downloader.gui;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
@@ -16,6 +18,12 @@ class AccountTableModel extends AbstractTableModel {
 
     AccountTableModel(AccountMapper accountMapper) {
         this.accountMapper = accountMapper;
+        addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent tableModelEvent) {
+                refresh();
+            }
+        });
     }
 
     private List<Account> data;
@@ -33,7 +41,6 @@ class AccountTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-
         return getData().size();
     }
 

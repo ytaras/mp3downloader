@@ -4,6 +4,8 @@ import com.google.inject.Singleton;
 
 import javax.inject.Inject;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author ytaras
@@ -16,6 +18,18 @@ public class AccountsList {
     private JPanel contentPane;
     private JButton newAccount;
     private JButton deleteAccount;
+
+    public AccountsList() {
+        newAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JDialog addAccount = new AddAccount(model);
+                addAccount.pack();
+                addAccount.setLocationRelativeTo(contentPane);
+                addAccount.setVisible(true);
+            }
+        });
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("AccountsList");
