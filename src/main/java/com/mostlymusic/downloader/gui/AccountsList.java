@@ -20,13 +20,16 @@ public class AccountsList {
     private JPanel contentPane;
     private JButton newAccount;
     private JButton deleteAccount;
+    private JButton login;
 
     public AccountsList() {
         accountsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         accountsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                deleteAccount.setEnabled(accountsTable.getSelectedRow() >= 0);
+                boolean rowSelected = accountsTable.getSelectedRow() >= 0;
+                deleteAccount.setEnabled(rowSelected);
+                login.setEnabled(rowSelected);
             }
         });
         newAccount.addActionListener(new ActionListener() {
@@ -46,6 +49,12 @@ public class AccountsList {
                 if (JOptionPane.YES_OPTION == result) {
                     model.getAccountsTableModel().deleteAccountAt(accountsTable.getSelectedRow());
                 }
+            }
+        });
+        login.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                model.loginToAccountAt(accountsTable.getSelectedRow());
             }
         });
     }

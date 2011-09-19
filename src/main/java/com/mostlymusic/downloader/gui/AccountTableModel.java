@@ -51,11 +51,15 @@ class AccountTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int row, int col) {
-        return getData().get(row).getUsername();
+        return getAccountAt(row).getUsername();
     }
 
     public void deleteAccountAt(int selectedRow) {
-        accountMapper.deleteAccount(getData().get(selectedRow).getId());
+        accountMapper.deleteAccount(getAccountAt(selectedRow).getId());
         fireTableDataChanged();
+    }
+
+    public Account getAccountAt(int row) {
+        return getData().get(row);
     }
 }

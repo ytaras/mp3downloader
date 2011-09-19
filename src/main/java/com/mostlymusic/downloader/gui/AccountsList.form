@@ -25,6 +25,13 @@
               <text value="&amp;Delete"/>
             </properties>
           </component>
+          <component id="be567" class="javax.swing.JButton" binding="login" default-binding="true">
+            <constraints/>
+            <properties>
+              <enabled value="false"/>
+              <text value="&amp;Login"/>
+            </properties>
+          </component>
         </children>
       </grid>
       <scrollpane id="637bb">

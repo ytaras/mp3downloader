@@ -9,4 +9,6 @@ public interface ApplicationModel {
     AccountTableModel getAccountsTableModel();
 
     void createAccount(String text, char[] password);
+
+    void loginToAccountAt(int selectedRow);
 }

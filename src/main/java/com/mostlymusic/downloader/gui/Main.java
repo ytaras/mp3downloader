@@ -15,7 +15,10 @@ import javax.swing.*;
  */
 public class Main {
     public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(""), new GuiModule());
+        if (args.length == 0) {
+            args = new String[]{""};
+        }
+        Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
 
         JFrame frame = new JFrame("AccountsList");
         frame.setContentPane(injector.getInstance(AccountsList.class).getContentPane());

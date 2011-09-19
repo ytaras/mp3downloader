@@ -3,7 +3,7 @@ package com.mostlymusic.downloader;
 import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.gui.AccountsList;
 import com.mostlymusic.downloader.gui.ApplicationModel;
-import com.mostlymusic.downloader.gui.MybatisApplicationModel;
+import com.mostlymusic.downloader.gui.DefaultApplicationModel;
 
 /**
  * @author ytaras
@@ -14,6 +14,6 @@ public class GuiModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(AccountsList.class);
-        bind(ApplicationModel.class).to(MybatisApplicationModel.class);
+        bind(ApplicationModel.class).to(DefaultApplicationModel.class);
     }
 }

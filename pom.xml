@@ -30,6 +30,9 @@
 				</executions>
 				<configuration>
 					<mainClass>com.mostlymusic.downloader.gui.Main</mainClass>
+					<arguments>
+						<argument>http://www.mostlymusic.com/download-manager/files/</argument>
+					</arguments>
 				</configuration>
 			</plugin>
 		</plugins>
