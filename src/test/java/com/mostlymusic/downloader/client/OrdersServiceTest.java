@@ -67,12 +67,12 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         List<TrackDto> dto = ordersService.getTracks();
 
         // then
-        assertThat(dto).isEqualTo(getMockDto());
+        assertThat(dto).isEqualTo(getMockTracksDtos());
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
     }
 
 
-    private List<TrackDto> getMockDto() {
+    private List<TrackDto> getMockTracksDtos() {
         LinkedList<TrackDto> trackDtos = new LinkedList<TrackDto>();
         TrackDto trackDto = new TrackDto();
         trackDto.setId(1);
@@ -113,7 +113,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     private class TracksHttpHandler extends JsonHttpHandler{
         @Override
         protected Object getObject(HttpRequest httpRequest) {
-            return getMockDto();
+            return getMockTracksDtos();
         }
     }
 
