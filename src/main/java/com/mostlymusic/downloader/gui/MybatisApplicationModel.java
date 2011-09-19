@@ -4,7 +4,6 @@ import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 
 import javax.inject.Inject;
-import javax.swing.table.TableModel;
 
 /**
  * @author ytaras
@@ -24,8 +23,7 @@ public class MybatisApplicationModel implements ApplicationModel {
     private final AccountMapper accountMapper;
 
     @Override
-    public TableModel getAccountsTableModel() {
-
+    public AccountTableModel getAccountsTableModel() {
         return accountTableModel;
     }
 

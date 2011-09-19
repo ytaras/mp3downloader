@@ -42,7 +42,7 @@ public class AccountsServiceTest extends StoragetTestBase {
     }
 
     @Test
-    public void shouldCRUD() throws SQLException {
+    public void shouldCR() throws SQLException {
         // given
         Connection connection = dataSource.getConnection();
         connection.prepareStatement("DELETE FROM ACCOUNTS").executeUpdate();
@@ -59,4 +59,24 @@ public class AccountsServiceTest extends StoragetTestBase {
         assertThat(actual.getUsername()).isEqualTo(account.getUsername());
         assertThat(actual.getPassword()).isEqualTo(account.getPassword());
     }
+
+    @Test
+    public void shouldCD() throws SQLException {
+        // given
+        Connection connection = dataSource.getConnection();
+        connection.prepareStatement("DELETE FROM ACCOUNTS").executeUpdate();
+        connection.close();
+        Account account = new Account("ytaras", "password");
+        accountMapper.createAccount(account);
+        List<Account> accounts = accountMapper.listAccounts();
+        Account actual = accounts.get(0);
+
+        // when
+
+        accountMapper.deleteAccount(actual.getId());
+
+        // then
+        assertThat(accountMapper.listAccounts()).isEmpty();
+    }
+
 }

@@ -4,6 +4,8 @@ import com.google.inject.Singleton;
 
 import javax.inject.Inject;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +22,13 @@ public class AccountsList {
     private JButton deleteAccount;
 
     public AccountsList() {
+        accountsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        accountsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                deleteAccount.setEnabled(accountsTable.getSelectedRow() >= 0);
+            }
+        });
         newAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -29,14 +38,16 @@ public class AccountsList {
                 addAccount.setVisible(true);
             }
         });
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("AccountsList");
-        frame.setContentPane(new AccountsList().contentPane);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        deleteAccount.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                int result = JOptionPane.
+                        showConfirmDialog(contentPane, "Are you sure?", "Are you sure to delete this account", JOptionPane.YES_NO_OPTION);
+                if (JOptionPane.YES_OPTION == result) {
+                    model.getAccountsTableModel().deleteAccountAt(accountsTable.getSelectedRow());
+                }
+            }
+        });
     }
 
     private ApplicationModel model;

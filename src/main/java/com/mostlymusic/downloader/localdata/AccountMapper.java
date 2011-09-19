@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.localdata;
 
 import com.mostlymusic.downloader.dto.Account;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -16,7 +17,7 @@ public interface AccountMapper {
 
     String TABLE_NAME = "ACCOUNTS";
 
-    @Select("SELECT * FROM " + TABLE_NAME + " ORDER BY id")
+    @Select("SELECT * FROM " + TABLE_NAME + " ORDER BY username")
     List<Account> listAccounts();
 
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
@@ -25,4 +26,7 @@ public interface AccountMapper {
 
     @Insert("INSERT INTO " + TABLE_NAME + "(username, password) VALUES (#{username}, #{password})")
     void createAccount(Account account);
+
+    @Delete("DELETE FROM " + TABLE_NAME + " WHERE id = #{id}")
+    void deleteAccount(int id);
 }

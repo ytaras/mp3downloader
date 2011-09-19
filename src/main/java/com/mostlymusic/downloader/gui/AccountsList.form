@@ -21,6 +21,7 @@
           <component id="77846" class="javax.swing.JButton" binding="deleteAccount">
             <constraints/>
             <properties>
+              <enabled value="false"/>
               <text value="&amp;Delete"/>
             </properties>
           </component>
