@@ -20,11 +20,17 @@ public class Main {
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
 
-        JFrame frame = new JFrame("AccountsList");
+        final JFrame frame = new JFrame("AccountsList");
         frame.setContentPane(injector.getInstance(AccountsList.class).getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable throwable) {
+                JOptionPane.showMessageDialog(frame, throwable, "Error occured", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
     }
 }
