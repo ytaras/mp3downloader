@@ -1,12 +1,13 @@
 package com.mostlymusic.downloader;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Scopes;
+import com.google.inject.name.Names;
 import com.mostlymusic.downloader.localdata.ConnectionManager;
 import com.mostlymusic.downloader.localdata.IConnectionManager;
 import org.apache.derby.jdbc.EmbeddedDataSource;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.mybatis.guice.MyBatisModule;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -16,12 +17,16 @@ import java.io.File;
  *         Date: 9/19/11
  *         Time: 3:02 PM
  */
-public class LocalStorageModule extends AbstractModule {
+public class LocalStorageModule extends MyBatisModule {
     @Override
-    protected void configure() {
+    protected void initialize() {
+        bindConstant().annotatedWith(Names.named("mybatis.environment.id")).to("production");
         bindConstant().annotatedWith(DatabaseFilename.class).to(getDatabaseFile());
+
+        bindDataSourceProviderType(DataSourceProvider.class);
+        bindTransactionFactoryType(JdbcTransactionFactory.class);
+
         bind(IConnectionManager.class).to(ConnectionManager.class);
-        bind(DataSource.class).toProvider(DataSourceProvider.class).in(Scopes.SINGLETON);
     }
 
     private String getDatabaseFile() {
@@ -45,4 +50,5 @@ public class LocalStorageModule extends AbstractModule {
             return ds;
         }
     }
+
 }
