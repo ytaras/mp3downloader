@@ -5,12 +5,13 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,19 +37,23 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
         pairs.add(new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId));
         pairs.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
         pairs.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
-        HttpGet get = new HttpGet(serviceUrl + "/list?" + URLEncodedUtils.format(pairs, null));
-        return getResult(get, TYPE);
+        HttpPost post = new HttpPost(serviceUrl + "/list");
+        post.setEntity(new UrlEncodedFormEntity(pairs, "UTF-8"));
+        return getResult(post, TYPE);
     }
 
     @Override
     public OrdersMetadataDto getOrdersMetadata() throws IOException {
-        HttpGet get = new HttpGet(serviceUrl);
+        HttpPost get = new HttpPost(serviceUrl);
         return getResult(get, OrdersMetadataDto.class);
     }
 
     @Override
     public OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
-        HttpGet get = new HttpGet(serviceUrl + "?" + LAST_ORDER_ID_PARAM_NAME + "=" + lastOrderId);
+        HttpPost get = new HttpPost(serviceUrl);
+        UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
+                new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId)));
+        get.setEntity(formEntity);
         return getResult(get, OrdersMetadataDto.class);
     }
 

@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.client;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -12,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
@@ -122,9 +122,12 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
 
     private class OrdersHttpHandler extends JsonHttpHandler {
         @Override
-        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException {
-            String uri = httpRequest.getRequestLine().getUri();
-            for (NameValuePair pair : URLEncodedUtils.parse(new URI(uri), null)) {
+        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException, IOException {
+            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
+                throw new RuntimeException("Should be POST");
+            }
+            HttpEntityEnclosingRequest entityEnclosingRequest = (HttpEntityEnclosingRequest) httpRequest;
+            for (NameValuePair pair : URLEncodedUtils.parse(entityEnclosingRequest.getEntity())) {
                 if (pair.getName().equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
                     Long aLong = Long.parseLong(pair.getValue());
                     return getMockOrdersMetadata(aLong);
@@ -137,12 +140,15 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     private class TracksHttpHandler extends JsonHttpHandler {
 
         @Override
-        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException {
-            String uri = httpRequest.getRequestLine().getUri();
+        protected Object getObject(HttpRequest httpRequest) throws URISyntaxException, IOException {
+            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
+                throw new RuntimeException("Should be POST");
+            }
+            HttpEntityEnclosingRequest entityEnclosingRequest = (HttpEntityEnclosingRequest) httpRequest;
             long lastOrderId = 0;
             int page = 0;
             int pageSize = 0;
-            for (NameValuePair pair : URLEncodedUtils.parse(new URI(uri), null)) {
+            for (NameValuePair pair : URLEncodedUtils.parse(entityEnclosingRequest.getEntity())) {
                 String name = pair.getName();
                 if (name.equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
                     lastOrderId = Long.parseLong(pair.getValue());
