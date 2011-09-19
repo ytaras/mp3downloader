@@ -21,4 +21,10 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
         return getResult(get, OrdersMetadataDto.class);
     }
 
+    @Override
+    public OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
+        HttpGet get = new HttpGet(serviceUrl + "?" + LAST_ORDER_ID_PARAM_NAME + "=" + lastOrderId);
+        return getResult(get, OrdersMetadataDto.class);
+    }
+
 }

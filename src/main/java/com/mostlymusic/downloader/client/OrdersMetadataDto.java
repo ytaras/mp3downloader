@@ -6,15 +6,15 @@ package com.mostlymusic.downloader.client;
  *         Time: 11:56 AM
  */
 public class OrdersMetadataDto {
-    private int lastOrderId;
+    private long lastOrderId;
     private int count;
 
-    public OrdersMetadataDto(int lastOrderId, int count) {
+    public OrdersMetadataDto(long lastOrderId, int count) {
         this.lastOrderId = lastOrderId;
         this.count = count;
     }
 
-    public int getLastOrderId() {
+    public long getLastOrderId() {
         return lastOrderId;
     }
 
@@ -37,15 +37,13 @@ public class OrdersMetadataDto {
 
         OrdersMetadataDto that = (OrdersMetadataDto) o;
 
-        if (count != that.count) return false;
-        if (lastOrderId != that.lastOrderId) return false;
+        return count == that.count && lastOrderId == that.lastOrderId;
 
-        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = lastOrderId;
+        int result = (int) (lastOrderId ^ (lastOrderId >>> 32));
         result = 31 * result + count;
         return result;
     }
