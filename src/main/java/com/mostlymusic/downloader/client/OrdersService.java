@@ -1,6 +1,8 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.reflect.TypeToken;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -16,11 +18,13 @@ import java.util.List;
  *         Date: 9/19/11
  *         Time: 11:58 AM
  */
+@Singleton
 public class OrdersService extends JsonServiceClient implements IOrdersService {
     private final String serviceUrl;
     private static final Type TYPE = new TypeToken<List<TrackDto>>() {
     }.getType();
 
+    @Inject
     public OrdersService(String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
