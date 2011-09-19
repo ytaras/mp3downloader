@@ -26,7 +26,7 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
 
     @Inject
     public OrdersService(String serviceUrl) {
-        this.serviceUrl = serviceUrl;
+        this.serviceUrl = serviceUrl + "/orders/";
     }
 
     @Override

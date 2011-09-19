@@ -26,7 +26,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldGetProductDescriptions() throws IOException {
         // given
-        IProductsService productsService = new ProductsService(serverUrl + "/products");
+        IProductsService productsService = new ProductsService(serverUrl);
 
         // when
         List<ProductDto> products = productsService.getProducts(1, 2, 3);

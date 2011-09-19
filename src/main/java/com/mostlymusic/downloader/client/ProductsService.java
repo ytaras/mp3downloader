@@ -18,7 +18,7 @@ public class ProductsService extends JsonServiceClient implements IProductsServi
     }.getType();
 
     public ProductsService(String serviceUrl) {
-        this.serviceUrl = serviceUrl;
+        this.serviceUrl = serviceUrl + "/products";
     }
 
     @Override

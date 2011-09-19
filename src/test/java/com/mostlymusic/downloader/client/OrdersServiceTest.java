@@ -27,13 +27,13 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     protected void registerHandler() {
         localTestServer.register("/orders/", new OrdersHttpHandler());
         localTestServer.register("/orders/list", new TracksHttpHandler());
-        localTestServer.register("/fail/", new FailHttpHandler());
+        localTestServer.register("/fail/orders/", new FailHttpHandler());
     }
 
     @Test
     public void shouldGetWithoutParameters() throws IOException {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl + "/orders/");
+        IOrdersService ordersService = new OrdersService(serverUrl);
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -47,7 +47,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldGetMetadataWithParameters() throws IOException {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl + "/orders/");
+        IOrdersService ordersService = new OrdersService(serverUrl);
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -61,7 +61,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldReturnList() throws IOException {
         // given
-        IOrdersService ordersService = new OrdersService(serverUrl + "/orders/");
+        IOrdersService ordersService = new OrdersService(serverUrl);
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
