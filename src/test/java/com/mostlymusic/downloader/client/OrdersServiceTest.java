@@ -33,8 +33,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldGetWithoutParameters() throws IOException {
         // given
-        OrdersService ordersService = new OrdersService();
-        ordersService.setServiceUrl(serverUrl + "/orders/");
+        IOrdersService ordersService = new OrdersService(serverUrl + "/orders/");
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -48,8 +47,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldGetMetadataWithParameters() throws IOException {
         // given
-        OrdersService ordersService = new OrdersService();
-        ordersService.setServiceUrl(serverUrl + "/orders/");
+        IOrdersService ordersService = new OrdersService(serverUrl + "/orders/");
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -63,8 +61,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldReturnList() throws IOException {
         // given
-        OrdersService ordersService = new OrdersService();
-        ordersService.setServiceUrl(serverUrl + "/orders/");
+        IOrdersService ordersService = new OrdersService(serverUrl + "/orders/");
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
@@ -78,8 +75,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldThrowException() throws IOException {
         // given
-        OrdersService ordersService = new OrdersService();
-        ordersService.setServiceUrl(serverUrl + "/fail/");
+        IOrdersService ordersService = new OrdersService(serverUrl + "/fail/");
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when

@@ -21,13 +21,15 @@ import java.lang.reflect.Type;
  */
 public class JsonServiceClient {
     private HttpClient httpClient = new DefaultHttpClient();
+    // TODO Inject
+    private Gson gson = new Gson();
 
     protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException {
-        return new Gson().fromJson(getReader(get), aClass);
+        return gson.fromJson(getReader(get), aClass);
     }
 
     protected <T> T getResult(HttpUriRequest get, Type type) throws IOException {
-        return new Gson().fromJson(getReader(get), type);
+        return gson.fromJson(getReader(get), type);
     }
 
     private InputStreamReader getReader(HttpUriRequest get) throws IOException {

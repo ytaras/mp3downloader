@@ -17,11 +17,11 @@ import java.util.List;
  *         Time: 11:58 AM
  */
 public class OrdersService extends JsonServiceClient implements IOrdersService {
-    private String serviceUrl;
+    private final String serviceUrl;
     private static final Type TYPE = new TypeToken<List<TrackDto>>() {
     }.getType();
 
-    public void setServiceUrl(String serviceUrl) {
+    public OrdersService(String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
 
