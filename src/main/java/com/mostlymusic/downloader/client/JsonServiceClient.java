@@ -1,11 +1,15 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -21,20 +25,27 @@ public class JsonServiceClient {
     protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException {
         return new Gson().fromJson(getReader(get), aClass);
     }
+
     protected <T> T getResult(HttpUriRequest get, Type type) throws IOException {
         return new Gson().fromJson(getReader(get), type);
     }
 
     private InputStreamReader getReader(HttpUriRequest get) throws IOException {
         HttpResponse response = httpClient.execute(get);
+        HttpEntity entity = response.getEntity();
         String encoding = "UTF-8";
-        if (response.getEntity().getContentEncoding() != null) {
-            encoding = response.getEntity().getContentEncoding().getValue();
+        if (entity.getContentEncoding() != null) {
+            encoding = entity.getContentEncoding().getValue();
         }
-        return new InputStreamReader(response.getEntity().getContent(),
-                encoding);
-    }
 
+        if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            entity.writeTo(stream);
+            throw new HttpResponseException(response.getStatusLine().getStatusCode(), stream.toString(encoding));
+        }
+
+        return new InputStreamReader(entity.getContent(), encoding);
+    }
 
 
 }

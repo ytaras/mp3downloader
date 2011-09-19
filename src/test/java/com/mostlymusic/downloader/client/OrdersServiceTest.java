@@ -1,7 +1,9 @@
 package com.mostlymusic.downloader.client;
 
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Test;
 
@@ -12,6 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @author ytaras
@@ -24,6 +27,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     protected void registerHandler() {
         localTestServer.register("/orders/", new OrdersHttpHandler());
         localTestServer.register("/orders/list", new TracksHttpHandler());
+        localTestServer.register("/fail/", new FailHttpHandler());
     }
 
     @Test
@@ -71,6 +75,25 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
     }
 
+    @Test
+    public void shouldThrowException() throws IOException {
+        // given
+        OrdersService ordersService = new OrdersService();
+        ordersService.setServiceUrl(serverUrl + "/fail/");
+        assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
+
+        // when
+        try {
+            ordersService.getOrdersMetadata();
+            fail("Exception should be thrown");
+        } catch (HttpResponseException e) {
+            // then
+            assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
+            assertThat(e).hasMessage("Invalid request");
+            assertThat(e.getStatusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
+        }
+    }
+
 
     private List<TrackDto> getMockTracksDtos() {
         LinkedList<TrackDto> trackDtos = new LinkedList<TrackDto>();
@@ -110,10 +133,24 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
             return getMockOrdersMetadata();
         }
     }
-    private class TracksHttpHandler extends JsonHttpHandler{
+
+    private class TracksHttpHandler extends JsonHttpHandler {
         @Override
         protected Object getObject(HttpRequest httpRequest) {
             return getMockTracksDtos();
+        }
+    }
+
+    private class FailHttpHandler extends JsonHttpHandler {
+        @Override
+        protected boolean requestValid(HttpRequest httpRequest) {
+            reason = "Invalid request";
+            return false;
+        }
+
+        @Override
+        protected Object getObject(HttpRequest httpRequest) {
+            return null;
         }
     }
 
