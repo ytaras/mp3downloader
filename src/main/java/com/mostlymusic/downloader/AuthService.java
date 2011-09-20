@@ -47,7 +47,7 @@ public class AuthService extends JsonServiceClient implements IAuthService {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             response.getEntity().writeTo(stream);
             throw new HttpResponseException(response.getStatusLine().getStatusCode(),
-                    stream.toString(response.getEntity().getContentEncoding().getValue()));
+                    stream.toString());
         }
     }
 }
