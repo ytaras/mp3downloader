@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.client;
 
 import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpStatus;
@@ -12,8 +13,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -71,10 +70,10 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        List<ItemDto> dto = itemsService.getTracks(123, 2, 100);
+        ItemsDto dto = itemsService.getTracks(123, 2, 100);
 
         // then
-        assertThat(dto).isEqualTo(getMockTracksDtos());
+        assertThat(dto).isEqualTo(getMockTracksDtos(123, 2, 100));
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
     }
 
@@ -97,13 +96,18 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     }
 
 
-    private List<ItemDto> getMockTracksDtos() {
-        LinkedList<ItemDto> itemDtos = new LinkedList<ItemDto>();
+    private ItemsDto getMockTracksDtos(long lastItemId, int page, int pageSize) {
+        ItemsDto itemsDto = new ItemsDto();
+        itemsDto.getInfo().setPageSize(pageSize);
+        itemsDto.getInfo().setPageCurrent(page);
+        itemsDto.getInfo().setPageTotal(12);
+        itemsDto.getInfo().setTotalRecords(120);
+
         ItemDto itemDto = new ItemDto();
         itemDto.setItemId(1);
         itemDto.setLinkTitle("\u1234Name");
-        itemDtos.add(itemDto);
-        return itemDtos;
+        itemsDto.getItems().add(itemDto);
+        return itemsDto;
     }
 
     private ItemsMetadataDto getMockOrdersMetadata(long lastOrderId) {
@@ -118,7 +122,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
-                if (pair.getName().equals(IItemsService.LAST_ORDER_ID_PARAM_NAME)) {
+                if (pair.getName().equals(IItemsService.FIRST_ITEM_ID_PARAM_NAME)) {
                     Long aLong = Long.parseLong(pair.getValue());
                     return getMockOrdersMetadata(aLong);
                 }
@@ -131,27 +135,27 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
 
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
-            long lastOrderId = 0;
+            long lastItemId = 0;
             int page = 0;
             int pageSize = 0;
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
                 String name = pair.getName();
-                if (name.equals(IItemsService.LAST_ORDER_ID_PARAM_NAME)) {
-                    lastOrderId = Long.parseLong(pair.getValue());
+                if (name.equals(IItemsService.LAST_ITEM_ID_PARAM_NAME)) {
+                    lastItemId = Long.parseLong(pair.getValue());
                 } else if (IItemsService.PAGE_PARAM_NAME.equals(name)) {
                     page = Integer.parseInt(pair.getValue());
                 } else if (IItemsService.PAGE_SIZE_PARAM_NAME.equals(name)) {
                     pageSize = Integer.parseInt(pair.getValue());
                 }
             }
-            if (0 == lastOrderId) {
-                throw new RuntimeException("lastOrderId should be set ");
+            if (0 == lastItemId) {
+                throw new RuntimeException("lastItemId should be set ");
             } else if (0 == page) {
                 throw new RuntimeException("page should be set ");
             } else if (0 == pageSize) {
                 throw new RuntimeException("pageSize should be set ");
             }
-            return getMockTracksDtos();
+            return getMockTracksDtos(lastItemId, page, pageSize);
         }
     }
 

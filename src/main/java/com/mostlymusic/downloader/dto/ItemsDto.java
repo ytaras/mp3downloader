@@ -43,10 +43,46 @@ public class ItemsDto {
                 '}';
     }
 
-    private static class ItemsInfo {
+    public ItemsInfo getInfo() {
+        return info;
+    }
+
+    public static class ItemsInfo {
         private int pageCurrent;
         private int pageTotal;
         private int pageSize;
         private int totalRecords;
+
+        public int getPageCurrent() {
+            return pageCurrent;
+        }
+
+        public void setPageCurrent(int pageCurrent) {
+            this.pageCurrent = pageCurrent;
+        }
+
+        public int getPageTotal() {
+            return pageTotal;
+        }
+
+        public void setPageTotal(int pageTotal) {
+            this.pageTotal = pageTotal;
+        }
+
+        public int getPageSize() {
+            return pageSize;
+        }
+
+        public void setPageSize(int pageSize) {
+            this.pageSize = pageSize;
+        }
+
+        public int getTotalRecords() {
+            return totalRecords;
+        }
+
+        public void setTotalRecords(int totalRecords) {
+            this.totalRecords = totalRecords;
+        }
     }
 }

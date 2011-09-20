@@ -1,10 +1,9 @@
 package com.mostlymusic.downloader.client;
 
-import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author ytaras
@@ -12,9 +11,10 @@ import java.util.List;
  *         Time: 11:58 AM
  */
 public interface IItemsService {
-    String LAST_ORDER_ID_PARAM_NAME = "first_item_id";
-    String PAGE_PARAM_NAME = "page";
-    String PAGE_SIZE_PARAM_NAME = "pageSize";
+    String LAST_ITEM_ID_PARAM_NAME = "last_item_id";
+    String FIRST_ITEM_ID_PARAM_NAME = "first_item_id";
+    String PAGE_PARAM_NAME = "page_num";
+    String PAGE_SIZE_PARAM_NAME = "page_size";
     String ID_PARAM_NAME = "ID";
 
     /**
@@ -34,5 +34,5 @@ public interface IItemsService {
      * @param pageSize    page size
      * @return list of tracks on this page
      */
-    List<ItemDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException;
+    ItemsDto getTracks(long lastOrderId, int page, int pageSize) throws IOException;
 }

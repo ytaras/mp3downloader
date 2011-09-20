@@ -1,10 +1,9 @@
 package com.mostlymusic.downloader.client;
 
-import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
-import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -12,7 +11,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +23,6 @@ import java.util.List;
 @Singleton
 public class ItemsService extends JsonServiceClient implements IItemsService {
     private final String serviceUrl;
-    private static final Type TYPE = new TypeToken<List<ItemDto>>() {
-    }.getType();
 
     @Inject
     public ItemsService(@ServiceUrl String serviceUrl) {
@@ -34,14 +30,14 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public List<ItemDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException {
+    public ItemsDto getTracks(long lastOrderId, int page, int pageSize) throws IOException {
         List<NameValuePair> pairs = new LinkedList<NameValuePair>();
-        pairs.add(new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId));
+        pairs.add(new BasicNameValuePair(LAST_ITEM_ID_PARAM_NAME, "" + lastOrderId));
         pairs.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
         pairs.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
         HttpPost post = new HttpPost(serviceUrl + "/itemsList/");
         post.setEntity(new UrlEncodedFormEntity(pairs, "UTF-8"));
-        return getResult(post, TYPE);
+        return getResult(post, ItemsDto.class);
     }
 
     @Override
@@ -54,7 +50,7 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     public ItemsMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
         HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
-                new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId)));
+                new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + lastOrderId)));
         get.setEntity(formEntity);
         return getResult(get, ItemsMetadataDto.class);
     }
