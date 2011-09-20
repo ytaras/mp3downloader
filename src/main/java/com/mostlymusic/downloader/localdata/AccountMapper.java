@@ -21,12 +21,16 @@ public interface AccountMapper {
     List<Account> listAccounts();
 
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-            "username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL)")
+            "username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL, lastOrderId BIGINT)")
     void createSchema();
 
-    @Insert("INSERT INTO " + TABLE_NAME + "(username, password) VALUES (#{username}, #{password})")
+    @Insert("INSERT INTO " + TABLE_NAME + "(username, password, lastOrderId) VALUES (#{username}, #{password}, #{lastOrderId:NUMERIC})")
     void createAccount(Account account);
 
     @Delete("DELETE FROM " + TABLE_NAME + " WHERE id = #{id}")
     void deleteAccount(int id);
+
+    @Update("UPDATE " + TABLE_NAME + " SET username = #{username}, password = #{password}, " +
+            "lastOrderId = #{lastOrderId:NUMERIC} WHERE id = #{id}")
+    void updateAccount(Account account);
 }

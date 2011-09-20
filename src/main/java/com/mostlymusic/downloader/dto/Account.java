@@ -9,6 +9,7 @@ public class Account {
     private String username;
     private String password;
     private int id;
+    private Long lastOrderId;
 
     public Account() {
     }
@@ -42,6 +43,14 @@ public class Account {
         this.id = id;
     }
 
+    public void setLastOrderId(Long lastOrderId) {
+        this.lastOrderId = lastOrderId;
+    }
+
+    public Long getLastOrderId() {
+        return lastOrderId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,6 +59,7 @@ public class Account {
         Account account = (Account) o;
 
         if (id != account.id) return false;
+        if (lastOrderId != null ? !lastOrderId.equals(account.lastOrderId) : account.lastOrderId != null) return false;
         if (password != null ? !password.equals(account.password) : account.password != null) return false;
         if (username != null ? !username.equals(account.username) : account.username != null) return false;
 
@@ -61,6 +71,7 @@ public class Account {
         int result = username != null ? username.hashCode() : 0;
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + id;
+        result = 31 * result + (lastOrderId != null ? lastOrderId.hashCode() : 0);
         return result;
     }
 
@@ -70,6 +81,7 @@ public class Account {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", id=" + id +
+                ", lastOrderId=" + lastOrderId +
                 '}';
     }
 }
