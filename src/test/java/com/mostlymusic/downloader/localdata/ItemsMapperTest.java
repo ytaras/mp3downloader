@@ -22,9 +22,10 @@ import static org.fest.assertions.Assertions.assertThat;
  *         Date: 9/20/11
  *         Time: 4:59 PM
  */
-public class ItemsServiceTest extends StoragetTestBase {
+public class ItemsMapperTest extends StoragetTestBase {
     private DataSource dataSource;
     private ItemsMapper itemsMapper;
+
 
     @Before
     public void setUp() throws Exception {
@@ -49,18 +50,7 @@ public class ItemsServiceTest extends StoragetTestBase {
         // given
         Account account = new Account();
         account.setId(1);
-        Item item = new Item();
-        item.setCreatedAt(new Date());
-        item.setUpdatedAt(new Date());
-        item.setDownloadsBought(4);
-        item.setDownloadsUsed(3);
-        item.setFileName("FileName");
-        item.setItemId(123);
-        item.setLinkId(321);
-        item.setLinkHash("LHASH");
-        item.setLinkTitle("LTITLE");
-        item.setStatus("STATUS");
-        item.setProductId(444);
+        Item item = getMockItem(account);
 
         // when
         itemsMapper.insertItem(item, account);
@@ -68,6 +58,40 @@ public class ItemsServiceTest extends StoragetTestBase {
         // then
         List<Item> items = itemsMapper.listLinks(account);
         assertThat(items).contains(item);
+    }
+
+    private Item getMockItem(Account account) {
+        Item item = new Item();
+        item.setCreatedAt(new Date());
+        item.setUpdatedAt(new Date());
+        item.setDownloadsBought(4 + account.getId());
+        item.setDownloadsUsed(3 + account.getId());
+        item.setFileName("FileName");
+        item.setItemId(123 + account.getId());
+        item.setLinkId(321 + account.getId());
+        item.setLinkHash("LHASH" + account.getId());
+        item.setLinkTitle("LTITLE" + account.getId());
+        item.setStatus("STATUS" + account.getId());
+        item.setProductId(444 + account.getId());
+        return item;
+    }
+
+    @Test
+    public void shouldFilterByAccount() {
+        // given
+        Account account = new Account();
+        account.setId(1);
+        Item mockItem = getMockItem(account);
+        itemsMapper.insertItem(mockItem, account);
+        Account account2 = new Account();
+        account2.setId(2);
+        itemsMapper.insertItem(getMockItem(account2), account2);
+
+        // when
+        List<Item> items = itemsMapper.listLinks(account);
+
+        // then
+        assertThat(items).containsExactly(mockItem);
     }
 
     @After

@@ -20,11 +20,11 @@ public interface ItemsMapper {
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE accountId = #{id}")
     List<Item> listLinks(Account account);
 
-    @Update("CREATE TABLE " + TABLE_NAME + " (itemId BIGINT,\n" +
+    @Update("CREATE TABLE " + TABLE_NAME + " (itemId BIGINT NOT NULL PRIMARY KEY,\n" +
             "productId BIGINT ,\n" +
             "downloadsBought INT,\n" +
             "downloadsUsed INT,\n" +
-            "linkId BIGINT NOT NULL PRIMARY KEY,\n" +
+            "linkId BIGINT,\n" +
             "linkTitle VARCHAR(255),\n" +
             "linkHash VARCHAR(255),\n" +
             "status VARCHAR(255),\n" +
