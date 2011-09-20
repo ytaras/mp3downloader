@@ -68,12 +68,20 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     public void shouldReturnList() throws IOException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
+        int firstOrderId = 10;
+        int lastOrderId = 123;
+        int page = 2;
+        int pageSize = 100;
+
 
         // when
-        ItemsDto dto = itemsService.getTracks(123, 2, 100);
+        ItemsDto dtoWithoutFirst = itemsService.getTracks(lastOrderId, page, pageSize);
+
+        ItemsDto dtoWithFirst = itemsService.getTracks(firstOrderId, lastOrderId, page, pageSize);
 
         // then
-        assertThat(dto).isEqualTo(getMockTracksDtos(123, 2, 100));
+        assertThat(dtoWithoutFirst).isEqualTo(getMockTracksDtos(lastOrderId, page, pageSize));
+        assertThat(dtoWithFirst).isEqualTo(getMockTracksDtos(firstOrderId, lastOrderId, page, pageSize));
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
     }
 
@@ -95,19 +103,22 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         }
     }
 
-
-    private ItemsDto getMockTracksDtos(long lastItemId, int page, int pageSize) {
+    private ItemsDto getMockTracksDtos(long firstItemId, long lastItemId, int page, int pageSize) {
         ItemsDto itemsDto = new ItemsDto();
         itemsDto.getInfo().setPageSize(pageSize);
         itemsDto.getInfo().setPageCurrent(page);
-        itemsDto.getInfo().setPageTotal(12);
-        itemsDto.getInfo().setTotalRecords(120);
+        itemsDto.getInfo().setPageTotal((int) lastItemId);
+        itemsDto.getInfo().setTotalRecords((int) firstItemId);
 
         ItemDto itemDto = new ItemDto();
         itemDto.setItemId(1);
         itemDto.setLinkTitle("\u1234Name");
         itemsDto.getItems().add(itemDto);
         return itemsDto;
+    }
+
+    private ItemsDto getMockTracksDtos(long lastItemId, int page, int pageSize) {
+        return getMockTracksDtos(0, lastItemId, page, pageSize);
     }
 
     private ItemsMetadataDto getMockOrdersMetadata(long lastOrderId) {
@@ -138,6 +149,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
             long lastItemId = 0;
             int page = 0;
             int pageSize = 0;
+            long firstItemId = 0;
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
                 String name = pair.getName();
                 if (name.equals(IItemsService.LAST_ITEM_ID_PARAM_NAME)) {
@@ -146,6 +158,8 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
                     page = Integer.parseInt(pair.getValue());
                 } else if (IItemsService.PAGE_SIZE_PARAM_NAME.equals(name)) {
                     pageSize = Integer.parseInt(pair.getValue());
+                } else if (IItemsService.FIRST_ITEM_ID_PARAM_NAME.equals(name)) {
+                    firstItemId = Long.parseLong(pair.getValue());
                 }
             }
             if (0 == lastItemId) {
@@ -155,7 +169,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
             } else if (0 == pageSize) {
                 throw new RuntimeException("pageSize should be set ");
             }
-            return getMockTracksDtos(lastItemId, page, pageSize);
+            return getMockTracksDtos(firstItemId, lastItemId, page, pageSize);
         }
     }
 

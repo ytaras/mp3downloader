@@ -35,4 +35,6 @@ public interface IItemsService {
      * @return list of tracks on this page
      */
     ItemsDto getTracks(long lastOrderId, int page, int pageSize) throws IOException;
+
+    ItemsDto getTracks(long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
 }

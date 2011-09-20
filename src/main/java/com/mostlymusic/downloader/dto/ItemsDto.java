@@ -25,21 +25,26 @@ public class ItemsDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ItemsDto tracksDto = (ItemsDto) o;
+        ItemsDto itemsDto = (ItemsDto) o;
 
-        return !(items != null ? !items.equals(tracksDto.items) : tracksDto.items != null);
+        if (info != null ? !info.equals(itemsDto.info) : itemsDto.info != null) return false;
+        if (items != null ? !items.equals(itemsDto.items) : itemsDto.items != null) return false;
 
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return items != null ? items.hashCode() : 0;
+        int result = items != null ? items.hashCode() : 0;
+        result = 31 * result + (info != null ? info.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "ItemsDto{" +
                 "items=" + items +
+                ", info=" + info +
                 '}';
     }
 
@@ -83,6 +88,40 @@ public class ItemsDto {
 
         public void setTotalRecords(int totalRecords) {
             this.totalRecords = totalRecords;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ItemsInfo itemsInfo = (ItemsInfo) o;
+
+            if (pageCurrent != itemsInfo.pageCurrent) return false;
+            if (pageSize != itemsInfo.pageSize) return false;
+            if (pageTotal != itemsInfo.pageTotal) return false;
+            if (totalRecords != itemsInfo.totalRecords) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = pageCurrent;
+            result = 31 * result + pageTotal;
+            result = 31 * result + pageSize;
+            result = 31 * result + totalRecords;
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "ItemsInfo{" +
+                    "pageCurrent=" + pageCurrent +
+                    ", pageTotal=" + pageTotal +
+                    ", pageSize=" + pageSize +
+                    ", totalRecords=" + totalRecords +
+                    '}';
         }
     }
 }

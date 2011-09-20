@@ -31,13 +31,23 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
 
     @Override
     public ItemsDto getTracks(long lastOrderId, int page, int pageSize) throws IOException {
-        List<NameValuePair> pairs = new LinkedList<NameValuePair>();
-        pairs.add(new BasicNameValuePair(LAST_ITEM_ID_PARAM_NAME, "" + lastOrderId));
-        pairs.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
-        pairs.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
+        return doGetItems(lastOrderId, page, pageSize, new LinkedList<NameValuePair>());
+    }
+
+    private ItemsDto doGetItems(long lastOrderId, int page, int pageSize, List<NameValuePair> params) throws IOException {
+        params.add(new BasicNameValuePair(LAST_ITEM_ID_PARAM_NAME, "" + lastOrderId));
+        params.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
+        params.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
         HttpPost post = new HttpPost(serviceUrl + "/itemsList/");
-        post.setEntity(new UrlEncodedFormEntity(pairs, "UTF-8"));
+        post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
         return getResult(post, ItemsDto.class);
+    }
+
+    @Override
+    public ItemsDto getTracks(long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException {
+        LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + firstOrderId));
+        return doGetItems(lastOrderId, page, pageSize, params);
     }
 
     @Override
