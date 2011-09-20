@@ -5,8 +5,10 @@ import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
 import com.mostlymusic.downloader.GuiModule;
 import com.mostlymusic.downloader.LocalStorageModule;
+import com.mostlymusic.downloader.localdata.SchemaCreator;
 
 import javax.swing.*;
+import java.sql.SQLException;
 
 /**
  * @author ytaras
@@ -14,12 +16,12 @@ import javax.swing.*;
  *         Time: 7:20 PM
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         if (args.length == 0) {
             args = new String[]{"http://www.mostlymusic.com/download-manager/files"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
-
+        injector.getInstance(SchemaCreator.class).createTables();
         final JFrame frame = new JFrame("AccountsList");
         frame.setContentPane(injector.getInstance(MainPanel.class));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

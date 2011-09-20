@@ -14,23 +14,32 @@ import java.sql.SQLException;
  */
 public class SchemaCreator {
     @Inject
-    public SchemaCreator(DataSource dataSource, AccountMapper accountMapper) {
+    public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemsMapper itemsMapper) {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
+        this.itemsMapper = itemsMapper;
     }
 
     private DataSource dataSource;
     private AccountMapper accountMapper;
+    private ItemsMapper itemsMapper;
 
     public void createTables() throws SQLException {
         Connection connection = dataSource.getConnection();
         try {
-            ResultSet tables = connection.getMetaData().getTables(null, null, AccountMapper.TABLE_NAME, null);
-            if (!tables.next()) {
-                accountMapper.createTable();
+            if (!tableExists(connection, AccountMapper.TABLE_NAME)) {
+                accountMapper.createSchema();
+            }
+            if (!tableExists(connection, ItemsMapper.TABLE_NAME)) {
+                itemsMapper.createSchema();
             }
         } finally {
             connection.close();
         }
+    }
+
+    private boolean tableExists(Connection connection, String tableName) throws SQLException {
+        ResultSet tables = connection.getMetaData().getTables(null, null, tableName, null);
+        return tables.next();
     }
 }

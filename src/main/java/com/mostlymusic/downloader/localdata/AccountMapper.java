@@ -22,7 +22,7 @@ public interface AccountMapper {
 
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
             "username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL)")
-    void createTable();
+    void createSchema();
 
     @Insert("INSERT INTO " + TABLE_NAME + "(username, password) VALUES (#{username}, #{password})")
     void createAccount(Account account);
