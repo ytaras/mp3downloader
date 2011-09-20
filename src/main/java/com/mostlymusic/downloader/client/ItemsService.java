@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
+import com.mostlymusic.downloader.dto.ItemDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -22,13 +23,13 @@ import java.util.List;
  *         Time: 11:58 AM
  */
 @Singleton
-public class OrdersService extends JsonServiceClient implements IOrdersService {
+public class ItemsService extends JsonServiceClient implements IItemsService {
     private final String serviceUrl;
     private static final Type TYPE = new TypeToken<List<ItemDto>>() {
     }.getType();
 
     @Inject
-    public OrdersService(@ServiceUrl String serviceUrl) {
+    public ItemsService(@ServiceUrl String serviceUrl) {
         this.serviceUrl = serviceUrl;
     }
 

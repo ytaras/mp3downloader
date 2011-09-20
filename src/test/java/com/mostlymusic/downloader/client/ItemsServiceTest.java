@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.dto.ItemDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpStatus;
@@ -22,9 +23,9 @@ import static org.junit.Assert.fail;
  *         Date: 9/19/11
  *         Time: 11:50 AM
  */
-public class OrdersServiceTest extends BaseHttpClientTestCase {
+public class ItemsServiceTest extends BaseHttpClientTestCase {
 
-    private IOrdersService ordersService;
+    private IItemsService itemsService;
 
     @Override
     protected void registerHandler() {
@@ -34,7 +35,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
 
     @Before
     public void createInstance() {
-        ordersService = injector.getInstance(IOrdersService.class);
+        itemsService = injector.getInstance(IItemsService.class);
     }
 
 
@@ -44,7 +45,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        ItemsMetadataDto dto = ordersService.getOrdersMetadata();
+        ItemsMetadataDto dto = itemsService.getOrdersMetadata();
 
         // then
         assertThat(dto).isEqualTo(getMockOrdersMetadata());
@@ -57,7 +58,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        ItemsMetadataDto dto = ordersService.getOrdersMetadata(234);
+        ItemsMetadataDto dto = itemsService.getOrdersMetadata(234);
 
         // then
         assertThat(dto).isEqualTo(getMockOrdersMetadata(234));
@@ -70,7 +71,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        List<ItemDto> dto = ordersService.getTracks(123, 2, 100);
+        List<ItemDto> dto = itemsService.getTracks(123, 2, 100);
 
         // then
         assertThat(dto).isEqualTo(getMockTracksDtos());
@@ -85,7 +86,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
 
         // when
         try {
-            ordersService.getOrdersMetadata();
+            itemsService.getOrdersMetadata();
             fail("Exception should be thrown");
         } catch (HttpResponseException e) {
             // then
@@ -117,7 +118,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
-                if (pair.getName().equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
+                if (pair.getName().equals(IItemsService.LAST_ORDER_ID_PARAM_NAME)) {
                     Long aLong = Long.parseLong(pair.getValue());
                     return getMockOrdersMetadata(aLong);
                 }
@@ -135,11 +136,11 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
             int pageSize = 0;
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
                 String name = pair.getName();
-                if (name.equals(IOrdersService.LAST_ORDER_ID_PARAM_NAME)) {
+                if (name.equals(IItemsService.LAST_ORDER_ID_PARAM_NAME)) {
                     lastOrderId = Long.parseLong(pair.getValue());
-                } else if (IOrdersService.PAGE_PARAM_NAME.equals(name)) {
+                } else if (IItemsService.PAGE_PARAM_NAME.equals(name)) {
                     page = Integer.parseInt(pair.getValue());
-                } else if (IOrdersService.PAGE_SIZE_PARAM_NAME.equals(name)) {
+                } else if (IItemsService.PAGE_SIZE_PARAM_NAME.equals(name)) {
                     pageSize = Integer.parseInt(pair.getValue());
                 }
             }

@@ -1,5 +1,6 @@
-package com.mostlymusic.downloader.client;
+package com.mostlymusic.downloader.dto;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -7,8 +8,9 @@ import java.util.List;
  *         Date: 9/16/11
  *         Time: 5:05 PM
  */
-public class TracksDto {
-    private List<ItemDto> items;
+public class ItemsDto {
+    private List<ItemDto> items = new LinkedList<ItemDto>();
+    private ItemsInfo info = new ItemsInfo();
 
     public List<ItemDto> getItems() {
         return items;
@@ -23,7 +25,7 @@ public class TracksDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TracksDto tracksDto = (TracksDto) o;
+        ItemsDto tracksDto = (ItemsDto) o;
 
         return !(items != null ? !items.equals(tracksDto.items) : tracksDto.items != null);
 
@@ -36,8 +38,15 @@ public class TracksDto {
 
     @Override
     public String toString() {
-        return "TracksDto{" +
+        return "ItemsDto{" +
                 "items=" + items +
                 '}';
+    }
+
+    private static class ItemsInfo {
+        private int pageCurrent;
+        private int pageTotal;
+        private int pageSize;
+        private int totalRecords;
     }
 }

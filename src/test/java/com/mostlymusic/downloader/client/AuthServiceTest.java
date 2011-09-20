@@ -69,13 +69,13 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     public void shouldSendCookie() throws IOException {
         // given
         IAuthService authService = injector.getInstance(IAuthService.class);
-        IOrdersService ordersService = injector.getInstance(IOrdersService.class);
+        IItemsService itemsService = injector.getInstance(IItemsService.class);
 
         // when
         authService.auth("name", "pass");
 
         // then
-        ordersService.getOrdersMetadata();
+        itemsService.getOrdersMetadata();
     }
 
     private static class AuthHttpRequestHandler implements HttpRequestHandler {

@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.dto.ItemDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.List;
  *         Date: 9/19/11
  *         Time: 11:58 AM
  */
-public interface IOrdersService {
+public interface IItemsService {
     String LAST_ORDER_ID_PARAM_NAME = "first_item_id";
     String PAGE_PARAM_NAME = "page";
     String PAGE_SIZE_PARAM_NAME = "pageSize";

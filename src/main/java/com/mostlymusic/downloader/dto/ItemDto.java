@@ -1,4 +1,4 @@
-package com.mostlymusic.downloader.client;
+package com.mostlymusic.downloader.dto;
 
 import java.util.Date;
 

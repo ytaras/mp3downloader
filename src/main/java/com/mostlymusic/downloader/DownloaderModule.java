@@ -33,7 +33,7 @@ public class DownloaderModule extends AbstractModule {
 
         bind(DefaultHttpClient.class).toInstance(defaultHttpClient);
 
-        bind(IOrdersService.class).to(OrdersService.class);
+        bind(IItemsService.class).to(ItemsService.class);
         bind(IProductsService.class).to(ProductsService.class);
         bind(IAuthService.class).to(AuthService.class);
     }
