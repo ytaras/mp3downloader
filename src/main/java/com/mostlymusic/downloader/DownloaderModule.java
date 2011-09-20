@@ -1,6 +1,8 @@
 package com.mostlymusic.downloader;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.client.*;
 import org.apache.http.HttpHost;
@@ -26,7 +28,7 @@ public class DownloaderModule extends AbstractModule {
     protected void configure() {
         bindConstant().annotatedWith(ServiceUrl.class).to(serviceUrl);
 
-        bind(Gson.class).toInstance(new Gson());
+        bind(Gson.class).toInstance(createGson());
         DefaultHttpClient defaultHttpClient = createHttpClientInstance();
 
         bind(DefaultHttpClient.class).toInstance(defaultHttpClient);
@@ -34,6 +36,10 @@ public class DownloaderModule extends AbstractModule {
         bind(IOrdersService.class).to(OrdersService.class);
         bind(IProductsService.class).to(ProductsService.class);
         bind(IAuthService.class).to(AuthService.class);
+    }
+
+    private Gson createGson() {
+        return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
     }
 
     private DefaultHttpClient createHttpClientInstance() {

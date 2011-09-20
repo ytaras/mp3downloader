@@ -9,7 +9,7 @@ import java.util.List;
  *         Time: 11:58 AM
  */
 public interface IOrdersService {
-    String LAST_ORDER_ID_PARAM_NAME = "lastOrderId";
+    String LAST_ORDER_ID_PARAM_NAME = "first_item_id";
     String PAGE_PARAM_NAME = "page";
     String PAGE_SIZE_PARAM_NAME = "pageSize";
     String ID_PARAM_NAME = "ID";

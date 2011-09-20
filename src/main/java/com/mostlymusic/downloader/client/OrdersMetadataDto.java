@@ -6,28 +6,28 @@ package com.mostlymusic.downloader.client;
  *         Time: 11:56 AM
  */
 public class OrdersMetadataDto {
-    private long lastOrderId;
-    private int count;
+    private long lastItemId;
+    private int totalItems;
 
-    public OrdersMetadataDto(long lastOrderId, int count) {
-        this.lastOrderId = lastOrderId;
-        this.count = count;
+    public OrdersMetadataDto(long lastItemId, int totalitems) {
+        this.lastItemId = lastItemId;
+        this.totalItems = totalitems;
     }
 
-    public long getLastOrderId() {
-        return lastOrderId;
+    public long getLastItemId() {
+        return lastItemId;
     }
 
-    public void setLastOrderId(int lastOrderId) {
-        this.lastOrderId = lastOrderId;
+    public void setLastItemId(int lastItemId) {
+        this.lastItemId = lastItemId;
     }
 
-    public int getCount() {
-        return count;
+    public int getTotalItems() {
+        return totalItems;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setTotalItems(int totalItems) {
+        this.totalItems = totalItems;
     }
 
     @Override
@@ -37,22 +37,22 @@ public class OrdersMetadataDto {
 
         OrdersMetadataDto that = (OrdersMetadataDto) o;
 
-        return count == that.count && lastOrderId == that.lastOrderId;
+        return totalItems == that.totalItems && lastItemId == that.lastItemId;
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (lastOrderId ^ (lastOrderId >>> 32));
-        result = 31 * result + count;
+        int result = (int) (lastItemId ^ (lastItemId >>> 32));
+        result = 31 * result + totalItems;
         return result;
     }
 
     @Override
     public String toString() {
         return "OrdersMetadataDto{" +
-                "lastOrderId=" + lastOrderId +
-                ", count=" + count +
+                "lastItemId=" + lastItemId +
+                ", totalItems=" + totalItems +
                 '}';
     }
 }

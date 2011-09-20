@@ -28,7 +28,7 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
 
     @Inject
     public OrdersService(@ServiceUrl String serviceUrl) {
-        this.serviceUrl = serviceUrl + "/orders/";
+        this.serviceUrl = serviceUrl;
     }
 
     @Override
@@ -37,20 +37,20 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
         pairs.add(new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId));
         pairs.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
         pairs.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
-        HttpPost post = new HttpPost(serviceUrl + "/list");
+        HttpPost post = new HttpPost(serviceUrl + "/itemsList/");
         post.setEntity(new UrlEncodedFormEntity(pairs, "UTF-8"));
         return getResult(post, TYPE);
     }
 
     @Override
     public OrdersMetadataDto getOrdersMetadata() throws IOException {
-        HttpPost get = new HttpPost(serviceUrl);
+        HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
         return getResult(get, OrdersMetadataDto.class);
     }
 
     @Override
     public OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
-        HttpPost get = new HttpPost(serviceUrl);
+        HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
                 new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId)));
         get.setEntity(formEntity);
