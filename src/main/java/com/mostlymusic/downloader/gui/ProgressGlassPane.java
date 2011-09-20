@@ -1,9 +1,13 @@
 package com.mostlymusic.downloader.gui;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+@Singleton
 public class ProgressGlassPane extends JComponent {
     private static final int BAR_WIDTH = 200;
     private static final int BAR_HEIGHT = 10;
@@ -12,10 +16,24 @@ public class ProgressGlassPane extends JComponent {
 
     private String message = "";
 
-    public ProgressGlassPane() {
+    @Inject
+    public ProgressGlassPane(ApplicationModel model) {
         setBackground(Color.WHITE);
         setFont(new Font("Default", Font.BOLD, 16));
         interceptEvents();
+        model.addListener(new ApplicationModelListenerAdapter() {
+            @Override
+            public void statusUnset() {
+                setMessage("");
+                setVisible(false);
+            }
+
+            @Override
+            public void statusSet(String status) {
+                setMessage(status);
+                setVisible(true);
+            }
+        });
     }
 
     private void interceptEvents() {

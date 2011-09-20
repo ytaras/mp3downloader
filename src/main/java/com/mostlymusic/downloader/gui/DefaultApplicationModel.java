@@ -52,7 +52,6 @@ public class DefaultApplicationModel implements ApplicationModel {
         new SwingWorker<Boolean, Void>() {
             @Override
             protected Boolean doInBackground() throws Exception {
-                Thread.sleep(5000);
                 return authService.auth(account.getUsername(), account.getPassword());
             }
 
