@@ -3,6 +3,8 @@ package com.mostlymusic.downloader;
 import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.client.*;
+import org.apache.http.HttpHost;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -25,12 +27,23 @@ public class DownloaderModule extends AbstractModule {
         bindConstant().annotatedWith(ServiceUrl.class).to(serviceUrl);
 
         bind(Gson.class).toInstance(new Gson());
-        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
-        defaultHttpClient.setCookieStore(new BasicCookieStore());
+        DefaultHttpClient defaultHttpClient = createHttpClientInstance();
+
         bind(DefaultHttpClient.class).toInstance(defaultHttpClient);
 
         bind(IOrdersService.class).to(OrdersService.class);
         bind(IProductsService.class).to(ProductsService.class);
         bind(IAuthService.class).to(AuthService.class);
+    }
+
+    private DefaultHttpClient createHttpClientInstance() {
+        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        defaultHttpClient.setCookieStore(new BasicCookieStore());
+        if (System.getProperties().getProperty("http.proxyHost") != null) {
+            HttpHost proxy = new HttpHost(System.getProperty("http.proxyHost"),
+                    Integer.parseInt(System.getProperty("http.proxyPort")), "http");
+            defaultHttpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+        }
+        return defaultHttpClient;
     }
 }

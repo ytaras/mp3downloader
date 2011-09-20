@@ -33,6 +33,16 @@
 					<arguments>
 						<argument>http://www.mostlymusic.com/download-manager/files/</argument>
 					</arguments>
+					<systemProperties>
+						<systemProperty>
+							<key>http.proxyHost</key>
+							<value>localhost</value>
+						</systemProperty>
+						<systemProperty>
+							<key>http.proxyPort</key>
+							<value>3128</value>
+						</systemProperty>
+					</systemProperties>
 				</configuration>
 			</plugin>
 		</plugins>
