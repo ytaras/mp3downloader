@@ -24,6 +24,7 @@ public abstract class BaseHttpClientTestCase {
 
     protected String serverUrl;
     protected Injector injector;
+    private Gson gson;
 
     @Before
     public void startServer() throws Exception {
@@ -32,6 +33,7 @@ public abstract class BaseHttpClientTestCase {
         localTestServer.start();
         serverUrl = "http:/" + localTestServer.getServiceAddress();
         injector = Guice.createInjector(new DownloaderModule(serverUrl));
+        gson = injector.getInstance(Gson.class);
     }
 
     protected abstract void registerHandler();
@@ -41,7 +43,7 @@ public abstract class BaseHttpClientTestCase {
         localTestServer.stop();
     }
 
-    protected abstract static class JsonHttpHandler implements HttpRequestHandler {
+    protected abstract class JsonHttpHandler implements HttpRequestHandler {
         protected String reason;
 
         protected abstract Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception;
@@ -60,7 +62,7 @@ public abstract class BaseHttpClientTestCase {
                 httpResponse.setEntity(new StringEntity(e.getMessage()));
                 return;
             }
-            String json = new Gson().toJson(object);
+            String json = gson.toJson(object);
             httpResponse.setEntity(new StringEntity(json, "UTF-8"));
         }
     }

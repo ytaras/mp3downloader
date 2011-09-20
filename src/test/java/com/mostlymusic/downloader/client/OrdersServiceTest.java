@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -43,7 +44,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        OrdersMetadataDto dto = ordersService.getOrdersMetadata();
+        ItemsMetadataDto dto = ordersService.getOrdersMetadata();
 
         // then
         assertThat(dto).isEqualTo(getMockOrdersMetadata());
@@ -56,7 +57,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        OrdersMetadataDto dto = ordersService.getOrdersMetadata(234);
+        ItemsMetadataDto dto = ordersService.getOrdersMetadata(234);
 
         // then
         assertThat(dto).isEqualTo(getMockOrdersMetadata(234));
@@ -69,7 +70,7 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        List<TrackDto> dto = ordersService.getTracks(123, 2, 100);
+        List<ItemDto> dto = ordersService.getTracks(123, 2, 100);
 
         // then
         assertThat(dto).isEqualTo(getMockTracksDtos());
@@ -95,23 +96,21 @@ public class OrdersServiceTest extends BaseHttpClientTestCase {
     }
 
 
-    private List<TrackDto> getMockTracksDtos() {
-        LinkedList<TrackDto> trackDtos = new LinkedList<TrackDto>();
-        TrackDto trackDto = new TrackDto();
-        trackDto.setId(1);
-        trackDto.setAlbum("A\u1234lbum");
-        trackDto.setName("Name");
-        trackDto.setArtist("Artist");
-        trackDtos.add(trackDto);
-        return trackDtos;
+    private List<ItemDto> getMockTracksDtos() {
+        LinkedList<ItemDto> itemDtos = new LinkedList<ItemDto>();
+        ItemDto itemDto = new ItemDto();
+        itemDto.setItemId(1);
+        itemDto.setLinkTitle("\u1234Name");
+        itemDtos.add(itemDto);
+        return itemDtos;
     }
 
-    private OrdersMetadataDto getMockOrdersMetadata(long lastOrderId) {
-        return new OrdersMetadataDto(lastOrderId, 555);
+    private ItemsMetadataDto getMockOrdersMetadata(long lastOrderId) {
+        return new ItemsMetadataDto(lastOrderId, 555);
     }
 
-    protected OrdersMetadataDto getMockOrdersMetadata() {
-        return new OrdersMetadataDto(123, 345);
+    protected ItemsMetadataDto getMockOrdersMetadata() {
+        return new ItemsMetadataDto(123, 345);
     }
 
     private class OrdersHttpHandler extends JsonHttpHandler {

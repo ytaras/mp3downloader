@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.dto.ItemsMetadataDto;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -17,13 +19,13 @@ public interface IOrdersService {
     /**
      * @return Orders list metadata like last order id and count of available orders
      */
-    OrdersMetadataDto getOrdersMetadata() throws IOException;
+    ItemsMetadataDto getOrdersMetadata() throws IOException;
 
     /**
      * @param lastOrderId Last order id that we know about
      * @return Orders list metadata like last order id and count of available orders after supplied last order
      */
-    OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException;
+    ItemsMetadataDto getOrdersMetadata(long lastOrderId) throws IOException;
 
     /**
      * @param lastOrderId Last order id we know about
@@ -31,5 +33,5 @@ public interface IOrdersService {
      * @param pageSize    page size
      * @return list of tracks on this page
      */
-    List<TrackDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException;
+    List<ItemDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException;
 }

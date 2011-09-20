@@ -8,14 +8,14 @@ import java.util.List;
  *         Time: 5:05 PM
  */
 public class TracksDto {
-    private List<TrackDto> tracks;
+    private List<ItemDto> items;
 
-    public List<TrackDto> getTracks() {
-        return tracks;
+    public List<ItemDto> getItems() {
+        return items;
     }
 
-    public void setTracks(List<TrackDto> tracks) {
-        this.tracks = tracks;
+    public void setItems(List<ItemDto> items) {
+        this.items = items;
     }
 
     @Override
@@ -25,19 +25,19 @@ public class TracksDto {
 
         TracksDto tracksDto = (TracksDto) o;
 
-        return !(tracks != null ? !tracks.equals(tracksDto.tracks) : tracksDto.tracks != null);
+        return !(items != null ? !items.equals(tracksDto.items) : tracksDto.items != null);
 
     }
 
     @Override
     public int hashCode() {
-        return tracks != null ? tracks.hashCode() : 0;
+        return items != null ? items.hashCode() : 0;
     }
 
     @Override
     public String toString() {
         return "TracksDto{" +
-                "tracks=" + tracks +
+                "items=" + items +
                 '}';
     }
 }

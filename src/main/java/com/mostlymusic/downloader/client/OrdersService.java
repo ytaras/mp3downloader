@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
+import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -23,7 +24,7 @@ import java.util.List;
 @Singleton
 public class OrdersService extends JsonServiceClient implements IOrdersService {
     private final String serviceUrl;
-    private static final Type TYPE = new TypeToken<List<TrackDto>>() {
+    private static final Type TYPE = new TypeToken<List<ItemDto>>() {
     }.getType();
 
     @Inject
@@ -32,7 +33,7 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
     }
 
     @Override
-    public List<TrackDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException {
+    public List<ItemDto> getTracks(long lastOrderId, int page, int pageSize) throws IOException {
         List<NameValuePair> pairs = new LinkedList<NameValuePair>();
         pairs.add(new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId));
         pairs.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
@@ -43,18 +44,18 @@ public class OrdersService extends JsonServiceClient implements IOrdersService {
     }
 
     @Override
-    public OrdersMetadataDto getOrdersMetadata() throws IOException {
+    public ItemsMetadataDto getOrdersMetadata() throws IOException {
         HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
-        return getResult(get, OrdersMetadataDto.class);
+        return getResult(get, ItemsMetadataDto.class);
     }
 
     @Override
-    public OrdersMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
+    public ItemsMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
         HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
         UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
                 new BasicNameValuePair(LAST_ORDER_ID_PARAM_NAME, "" + lastOrderId)));
         get.setEntity(formEntity);
-        return getResult(get, OrdersMetadataDto.class);
+        return getResult(get, ItemsMetadataDto.class);
     }
 
 }

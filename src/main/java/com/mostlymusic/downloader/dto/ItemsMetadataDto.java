@@ -1,15 +1,15 @@
-package com.mostlymusic.downloader.client;
+package com.mostlymusic.downloader.dto;
 
 /**
  * @author ytaras
  *         Date: 9/19/11
  *         Time: 11:56 AM
  */
-public class OrdersMetadataDto {
+public class ItemsMetadataDto {
     private long lastItemId;
     private int totalItems;
 
-    public OrdersMetadataDto(long lastItemId, int totalitems) {
+    public ItemsMetadataDto(long lastItemId, int totalitems) {
         this.lastItemId = lastItemId;
         this.totalItems = totalitems;
     }
@@ -35,7 +35,7 @@ public class OrdersMetadataDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        OrdersMetadataDto that = (OrdersMetadataDto) o;
+        ItemsMetadataDto that = (ItemsMetadataDto) o;
 
         return totalItems == that.totalItems && lastItemId == that.lastItemId;
 
@@ -50,7 +50,7 @@ public class OrdersMetadataDto {
 
     @Override
     public String toString() {
-        return "OrdersMetadataDto{" +
+        return "ItemsMetadataDto{" +
                 "lastItemId=" + lastItemId +
                 ", totalItems=" + totalItems +
                 '}';

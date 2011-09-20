@@ -1,7 +1,5 @@
 package com.mostlymusic.downloader.gui;
 
-import com.sun.istack.internal.Nullable;
-
 /**
  * @author ytaras
  *         Date: 9/19/11
@@ -16,5 +14,5 @@ public interface ApplicationModel {
 
     void addListener(ApplicationModelListener mock);
 
-    void setStatus(@Nullable String status);
+    void setStatus(String status);
 }

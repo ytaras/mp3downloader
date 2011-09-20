@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.*;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.Cookie;
@@ -26,14 +27,14 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     @Override
     protected void registerHandler() {
         localTestServer.register("/loginPost", new AuthHttpRequestHandler());
-        localTestServer.register("/orders/", new JsonHttpHandler() {
+        localTestServer.register("/itemsStatus/", new JsonHttpHandler() {
             @Override
             protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
                 Header[] cookies = httpRequest.getHeaders("Cookie");
                 if (cookies.length == 0) {
                     throw new RuntimeException("Cookies not set");
                 }
-                return new OrdersMetadataDto(0, 0);
+                return new ItemsMetadataDto(0, 0);
             }
         });
     }
