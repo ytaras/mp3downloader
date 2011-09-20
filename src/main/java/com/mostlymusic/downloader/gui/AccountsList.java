@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -69,6 +70,12 @@ public class AccountsList {
     public void setModel(ApplicationModel model) {
         this.model = model;
         accountsTable.setModel(model.getAccountsTableModel());
+        model.addListener(new ApplicationModelListenerAdapter() {
+            @Override
+            public void loginFailed(Account account) {
+                JOptionPane.showMessageDialog(null, "Alert", "Failed to login, check your username/password", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
     public JPanel getContentPane() {

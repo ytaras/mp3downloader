@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
@@ -58,9 +59,21 @@ public class DefaultApplicationModel implements ApplicationModel {
             @Override
             protected void done() {
                 setStatus(null);
+                try {
+                    if (get()) {
+                        fireLoggedInEvent(account);
+                    } else {
+                        fireLoginFailedEvent(account);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         }.execute();
     }
+
 
     @Override
     public void addListener(ApplicationModelListener listener) {
@@ -75,6 +88,18 @@ public class DefaultApplicationModel implements ApplicationModel {
             fireStatusSetEvent(status);
         }
 
+    }
+
+    private void fireLoginFailedEvent(Account account) {
+        for (ApplicationModelListener listener : listeners) {
+            listener.loginFailed(account);
+        }
+    }
+
+    private void fireLoggedInEvent(Account account) {
+        for (ApplicationModelListener listener : listeners) {
+            listener.loggedIn(account);
+        }
     }
 
     private void fireStatusSetEvent(String status) {

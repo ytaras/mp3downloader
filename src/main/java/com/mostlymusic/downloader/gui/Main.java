@@ -16,7 +16,7 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {
-            args = new String[]{"http://www.mostlymusic.com/download-manager/files/"};
+            args = new String[]{"http://www.mostlymusic.com/download-manager/files"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
 
