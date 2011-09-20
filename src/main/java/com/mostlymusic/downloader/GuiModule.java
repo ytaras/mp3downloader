@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader;
 
 import com.google.inject.AbstractModule;
-import com.mostlymusic.downloader.gui.AccountsList;
-import com.mostlymusic.downloader.gui.ApplicationModel;
-import com.mostlymusic.downloader.gui.DefaultApplicationModel;
+import com.mostlymusic.downloader.gui.*;
+
+import javax.swing.*;
 
 /**
  * @author ytaras
@@ -15,5 +15,6 @@ public class GuiModule extends AbstractModule {
     protected void configure() {
         bind(AccountsList.class);
         bind(ApplicationModel.class).to(DefaultApplicationModel.class);
+        bind(JPanel.class).annotatedWith(MainLayout.class).to(MainPanel.class);
     }
 }

@@ -73,7 +73,8 @@ public class AccountsList {
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loginFailed(Account account) {
-                JOptionPane.showMessageDialog(null, "Alert", "Failed to login, check your username/password", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Failed to login, check your username/password",
+                        "Login failed", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

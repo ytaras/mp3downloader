@@ -68,7 +68,7 @@ public class DefaultApplicationModel implements ApplicationModel {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException("Error while trying to login", e);
                 }
             }
         }.execute();

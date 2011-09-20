@@ -21,7 +21,7 @@ public class Main {
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
 
         final JFrame frame = new JFrame("AccountsList");
-        frame.setContentPane(injector.getInstance(AccountsList.class).getContentPane());
+        frame.setContentPane(injector.getInstance(MainPanel.class));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setGlassPane(injector.getInstance(ProgressGlassPane.class));
@@ -32,7 +32,6 @@ public class Main {
                 JOptionPane.showMessageDialog(frame, throwable, "Error occured", JOptionPane.ERROR_MESSAGE);
             }
         });
-
     }
 
 }
