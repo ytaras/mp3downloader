@@ -9,14 +9,14 @@ import java.util.List;
  *         Time: 5:05 PM
  */
 public class ItemsDto {
-    private List<ItemDto> items = new LinkedList<ItemDto>();
+    private List<Item> items = new LinkedList<Item>();
     private ItemsInfo info = new ItemsInfo();
 
-    public List<ItemDto> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemDto> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 

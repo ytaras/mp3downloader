@@ -1,7 +1,7 @@
 package com.mostlymusic.downloader.localdata;
 
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.Item;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -18,7 +18,7 @@ public interface ItemsMapper {
     String TABLE_NAME = "LINKS";
 
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE accountId = #{id}")
-    List<ItemDto> listLinks(Account account);
+    List<Item> listLinks(Account account);
 
     @Update("CREATE TABLE " + TABLE_NAME + " (itemId BIGINT,\n" +
             "productId BIGINT ,\n" +
@@ -40,5 +40,5 @@ public interface ItemsMapper {
             "#{item.downloadsBought:NUMERIC}, #{item.linkHash:VARCHAR}, " +
             "#{item.downloadsUsed:NUMERIC}, #{item.status:VARCHAR}, #{item.fileName:VARCHAR}, #{item.createdAt:DATE}, " +
             "#{item.updatedAt:DATE}, #{account.id:NUMERIC})")
-    void insertItem(@Param("item") ItemDto itemDto, @Param("account") Account account);
+    void insertItem(@Param("item") Item item, @Param("account") Account account);
 }

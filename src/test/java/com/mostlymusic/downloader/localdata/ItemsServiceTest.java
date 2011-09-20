@@ -4,7 +4,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.LocalStorageModule;
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.Item;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class ItemsServiceTest extends StoragetTestBase {
     public void shouldInitMyBatis() {
         // given
         // when
-        List<ItemDto> items = itemsMapper.listLinks(new Account());
+        List<Item> items = itemsMapper.listLinks(new Account());
 
         // then
         assertThat(items).isNotNull();
@@ -49,25 +49,25 @@ public class ItemsServiceTest extends StoragetTestBase {
         // given
         Account account = new Account();
         account.setId(1);
-        ItemDto itemDto = new ItemDto();
-        itemDto.setCreatedAt(new Date());
-        itemDto.setUpdatedAt(new Date());
-        itemDto.setDownloadsBought(4);
-        itemDto.setDownloadsUsed(3);
-        itemDto.setFileName("FileName");
-        itemDto.setItemId(123);
-        itemDto.setLinkId(321);
-        itemDto.setLinkHash("LHASH");
-        itemDto.setLinkTitle("LTITLE");
-        itemDto.setStatus("STATUS");
-        itemDto.setProductId(444);
+        Item item = new Item();
+        item.setCreatedAt(new Date());
+        item.setUpdatedAt(new Date());
+        item.setDownloadsBought(4);
+        item.setDownloadsUsed(3);
+        item.setFileName("FileName");
+        item.setItemId(123);
+        item.setLinkId(321);
+        item.setLinkHash("LHASH");
+        item.setLinkTitle("LTITLE");
+        item.setStatus("STATUS");
+        item.setProductId(444);
 
         // when
-        itemsMapper.insertItem(itemDto, account);
+        itemsMapper.insertItem(item, account);
 
         // then
-        List<ItemDto> itemDtos = itemsMapper.listLinks(account);
-        assertThat(itemDtos).contains(itemDto);
+        List<Item> items = itemsMapper.listLinks(account);
+        assertThat(items).contains(item);
     }
 
     @After

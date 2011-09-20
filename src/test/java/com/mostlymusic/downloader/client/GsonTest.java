@@ -3,7 +3,7 @@ package com.mostlymusic.downloader.client;
 import com.google.gson.Gson;
 import com.google.inject.Guice;
 import com.mostlymusic.downloader.DownloaderModule;
-import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.junit.Before;
@@ -40,16 +40,16 @@ public class GsonTest {
     @Test
     public void itemShouldHaveCorrectNaming() throws Exception {
         // given
-        ItemDto itemDto = new ItemDto();
-        itemDto.setLinkHash("lh");
-        itemDto.setLinkTitle("lt");
-        itemDto.setStatus("st");
-        itemDto.setFileName("fn");
-        itemDto.setCreatedAt(new Date());
-        itemDto.setUpdatedAt(new Date());
+        Item item = new Item();
+        item.setLinkHash("lh");
+        item.setLinkTitle("lt");
+        item.setStatus("st");
+        item.setFileName("fn");
+        item.setCreatedAt(new Date());
+        item.setUpdatedAt(new Date());
 
         // when
-        String s = gson.toJson(itemDto);
+        String s = gson.toJson(item);
 
         // then
         assertThat(s).contains("item_id").contains("product_id").contains("link_hash").contains("downloads_bought");

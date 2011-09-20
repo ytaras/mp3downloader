@@ -7,7 +7,7 @@ import java.util.Date;
  *         Date: 9/16/11
  *         Time: 5:39 PM
  */
-public class ItemDto {
+public class Item {
     private long itemId;
     private long productId;
     private String linkHash;
@@ -114,19 +114,17 @@ public class ItemDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ItemDto itemDto = (ItemDto) o;
+        Item item = (Item) o;
 
-        if (downloadsBought != itemDto.downloadsBought) return false;
-        if (downloadsUsed != itemDto.downloadsUsed) return false;
-        if (itemId != itemDto.itemId) return false;
-        if (linkId != itemDto.linkId) return false;
-        if (productId != itemDto.productId) return false;
-        if (createdAt != null ? !createdAt.equals(itemDto.createdAt) : itemDto.createdAt != null) return false;
-        if (fileName != null ? !fileName.equals(itemDto.fileName) : itemDto.fileName != null) return false;
-        if (linkHash != null ? !linkHash.equals(itemDto.linkHash) : itemDto.linkHash != null) return false;
-        if (linkTitle != null ? !linkTitle.equals(itemDto.linkTitle) : itemDto.linkTitle != null) return false;
-        if (status != null ? !status.equals(itemDto.status) : itemDto.status != null) return false;
-        if (updatedAt != null ? !updatedAt.equals(itemDto.updatedAt) : itemDto.updatedAt != null) return false;
+        if (downloadsBought != item.downloadsBought) return false;
+        if (downloadsUsed != item.downloadsUsed) return false;
+        if (itemId != item.itemId) return false;
+        if (linkId != item.linkId) return false;
+        if (productId != item.productId) return false;
+        if (fileName != null ? !fileName.equals(item.fileName) : item.fileName != null) return false;
+        if (linkHash != null ? !linkHash.equals(item.linkHash) : item.linkHash != null) return false;
+        if (linkTitle != null ? !linkTitle.equals(item.linkTitle) : item.linkTitle != null) return false;
+        if (status != null ? !status.equals(item.status) : item.status != null) return false;
 
         return true;
     }
@@ -142,14 +140,12 @@ public class ItemDto {
         result = 31 * result + (linkTitle != null ? linkTitle.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (fileName != null ? fileName.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "ItemDto{" +
+        return "Item{" +
                 "itemId=" + itemId +
                 ", productId=" + productId +
                 ", linkHash='" + linkHash + '\'' +

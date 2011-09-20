@@ -24,7 +24,6 @@ public class SchemaCreatorTest extends StoragetTestBase {
         ensureDatabaseFileNotExist();
         Injector injector = Guice.createInjector(new LocalStorageModule());
         DataSource dataSource = injector.getInstance(DataSource.class);
-        assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isFalse();
         SchemaCreator instance = injector.getInstance(SchemaCreator.class);
 
         // when

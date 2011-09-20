@@ -1,6 +1,6 @@
 package com.mostlymusic.downloader.client;
 
-import com.mostlymusic.downloader.dto.ItemDto;
+import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -110,10 +110,10 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         itemsDto.getInfo().setPageTotal((int) lastItemId);
         itemsDto.getInfo().setTotalRecords((int) firstItemId);
 
-        ItemDto itemDto = new ItemDto();
-        itemDto.setItemId(1);
-        itemDto.setLinkTitle("\u1234Name");
-        itemsDto.getItems().add(itemDto);
+        Item item = new Item();
+        item.setItemId(1);
+        item.setLinkTitle("\u1234Name");
+        itemsDto.getItems().add(item);
         return itemsDto;
     }
 
