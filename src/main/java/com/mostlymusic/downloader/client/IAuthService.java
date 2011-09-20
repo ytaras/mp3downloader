@@ -8,5 +8,8 @@ import java.io.IOException;
  *         Time: 5:57 PM
  */
 public interface IAuthService {
+    String USERNAME = "login[username]";
+    String PASSWORD = "login[password]";
+
     boolean auth(String name, String pass) throws IOException;
 }

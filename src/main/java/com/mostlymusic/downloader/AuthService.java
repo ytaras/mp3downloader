@@ -31,8 +31,8 @@ public class AuthService extends JsonServiceClient implements IAuthService {
     @Override
     public boolean auth(String name, String pass) throws IOException {
         LinkedList<NameValuePair> nameValuePairs = new LinkedList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("username", name));
-        nameValuePairs.add(new BasicNameValuePair("password", pass));
+        nameValuePairs.add(new BasicNameValuePair(USERNAME, name));
+        nameValuePairs.add(new BasicNameValuePair(PASSWORD, pass));
         UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairs, null);
         HttpPost httpPost = new HttpPost(serviceUrl);
         httpPost.setEntity(urlEncodedFormEntity);

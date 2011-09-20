@@ -86,9 +86,9 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
             String name = null;
             String password = null;
             for (NameValuePair pair : parse) {
-                if (pair.getName().equals("username")) {
+                if (pair.getName().equals(IAuthService.USERNAME)) {
                     name = pair.getValue();
-                } else if (pair.getName().equals("password")) {
+                } else if (pair.getName().equals(IAuthService.PASSWORD)) {
                     password = pair.getValue();
                 }
             }
