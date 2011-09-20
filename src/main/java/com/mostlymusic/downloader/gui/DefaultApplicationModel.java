@@ -1,11 +1,12 @@
 package com.mostlymusic.downloader.gui;
 
+import com.google.inject.Singleton;
 import com.mostlymusic.downloader.AuthService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 
 import javax.inject.Inject;
-import java.io.IOException;
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  *         Date: 9/19/11
  *         Time: 7:38 PM
  */
+@Singleton
 public class DefaultApplicationModel implements ApplicationModel {
 
     private AccountTableModel accountTableModel;
@@ -45,15 +47,20 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     @Override
     public void loginToAccountAt(int selectedRow) {
-        Account account = accountTableModel.getAccountAt(selectedRow);
+        final Account account = accountTableModel.getAccountAt(selectedRow);
         this.setStatus("Trying to log in...");
-        try {
-            authService.auth(account.getUsername(), account.getPassword());
-        } catch (IOException e) {
-            throw new RuntimeException("Error while trying to login", e);
-        } finally {
-            this.setStatus(null);
-        }
+        new SwingWorker<Boolean, Void>() {
+            @Override
+            protected Boolean doInBackground() throws Exception {
+                Thread.sleep(5000);
+                return authService.auth(account.getUsername(), account.getPassword());
+            }
+
+            @Override
+            protected void done() {
+                setStatus(null);
+            }
+        }.execute();
     }
 
     @Override

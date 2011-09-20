@@ -16,7 +16,7 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         if (args.length == 0) {
-            args = new String[]{""};
+            args = new String[]{"http://google.com"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
 
@@ -24,6 +24,7 @@ public class Main {
         frame.setContentPane(injector.getInstance(AccountsList.class).getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setGlassPane(pane(injector.getInstance(ApplicationModel.class)));
         frame.setVisible(true);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -32,5 +33,23 @@ public class Main {
             }
         });
 
+    }
+
+    public static ProgressGlassPane pane(ApplicationModel instance) {
+        final ProgressGlassPane progressGlassPane = new ProgressGlassPane();
+        instance.addListener(new ApplicationModelListenerAdapter() {
+            @Override
+            public void statusUnset() {
+                progressGlassPane.setMessage("");
+                progressGlassPane.setVisible(false);
+            }
+
+            @Override
+            public void statusSet(String status) {
+                progressGlassPane.setMessage(status);
+                progressGlassPane.setVisible(true);
+            }
+        });
+        return progressGlassPane;
     }
 }
