@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.gui.worker;
 
+import com.google.inject.Inject;
 import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
@@ -19,6 +20,7 @@ public class CheckServerUpdatesWorker extends SwingWorker<ItemsMetadataDto, Void
     private ItemsService itemsService;
     private ApplicationModel applicationModel;
 
+    @Inject
     public CheckServerUpdatesWorker(Account account, ItemsService itemsService, ApplicationModel applicationModel) {
         this.account = account;
         this.itemsService = itemsService;

@@ -2,7 +2,6 @@ package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.AuthService;
-import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
@@ -23,23 +22,19 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     private AccountTableModel accountTableModel;
     private AuthService authService;
-    private ItemsService itemsService;
     private List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
 
     @Inject
-    public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService, final ItemsService itemsService) {
+    public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
+                                   final CheckServerUpdatesWorker worker) {
         this.accountMapper = accountMapper;
         this.authService = authService;
-        this.itemsService = itemsService;
         accountTableModel = new AccountTableModel(accountMapper);
-        final ItemsService itemsService1 = itemsService;
         addListener(new ApplicationModelListenerAdapter() {
-            private final ItemsService itemsService = itemsService1;
-
             @Override
             public void loggedIn(final Account account) {
                 setStatus("Fetching list of updates from server...");
-                new CheckServerUpdatesWorker(account, itemsService, DefaultApplicationModel.this).execute();
+                worker.execute();
             }
 
             @Override
