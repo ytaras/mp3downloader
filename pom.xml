@@ -62,8 +62,36 @@
 					</systemProperties>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<configuration>
+					<jnlp>
+						<mainClass>com.mostlymusic.downloader.gui.Main</mainClass>
+					</jnlp>
+					<sign>
+						<keystore>/home/ytaras/projects/mp3downloader/mp3downloader.jks
+						</keystore>
+						<keypass>mostlymusic</keypass>
+						<storepass>mostlymusic</storepass>
+						<storetype>jks</storetype>
+						<alias>mp3downloader</alias>
+						<verify>true</verify>
+					</sign>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>webstart-maven-plugin</artifactId>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+
 
 	<dependencies>
 		<dependency>

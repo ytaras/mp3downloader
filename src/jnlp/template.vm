@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://localhost:8000/" href="$outputFile">
+    <title>TimeFinder</title>
+    <vendor>TimeFinder Team</vendor>
+    <homepage href="http://timefinder.sourceforge.net/"/>
+    <description kind="one-line">TimeFinder</description>
+    <description kind="short">TimeFinder - the automatic timetabling generator for universities and schools</description>
+    <description kind="tooltip">TimeFinder - the automatic timetabling generator for universities and schools</description>
+    <icon href="http://timefinder.sourceforge.net/jnlp/shamrockwhite.jpg" kind="default"/>
+    <shortcut online="false"><desktop/><menu submenu="TimeFiner"/></shortcut>
+ </information>
+ <security>
+ <all-permissions/>
+ </security>
+ <resources>
+    <j2se version="1.6+" initial-heap-size="32m" max-heap-size="128m" />
+    <property name="jnlp.versionEnabled" value="true"/>
+    $dependencies
+ </resources>
+ <application-desc main-class="$mainClass">
+ </application-desc>
+</jnlp>
