@@ -63,11 +63,13 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>org.codehaus.mojo.webstart</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
+				<version>1.0-beta-2</version>
 				<configuration>
 					<jnlp>
 						<mainClass>com.mostlymusic.downloader.gui.Main</mainClass>
+						<inputTemplate>src/jnlp/jnlp_template.xml</inputTemplate>
 					</jnlp>
 					<sign>
 						<keystore>/home/ytaras/projects/mp3downloader/mp3downloader.jks

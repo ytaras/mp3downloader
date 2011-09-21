@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0+" codebase="http://localhost:8000/" href="$outputFile">
+	<information>
+		<title>MostlyMusic.com MP3 downloader</title>
+		<vendor>MostlyMusic.com</vendor>
+		<homepage href="http://timefinder.sourceforge.net/"/>
+		<description kind="one-line">MostlyMusic</description>
+		<description kind="short">MostlyMusic.com MP3 downloader</description>
+		<description kind="tooltip">MostlyMusic.com MP3 downloader</description>
+	</information>
+	<security>
+		<all-permissions/>
+	</security>
+	<resources>
+		<j2se version="1.6+" initial-heap-size="32m" max-heap-size="128m"/>
+		<property name="jnlp.versionEnabled" value="true"/>
+		$dependencies
+	</resources>
+	<application-desc main-class="$mainClass"/>
+</jnlp>
