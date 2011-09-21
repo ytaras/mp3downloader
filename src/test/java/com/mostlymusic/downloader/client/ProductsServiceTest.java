@@ -26,7 +26,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
 
     @Override
     protected void registerHandler() {
-        localTestServer.register("/products", new ProductsHttpHandler());
+        localTestServer.register("/download-manager/sync/products", new ProductsHttpHandler());
     }
 
     @Before

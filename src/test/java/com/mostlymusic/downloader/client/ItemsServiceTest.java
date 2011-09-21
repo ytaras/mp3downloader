@@ -28,8 +28,8 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
 
     @Override
     protected void registerHandler() {
-        localTestServer.register("/itemsStatus/", new OrdersHttpHandler());
-        localTestServer.register("/itemsList/", new TracksHttpHandler());
+        localTestServer.register("/download-manager/sync/itemsStatus/", new OrdersHttpHandler());
+        localTestServer.register("/download-manager/sync/itemsList/", new TracksHttpHandler());
     }
 
     @Before
@@ -88,7 +88,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldThrowException() throws Exception {
         // given
-        localTestServer.register("/itemsStatus/", new FailHttpHandler());
+        localTestServer.register("/download-manager/sync/itemsStatus/", new FailHttpHandler());
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when

@@ -37,14 +37,14 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
         params.add(new BasicNameValuePair(LAST_ITEM_ID_PARAM_NAME, "" + lastOrderId));
         params.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
         params.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
-        HttpPost post = new HttpPost(serviceUrl + "/itemsList/");
+        HttpPost post = new HttpPost(serviceUrl + "/download-manager/sync/itemsList/");
         post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
         return getResult(post, ItemsDto.class);
     }
 
     @Override
     public ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException {
-        HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
+        HttpPost get = new HttpPost(serviceUrl + "/download-manager/sync/itemsStatus/");
         if (null != lastOrderId) {
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
                     new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + lastOrderId)));

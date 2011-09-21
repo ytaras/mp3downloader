@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class Main {
     public static void main(String[] args) throws SQLException {
         if (args.length == 0) {
-            args = new String[]{"http://www.mostlymusic.com/download-manager/files"};
+            args = new String[]{"http://www.mostlymusic.com/"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
         injector.getInstance(SchemaCreator.class).createTables();

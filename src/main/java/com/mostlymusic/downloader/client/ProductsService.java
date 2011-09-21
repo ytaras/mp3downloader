@@ -27,7 +27,7 @@ public class ProductsService extends JsonServiceClient implements IProductsServi
         if (serviceUrl.isEmpty()) {
             throw new RuntimeException("service url should not be null");
         }
-        this.serviceUrl = serviceUrl + "/products";
+        this.serviceUrl = serviceUrl + "/download-manager/sync/products";
     }
 
     @Override

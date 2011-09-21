@@ -25,7 +25,7 @@ public class AuthService extends JsonServiceClient implements IAuthService {
 
     @Inject
     public AuthService(@ServiceUrl String serviceUrl) {
-        this.serviceUrl = serviceUrl + "/loginPost";
+        this.serviceUrl = serviceUrl + "/download-manager/sync/loginPost/";
     }
 
     @Override
