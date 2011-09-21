@@ -75,7 +75,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
         authService.auth("name", "pass");
 
         // then
-        itemsService.getOrdersMetadata();
+        itemsService.getOrdersMetadata(null);
     }
 
     private static class AuthHttpRequestHandler implements HttpRequestHandler {

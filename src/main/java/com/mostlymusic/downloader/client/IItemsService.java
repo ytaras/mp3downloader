@@ -18,15 +18,11 @@ public interface IItemsService {
     String ID_PARAM_NAME = "ID";
 
     /**
-     * @return Orders list metadata like last order id and count of available orders
-     */
-    ItemsMetadataDto getOrdersMetadata() throws IOException;
-
-    /**
      * @param lastOrderId Last order id that we know about
      * @return Orders list metadata like last order id and count of available orders after supplied last order
      */
-    ItemsMetadataDto getOrdersMetadata(long lastOrderId) throws IOException;
+    ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException;
+
 
     /**
      * @param lastOrderId Last order id we know about
@@ -34,7 +30,5 @@ public interface IItemsService {
      * @param pageSize    page size
      * @return list of tracks on this page
      */
-    ItemsDto getTracks(long lastOrderId, int page, int pageSize) throws IOException;
-
-    ItemsDto getTracks(long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
+    ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
 }

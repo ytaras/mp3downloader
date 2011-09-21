@@ -1,7 +1,6 @@
 package com.mostlymusic.downloader.gui;
 
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 
 /**
  * @author ytaras
@@ -16,8 +15,6 @@ public interface ApplicationModelListener {
     void loginFailed(Account account);
 
     void loggedIn(Account account);
-
-    void metadataFetched(ItemsMetadataDto itemsMetadataDto, Account account);
 
     void exceptionOccurred(Exception e);
 }

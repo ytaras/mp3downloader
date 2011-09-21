@@ -1,8 +1,5 @@
 package com.mostlymusic.downloader.gui;
 
-import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.ItemsMetadataDto;
-
 /**
  * @author ytaras
  *         Date: 9/19/11
@@ -18,8 +15,6 @@ public interface ApplicationModel {
     void addListener(ApplicationModelListener mock);
 
     void setStatus(String status);
-
-    void fireMetadataFetchedEvent(ItemsMetadataDto itemsMetadataDto, Account account);
 
     void fireExceptionEvent(Exception e);
 }

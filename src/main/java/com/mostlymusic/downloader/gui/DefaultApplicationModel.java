@@ -3,7 +3,6 @@ package com.mostlymusic.downloader.gui;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.AuthService;
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.localdata.AccountMapper;
@@ -33,13 +32,7 @@ public class DefaultApplicationModel implements ApplicationModel {
         addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(final Account account) {
-                setStatus("Fetching list of updates from server...");
                 worker.execute();
-            }
-
-            @Override
-            public void metadataFetched(ItemsMetadataDto itemsMetadataDto, Account account) {
-                setStatus(null);
             }
         });
     }
@@ -81,13 +74,6 @@ public class DefaultApplicationModel implements ApplicationModel {
             fireStatusSetEvent(status);
         }
 
-    }
-
-    @Override
-    public void fireMetadataFetchedEvent(ItemsMetadataDto itemsMetadataDto, Account account) {
-        for (ApplicationModelListener listener : listeners) {
-            listener.metadataFetched(itemsMetadataDto, account);
-        }
     }
 
     @Override

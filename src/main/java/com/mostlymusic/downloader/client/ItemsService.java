@@ -13,7 +13,6 @@ import org.apache.http.message.BasicNameValuePair;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author ytaras
@@ -30,11 +29,11 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public ItemsDto getTracks(long lastOrderId, int page, int pageSize) throws IOException {
-        return doGetItems(lastOrderId, page, pageSize, new LinkedList<NameValuePair>());
-    }
-
-    private ItemsDto doGetItems(long lastOrderId, int page, int pageSize, List<NameValuePair> params) throws IOException {
+    public ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException {
+        LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
+        if (null != firstOrderId) {
+            params.add(new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + firstOrderId));
+        }
         params.add(new BasicNameValuePair(LAST_ITEM_ID_PARAM_NAME, "" + lastOrderId));
         params.add(new BasicNameValuePair(PAGE_PARAM_NAME, "" + page));
         params.add(new BasicNameValuePair(PAGE_SIZE_PARAM_NAME, "" + pageSize));
@@ -44,24 +43,13 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public ItemsDto getTracks(long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException {
-        LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
-        params.add(new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + firstOrderId));
-        return doGetItems(lastOrderId, page, pageSize, params);
-    }
-
-    @Override
-    public ItemsMetadataDto getOrdersMetadata() throws IOException {
+    public ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException {
         HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
-        return getResult(get, ItemsMetadataDto.class);
-    }
-
-    @Override
-    public ItemsMetadataDto getOrdersMetadata(long lastOrderId) throws IOException {
-        HttpPost get = new HttpPost(serviceUrl + "/itemsStatus/");
-        UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
-                new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + lastOrderId)));
-        get.setEntity(formEntity);
+        if (null != lastOrderId) {
+            UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(
+                    new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + lastOrderId)));
+            get.setEntity(formEntity);
+        }
         return getResult(get, ItemsMetadataDto.class);
     }
 

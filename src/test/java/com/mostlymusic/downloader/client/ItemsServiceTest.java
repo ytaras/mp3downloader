@@ -44,7 +44,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        ItemsMetadataDto dto = itemsService.getOrdersMetadata();
+        ItemsMetadataDto dto = itemsService.getOrdersMetadata(null);
 
         // then
         assertThat(dto).isEqualTo(getMockOrdersMetadata());
@@ -57,7 +57,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
         // when
-        ItemsMetadataDto dto = itemsService.getOrdersMetadata(234);
+        ItemsMetadataDto dto = itemsService.getOrdersMetadata(234L);
 
         // then
         assertThat(dto).isEqualTo(getMockOrdersMetadata(234));
@@ -68,14 +68,14 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     public void shouldReturnList() throws IOException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
-        int firstOrderId = 10;
-        int lastOrderId = 123;
+        long firstOrderId = 10;
+        long lastOrderId = 123;
         int page = 2;
         int pageSize = 100;
 
 
         // when
-        ItemsDto dtoWithoutFirst = itemsService.getTracks(lastOrderId, page, pageSize);
+        ItemsDto dtoWithoutFirst = itemsService.getTracks(null, lastOrderId, page, pageSize);
 
         ItemsDto dtoWithFirst = itemsService.getTracks(firstOrderId, lastOrderId, page, pageSize);
 
@@ -93,7 +93,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
 
         // when
         try {
-            itemsService.getOrdersMetadata();
+            itemsService.getOrdersMetadata(null);
             fail("Exception should be thrown");
         } catch (HttpResponseException e) {
             // then

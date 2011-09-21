@@ -1,7 +1,6 @@
 package com.mostlymusic.downloader.gui;
 
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 
 /**
  * @author ytaras
@@ -23,10 +22,6 @@ public class ApplicationModelListenerAdapter implements ApplicationModelListener
 
     @Override
     public void loggedIn(Account account) {
-    }
-
-    @Override
-    public void metadataFetched(ItemsMetadataDto itemsMetadataDto, Account account) {
     }
 
     @Override
