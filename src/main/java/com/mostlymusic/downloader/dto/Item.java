@@ -19,6 +19,7 @@ public class Item {
     private String fileName;
     private Date createdAt;
     private Date updatedAt;
+    private boolean dirty;
 
 
     public long getItemId() {
@@ -109,6 +110,14 @@ public class Item {
         this.updatedAt = updatedAt;
     }
 
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,6 +125,7 @@ public class Item {
 
         Item item = (Item) o;
 
+        if (dirty != item.dirty) return false;
         if (downloadsBought != item.downloadsBought) return false;
         if (downloadsUsed != item.downloadsUsed) return false;
         if (itemId != item.itemId) return false;
@@ -140,6 +150,7 @@ public class Item {
         result = 31 * result + (linkTitle != null ? linkTitle.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (fileName != null ? fileName.hashCode() : 0);
+        result = 31 * result + (dirty ? 1 : 0);
         return result;
     }
 
@@ -157,6 +168,7 @@ public class Item {
                 ", fileName='" + fileName + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", dirty=" + dirty +
                 '}';
     }
 }

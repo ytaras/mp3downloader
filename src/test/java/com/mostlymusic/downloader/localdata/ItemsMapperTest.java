@@ -70,6 +70,7 @@ public class ItemsMapperTest extends StoragetTestBase {
         item.setLinkTitle("LTITLE" + account.getId());
         item.setStatus("STATUS" + account.getId());
         item.setProductId(444 + account.getId());
+        item.setDirty(true);
         return item;
     }
 

@@ -31,14 +31,15 @@ public interface ItemsMapper {
             "fileName VARCHAR(255),\n" +
             "createdAt DATE,\n" +
             "updatedAt DATE,\n" +
-            "accountId INT)")
+            "accountId INT,\n" +
+            "dirty SMALLINT)")
     void createSchema();
 
     @Insert("INSERT INTO " + TABLE_NAME + "(linkId, linkTitle, itemId, productId, downloadsBought, linkHash, " +
-            "downloadsUsed, status, fileName, createdAt, updatedAt, accountId) \n" +
+            "downloadsUsed, status, fileName, createdAt, updatedAt, accountId, dirty) \n" +
             "VALUES (#{item.linkId:NUMERIC}, #{item.linkTitle:VARCHAR}, #{item.itemId:NUMERIC}, #{item.productId:NUMERIC}, " +
             "#{item.downloadsBought:NUMERIC}, #{item.linkHash:VARCHAR}, " +
             "#{item.downloadsUsed:NUMERIC}, #{item.status:VARCHAR}, #{item.fileName:VARCHAR}, #{item.createdAt:DATE}, " +
-            "#{item.updatedAt:DATE}, #{account.id:NUMERIC})")
+            "#{item.updatedAt:DATE}, #{account.id:NUMERIC}, #{item.dirty:BOOLEAN})")
     void insertItem(@Param("item") Item item, @Param("account") Account account);
 }
