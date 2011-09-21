@@ -1,8 +1,5 @@
 package com.mostlymusic.downloader.localdata;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.mostlymusic.downloader.LocalStorageModule;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import org.junit.After;
@@ -29,7 +26,7 @@ public class ItemsMapperTest extends StoragetTestBase {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new LocalStorageModule());
+        super.setUp();
         itemsMapper = injector.getInstance(ItemsMapper.class);
         dataSource = injector.getInstance(DataSource.class);
         injector.getInstance(SchemaCreator.class).createTables();

@@ -1,10 +1,7 @@
 package com.mostlymusic.downloader.localdata;
 
 import com.mostlymusic.downloader.dto.Account;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -24,8 +21,9 @@ public interface AccountMapper {
             "username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL, lastOrderId BIGINT)")
     void createSchema();
 
-    @Insert("INSERT INTO " + TABLE_NAME + "(username, password, lastOrderId) VALUES (#{username:VARCHAR}, #{password:VARCHAR}, #{lastOrderId:NUMERIC})")
-    void createAccount(Account account);
+    @Insert("INSERT INTO " + TABLE_NAME + "(username, password, lastOrderId) VALUES (#{account.username:VARCHAR}," +
+            " #{account.password:VARCHAR}, #{account.lastOrderId:NUMERIC})")
+    void createAccount(@Param("account") Account account);
 
     @Delete("DELETE FROM " + TABLE_NAME + " WHERE id = #{id:NUMERIC}")
     void deleteAccount(int id);

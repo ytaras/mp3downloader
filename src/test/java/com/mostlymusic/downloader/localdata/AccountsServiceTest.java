@@ -1,8 +1,5 @@
 package com.mostlymusic.downloader.localdata;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.mostlymusic.downloader.LocalStorageModule;
 import com.mostlymusic.downloader.dto.Account;
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +24,7 @@ public class AccountsServiceTest extends StoragetTestBase {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new LocalStorageModule());
+        super.setUp();
         accountMapper = injector.getInstance(AccountMapper.class);
         dataSource = injector.getInstance(DataSource.class);
         injector.getInstance(SchemaCreator.class).createTables();

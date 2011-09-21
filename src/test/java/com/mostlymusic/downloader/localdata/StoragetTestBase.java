@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader.localdata;
 
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mostlymusic.downloader.LocalStorageModule;
+import org.junit.Before;
 
 /**
  * @author ytaras
@@ -11,15 +11,11 @@ import java.io.IOException;
  *         Time: 3:52 PM
  */
 public class StoragetTestBase {
-    protected void ensureDatabaseFileNotExist() throws IOException {
-        File file = getDbFile();
-        if (file.exists()) {
-            FileUtils.deleteDirectory(file);
-        }
-    }
 
-    protected File getDbFile() {
-        String userHome = System.getProperty("user.home");
-        return new File(userHome, ".mostlymusic.db");
+    protected Injector injector;
+
+    @Before
+    public void setUp() throws Exception {
+        injector = Guice.createInjector(new LocalStorageModule());
     }
 }

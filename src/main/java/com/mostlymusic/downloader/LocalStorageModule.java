@@ -18,6 +18,15 @@ import java.io.File;
  *         Time: 3:02 PM
  */
 public class LocalStorageModule extends MyBatisModule {
+    private File dbFile;
+
+    public LocalStorageModule() {
+    }
+
+    public LocalStorageModule(File dbFile) {
+        this.dbFile = dbFile;
+    }
+
     @Override
     protected void initialize() {
         bindConstant().annotatedWith(Names.named("mybatis.environment.id")).to("production");
@@ -31,8 +40,12 @@ public class LocalStorageModule extends MyBatisModule {
     }
 
     private String getDatabaseFile() {
-        String userHome = System.getProperty("user.home");
-        return new File(userHome, ".mostlymusic.db").getAbsolutePath();
+        if (null == dbFile) {
+            String userHome = System.getProperty("user.home");
+            return new File(userHome, ".mostlymusic.db").getAbsolutePath();
+        } else {
+            return dbFile.getAbsolutePath();
+        }
     }
 
     public static class DataSourceProvider implements Provider<DataSource> {

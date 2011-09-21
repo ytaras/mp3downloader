@@ -27,4 +27,8 @@ public class ApplicationModelListenerAdapter implements ApplicationModelListener
     @Override
     public void exceptionOccurred(Exception e) {
     }
+
+    @Override
+    public void checkServerDone() {
+    }
 }

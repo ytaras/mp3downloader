@@ -19,6 +19,13 @@ public class Account {
         this.password = password;
     }
 
+    public Account(Account account) {
+        this.username = account.username;
+        this.password = account.password;
+        this.id = account.id;
+        this.lastOrderId = account.lastOrderId;
+    }
+
     public String getUsername() {
         return username;
     }

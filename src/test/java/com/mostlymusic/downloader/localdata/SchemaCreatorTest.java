@@ -1,11 +1,11 @@
 package com.mostlymusic.downloader.localdata;
 
 import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.mostlymusic.downloader.LocalStorageModule;
 import org.junit.Test;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -18,11 +18,16 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class SchemaCreatorTest extends StoragetTestBase {
 
+    @Override
+    public void setUp() throws Exception {
+        File tempFile = File.createTempFile("mostly", "db");
+        assertThat(tempFile.delete()).isTrue();
+        injector = Guice.createInjector(new LocalStorageModule(tempFile));
+    }
+
     @Test
     public void shouldCreateSchema() throws Exception {
         // given
-        ensureDatabaseFileNotExist();
-        Injector injector = Guice.createInjector(new LocalStorageModule());
         DataSource dataSource = injector.getInstance(DataSource.class);
         SchemaCreator instance = injector.getInstance(SchemaCreator.class);
 
@@ -38,7 +43,6 @@ public class SchemaCreatorTest extends StoragetTestBase {
     @Test
     public void shouldNotCreateExisting() throws SQLException {
         // given
-        Injector injector = Guice.createInjector(new LocalStorageModule());
         SchemaCreator instance = injector.getInstance(SchemaCreator.class);
 
         // when

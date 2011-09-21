@@ -39,7 +39,8 @@ public class DownloaderModule extends AbstractModule {
     }
 
     private Gson createGson() {
-        return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
+        return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
     }
 
     private DefaultHttpClient createHttpClientInstance() {

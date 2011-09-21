@@ -21,15 +21,15 @@ import java.util.concurrent.ExecutionException;
  */
 public class CheckServerUpdatesWorker extends SwingWorker<Void, CheckServerStatusStage> {
 
-    private final Account account;
+    private Account account;
     private IItemsService itemsService;
     private ApplicationModel applicationModel;
     private ItemsMapper itemsMapper;
     private AccountMapper accountMapper;
 
+
     @Inject
-    public CheckServerUpdatesWorker(Account account, IItemsService itemsService, ApplicationModel applicationModel, ItemsMapper itemsMapper, AccountMapper accountMapper) {
-        this.account = account;
+    public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemsMapper itemsMapper, AccountMapper accountMapper) {
         this.itemsService = itemsService;
         this.applicationModel = applicationModel;
         this.itemsMapper = itemsMapper;
@@ -40,21 +40,22 @@ public class CheckServerUpdatesWorker extends SwingWorker<Void, CheckServerStatu
     @Override
     protected Void doInBackground() throws Exception {
         publish(CheckServerStatusStage.METADATA_FETCHING);
-        ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(account.getLastOrderId());
+        Long loadedLastOrderId = account.getLastOrderId();
+        ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
         if (0 == ordersMetadata.getTotalItems()) {
             // No updates
             return null;
         }
-        account.setLastOrderId(ordersMetadata.getLastItemId());
-        accountMapper.updateAccount(account);
         publish(CheckServerStatusStage.FETCH_ITEMS);
         int pageSize = 10;
-        for (int i = 1; i * pageSize < ordersMetadata.getTotalItems(); i++) {
-            ItemsDto tracks = itemsService.getTracks(account.getLastOrderId(), ordersMetadata.getLastItemId(), i, 10);
+        for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
+            ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
             for (Item item : tracks.getItems()) {
                 itemsMapper.insertItem(item, account);
             }
         }
+        account.setLastOrderId(ordersMetadata.getLastItemId());
+        accountMapper.updateAccount(account);
         return null;
     }
 
@@ -68,6 +69,7 @@ public class CheckServerUpdatesWorker extends SwingWorker<Void, CheckServerStatu
     @Override
     protected void done() {
         applicationModel.setStatus(null);
+        applicationModel.fireCheckServerDone();
         try {
             get();
         } catch (InterruptedException e) {
@@ -80,6 +82,10 @@ public class CheckServerUpdatesWorker extends SwingWorker<Void, CheckServerStatu
     private void handleException(Exception e) {
         applicationModel.setStatus(null);
         applicationModel.fireExceptionEvent(e);
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }
 

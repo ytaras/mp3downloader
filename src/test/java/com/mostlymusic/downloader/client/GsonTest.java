@@ -78,4 +78,17 @@ public class GsonTest {
         assertThat(gson.fromJson(gson.toJson(itemsMetadataDto), ItemsMetadataDto.class)).isEqualTo(itemsMetadataDto);
         // then
     }
+
+    @Test
+    public void shouldParseDate() {
+        // given
+        String serialized = "{created_at: \"2011-09-21 07:17:28\"}";
+
+        // when
+        Item deserialized = gson.fromJson(serialized, Item.class);
+
+        // then
+        assertThat(deserialized.getCreatedAt()).isNotNull();
+
+    }
 }

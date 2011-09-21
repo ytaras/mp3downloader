@@ -6,6 +6,7 @@ import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.localdata.AccountMapper;
+import com.mostlymusic.downloader.localdata.ItemsMapper;
 
 import javax.inject.Inject;
 import java.util.LinkedList;
@@ -22,17 +23,27 @@ public class DefaultApplicationModel implements ApplicationModel {
     private AccountTableModel accountTableModel;
     private AuthService authService;
     private List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
+    private ItemsTableModel itemsTableModel;
+    private Account loggedAccount;
 
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
-                                   final CheckServerUpdatesWorker worker) {
+                                   final CheckServerUpdatesWorker worker, ItemsMapper itemsMapper) {
         this.accountMapper = accountMapper;
         this.authService = authService;
         accountTableModel = new AccountTableModel(accountMapper);
+        itemsTableModel = new ItemsTableModel(this, itemsMapper);
         addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(final Account account) {
+                loggedAccount = account;
+                worker.setAccount(account);
                 worker.execute();
+            }
+
+            @Override
+            public void checkServerDone() {
+                itemsTableModel.fireTableDataChanged();
             }
         });
     }
@@ -42,6 +53,23 @@ public class DefaultApplicationModel implements ApplicationModel {
     @Override
     public AccountTableModel getAccountsTableModel() {
         return accountTableModel;
+    }
+
+    @Override
+    public ItemsTableModel getItemsTableModel() {
+        return itemsTableModel;
+    }
+
+    @Override
+    public Account getLoggedAccount() {
+        return loggedAccount;
+    }
+
+    @Override
+    public void fireCheckServerDone() {
+        for (ApplicationModelListener listener : listeners) {
+            listener.checkServerDone();
+        }
     }
 
     @Override

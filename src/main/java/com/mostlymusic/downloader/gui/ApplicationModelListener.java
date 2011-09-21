@@ -17,4 +17,6 @@ public interface ApplicationModelListener {
     void loggedIn(Account account);
 
     void exceptionOccurred(Exception e);
+
+    void checkServerDone();
 }
