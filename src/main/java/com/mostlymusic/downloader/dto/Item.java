@@ -19,7 +19,7 @@ public class Item {
     private String fileName;
     private Date createdAt;
     private Date updatedAt;
-    private boolean dirty;
+    private boolean dirty = false;
 
 
     public long getItemId() {
