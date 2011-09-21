@@ -46,11 +46,40 @@ public class DownloaderModule extends AbstractModule {
     private DefaultHttpClient createHttpClientInstance() {
         DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
         defaultHttpClient.setCookieStore(new BasicCookieStore());
-        if (System.getProperties().getProperty("http.proxyHost") != null) {
-            HttpHost proxy = new HttpHost(System.getProperty("http.proxyHost"),
-                    Integer.parseInt(System.getProperty("http.proxyPort")), "http");
-            defaultHttpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-        }
+        configureProxy(defaultHttpClient);
         return defaultHttpClient;
+    }
+
+    private void configureProxy(DefaultHttpClient defaultHttpClient) {
+        HttpHost httpProxy = null;
+        if (System.getProperties().getProperty("http.proxyHost") != null) {
+            httpProxy = new HttpHost(System.getProperty("http.proxyHost"),
+                    Integer.parseInt(System.getProperty("http.proxyPort")), "http");
+
+        } else if (System.getProperty("javaplugin.proxy.config.list") != null) {
+            String proxyList = System.getProperties().getProperty("javaplugin.proxy.config.list").toUpperCase();
+            System.out.println("PROXY: " + proxyList);
+            //  Using HTTP proxy as proxy for HTTP proxy tunnelled SSL
+            //  socket (should be listed FIRST)....
+            //  1/14/03 1.3.1_06 appears to omit HTTP portion of
+            //  reported proxy list... Mod to accomodate this...
+            //  Expecting proxyList of "HTTP=XXX.XXX.XXX.XXX:Port" OR
+            //  "XXX.XXX.XXX.XXX:Port" & assuming HTTP...
+            String proxyIP = "";
+            if (proxyList.contains("HTTP=")) {
+                proxyIP = proxyList.substring(proxyList.indexOf("HTTP=") + 5, proxyList.indexOf(":"));
+            } else {
+                proxyIP = proxyList.substring(0, proxyList.indexOf(":"));
+            }
+            int endOfPort = proxyList.indexOf(",");
+            if (endOfPort < 1)
+                endOfPort = proxyList.length();
+            String portString = proxyList.substring(proxyList.indexOf(":") + 1, endOfPort);
+            int proxyPort = Integer.parseInt(portString);
+            httpProxy = new HttpHost(proxyIP, proxyPort);
+        }
+        if (httpProxy != null) {
+            defaultHttpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, httpProxy);
+        }
     }
 }
