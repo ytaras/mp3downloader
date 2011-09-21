@@ -32,6 +32,7 @@ public class Main {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
                 JOptionPane.showMessageDialog(frame, throwable, "Error occured", JOptionPane.ERROR_MESSAGE);
+                throwable.printStackTrace();
             }
         });
     }

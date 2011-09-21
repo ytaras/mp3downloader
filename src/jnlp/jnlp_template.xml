@@ -13,6 +13,7 @@
 	</security>
 	<resources>
 		<j2se version="1.6+" initial-heap-size="32m" max-heap-size="128m"/>
+		<property name="jnlp.packEnabled" value="true"/>
 		<property name="jnlp.versionEnabled" value="true"/>
 		$dependencies
 	</resources>
