@@ -16,5 +16,6 @@ public class GuiModule extends AbstractModule {
         bind(AccountsList.class);
         bind(ApplicationModel.class).to(DefaultApplicationModel.class);
         bind(JPanel.class).annotatedWith(MainLayout.class).to(MainPanel.class);
+        bind(ErrorHandlerListener.class).asEagerSingleton();
     }
 }

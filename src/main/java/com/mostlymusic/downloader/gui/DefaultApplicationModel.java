@@ -2,14 +2,16 @@ package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.AuthService;
+import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.dto.ItemsMetadataDto;
+import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
+import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 
 import javax.inject.Inject;
-import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
@@ -21,13 +23,30 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     private AccountTableModel accountTableModel;
     private AuthService authService;
+    private ItemsService itemsService;
     private List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
 
     @Inject
-    public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService) {
+    public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService, final ItemsService itemsService) {
         this.accountMapper = accountMapper;
         this.authService = authService;
+        this.itemsService = itemsService;
         accountTableModel = new AccountTableModel(accountMapper);
+        final ItemsService itemsService1 = itemsService;
+        addListener(new ApplicationModelListenerAdapter() {
+            private final ItemsService itemsService = itemsService1;
+
+            @Override
+            public void loggedIn(final Account account) {
+                setStatus("Fetching list of updates from server...");
+                new CheckServerUpdatesWorker(account, itemsService, DefaultApplicationModel.this).execute();
+            }
+
+            @Override
+            public void metadataFetched(ItemsMetadataDto itemsMetadataDto, Account account) {
+                setStatus(null);
+            }
+        });
     }
 
     private final AccountMapper accountMapper;
@@ -50,28 +69,7 @@ public class DefaultApplicationModel implements ApplicationModel {
     public void loginToAccountAt(int selectedRow) {
         final Account account = accountTableModel.getAccountAt(selectedRow);
         this.setStatus("Trying to log in...");
-        new SwingWorker<Boolean, Void>() {
-            @Override
-            protected Boolean doInBackground() throws Exception {
-                return authService.auth(account.getUsername(), account.getPassword());
-            }
-
-            @Override
-            protected void done() {
-                setStatus(null);
-                try {
-                    if (get()) {
-                        fireLoggedInEvent(account);
-                    } else {
-                        fireLoginFailedEvent(account);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    throw new RuntimeException("Error while trying to login", e);
-                }
-            }
-        }.execute();
+        new LoginWorker(this, account, authService).execute();
     }
 
 
@@ -90,13 +88,27 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     }
 
-    private void fireLoginFailedEvent(Account account) {
+    @Override
+    public void fireMetadataFetchedEvent(ItemsMetadataDto itemsMetadataDto, Account account) {
+        for (ApplicationModelListener listener : listeners) {
+            listener.metadataFetched(itemsMetadataDto, account);
+        }
+    }
+
+    @Override
+    public void fireExceptionEvent(Exception e) {
+        for (ApplicationModelListener listener : listeners) {
+            listener.exceptionOccurred(e);
+        }
+    }
+
+    public void fireLoginFailedEvent(Account account) {
         for (ApplicationModelListener listener : listeners) {
             listener.loginFailed(account);
         }
     }
 
-    private void fireLoggedInEvent(Account account) {
+    public void fireLoggedInEvent(Account account) {
         for (ApplicationModelListener listener : listeners) {
             listener.loggedIn(account);
         }
