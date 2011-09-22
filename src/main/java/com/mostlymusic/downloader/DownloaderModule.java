@@ -44,7 +44,10 @@ public class DownloaderModule extends AbstractModule {
     }
 
     private DefaultHttpClient createHttpClientInstance() {
-        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(new ThreadSafeClientConnManager());
+        ThreadSafeClientConnManager conman = new ThreadSafeClientConnManager();
+        conman.setMaxTotal(200);
+        conman.setDefaultMaxPerRoute(20);
+        DefaultHttpClient defaultHttpClient = new DefaultHttpClient(conman);
         defaultHttpClient.setCookieStore(new BasicCookieStore());
         if (System.getProperties().getProperty("http.proxyHost") != null) {
             HttpHost proxy = new HttpHost(System.getProperty("http.proxyHost"),

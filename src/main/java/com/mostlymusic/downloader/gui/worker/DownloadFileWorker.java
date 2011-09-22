@@ -37,10 +37,10 @@ public class DownloadFileWorker extends SwingWorker<Void, Long> {
         if (null == item) {
             throw new IllegalStateException("Not initialized worker");
         }
-        final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
         model.getItemsTableModel().startDownload(item);
         model.publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
         publish(0L);
+        final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
         try {
             if (track.getValue() < 0) {
                 // We don't know size of entry, so don't bother calculating

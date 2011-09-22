@@ -57,7 +57,7 @@
 						</systemProperty>
 						<systemProperty>
 							<key>http.proxyPort</key>
-							<value>8008</value>
+							<value>3128</value>
 						</systemProperty>
 					</systemProperties>
 				</configuration>

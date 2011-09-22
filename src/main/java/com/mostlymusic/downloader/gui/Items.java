@@ -63,8 +63,6 @@ public class Items {
                         }
                     });
                     downloadFileWorker.execute();
-
-
                 }
             }
         });
