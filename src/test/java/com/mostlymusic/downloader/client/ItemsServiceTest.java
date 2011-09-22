@@ -17,6 +17,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;
@@ -115,13 +116,14 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         Item item = new Item();
         item.setLinkHash("HASH");
         // when
-        InputStream stream = itemsService.getTrack(item);
+        Map.Entry<InputStream, Long> trackEntry = itemsService.getTrack(item);
 
         // then
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        IOUtils.copy(stream, byteArrayOutputStream);
+        IOUtils.copy(trackEntry.getKey(), byteArrayOutputStream);
         assertThat(byteArrayOutputStream.toString()).isEqualTo(generateContent("HASH"));
+        assertThat(trackEntry.getValue()).isPositive();
     }
 
     private String generateContent(String hash) {

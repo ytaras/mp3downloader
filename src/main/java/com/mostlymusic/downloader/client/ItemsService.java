@@ -16,8 +16,10 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * @author ytaras
@@ -48,11 +50,11 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public InputStream getTrack(Item link) throws IOException {
+    public Map.Entry<InputStream, Long> getTrack(Item link) throws IOException {
         HttpPost httpPost = new HttpPost(serviceUrl + "/download-manager/files/download/id/" + link.getLinkHash());
         HttpResponse response = getHttpClient().execute(httpPost);
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            return response.getEntity().getContent();
+            return new AbstractMap.SimpleImmutableEntry<InputStream, Long>(response.getEntity().getContent(), response.getEntity().getContentLength());
         }
         throw new HttpResponseException(response.getStatusLine().getStatusCode(),
                 getEntityContent(response.getEntity()));

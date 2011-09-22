@@ -12,14 +12,27 @@ import java.awt.*;
  *         Time: 3:09 PM
  */
 public class ItemStatusRenderer extends DefaultTableCellRenderer {
+    private JProgressBar progressBar = new JProgressBar();
 
     @Override
     public Component getTableCellRendererComponent(JTable jTable, Object object, boolean isSelected, boolean hasFocus, int row, int column) {
         ItemsTableModel.ItemStatus status = (ItemsTableModel.ItemStatus) object;
         if (status.isDownloading()) {
-            JLabel tableCellRendererComponent = (JLabel) super.getTableCellRendererComponent(jTable, object, isSelected, hasFocus, row, column);
-            tableCellRendererComponent.setText("DOWNLOADING...");
-            return tableCellRendererComponent;
+            Long totalSize = status.getTotalSize();
+            if (null == totalSize || totalSize < 0) {
+                progressBar.setIndeterminate(true);
+            } else if (totalSize >= Integer.MAX_VALUE) {
+                progressBar.setIndeterminate(false);
+                progressBar.setMaximum((int) (totalSize >> 32));
+                progressBar.setValue((int) (status.getDownloadProgress() >> 32));
+                progressBar.setMinimum(0);
+            } else {
+                progressBar.setIndeterminate(false);
+                progressBar.setMaximum(totalSize.intValue());
+                progressBar.setValue((int) (status.getDownloadProgress()));
+                progressBar.setMinimum(0);
+            }
+            return progressBar;
         }
         return super.getTableCellRendererComponent(jTable, object, isSelected, hasFocus, row, column);
     }

@@ -21,7 +21,8 @@ public class ItemsTableModel extends AbstractTableModel {
     private ApplicationModel applicationModel;
     private ItemsMapper itemsMapper;
     private List<Item> data;
-    private Map<Item, Integer> downloadProgress = new HashMap<Item, Integer>();
+    private Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
+    private Map<Long, Long> fileSizes = new HashMap<Long, Long>();
     private static final String ITEM_ID = "Item id";
     private static final String TITLE = "Title";
     private static final String STATUS = "Status";
@@ -111,18 +112,36 @@ public class ItemsTableModel extends AbstractTableModel {
     }
 
     public boolean isDownloadingItemAt(int row) {
-        return downloadProgress.containsKey(getItemAt(row));
+        return downloadProgress.containsKey(getItemAt(row).getItemId());
     }
 
-    public void stopDownload(Item row) {
-        downloadProgress.remove(row);
+    public void stopDownload(Item item) {
+        downloadProgress.remove(item.getItemId());
         fireTableDataChanged();
     }
 
-    public void startDownload(Item row) {
-        downloadProgress.put(row, 0);
+    public void startDownload(Item item) {
+        downloadProgress.put(item.getItemId(), 0L);
         fireTableDataChanged();
     }
+
+    private long getDownloadProgress(Item item) {
+        return downloadProgress.get(item.getItemId());
+    }
+
+    public void setDownloadProgress(Item item, Long progress) {
+        Long oldValue = downloadProgress.get(item.getItemId());
+        if (!progress.equals(oldValue)) {
+            downloadProgress.put(item.getItemId(), progress);
+            // TODO Redraw cell only
+            fireTableDataChanged();
+        }
+    }
+
+    public void setFileSize(Item item, Long value) {
+        fileSizes.put(item.getItemId(), value);
+    }
+
 
     public class ItemStatus {
         private final int row;
@@ -143,5 +162,15 @@ public class ItemsTableModel extends AbstractTableModel {
         public boolean isDownloading() {
             return isDownloadingItemAt(row);
         }
+
+
+        public long getDownloadProgress() {
+            return ItemsTableModel.this.getDownloadProgress(getItemAt(row));
+        }
+
+        public Long getTotalSize() {
+            return fileSizes.get(getItemAt(row).getItemId());
+        }
     }
+
 }
