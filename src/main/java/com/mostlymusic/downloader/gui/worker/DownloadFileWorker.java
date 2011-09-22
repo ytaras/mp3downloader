@@ -1,6 +1,5 @@
 package com.mostlymusic.downloader.gui.worker;
 
-import com.google.inject.Inject;
 import com.mostlymusic.downloader.Configuration;
 import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Item;
@@ -19,18 +18,18 @@ import java.util.Map;
  *         Time: 11:54 AM
  */
 public class DownloadFileWorker extends SwingWorker<Void, Long> {
-    private Item item;
-    private ItemsService itemsService;
-    private Configuration configuration;
-    private ApplicationModel model;
+    private final Item item;
+    private final ItemsService itemsService;
+    private final Configuration configuration;
+    private final ApplicationModel model;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' download finished";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
 
-    @Inject
-    public DownloadFileWorker(ItemsService itemsService, Configuration configuration, ApplicationModel model) {
+    public DownloadFileWorker(ItemsService itemsService, Configuration configuration, ApplicationModel model, Item item) {
         this.itemsService = itemsService;
         this.configuration = configuration;
         this.model = model;
+        this.item = item;
     }
 
     @Override
@@ -81,11 +80,6 @@ public class DownloadFileWorker extends SwingWorker<Void, Long> {
         File file = new File(configuration.getDownloadDirectory(), item.getFileName());
         return new FileOutputStream(file);
     }
-
-    public void setItemToDownload(Item item) {
-        this.item = item;
-    }
-
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
         BufferedInputStream in = new BufferedInputStream(from);

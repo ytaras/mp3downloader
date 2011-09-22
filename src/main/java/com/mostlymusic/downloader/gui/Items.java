@@ -2,8 +2,10 @@ package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
+import com.mostlymusic.downloader.gui.worker.DownloadFileWorkerFactory;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -26,7 +28,7 @@ public class Items {
     private ItemsTableModel itemsTableModel;
 
     @Inject
-    public Items(final DownloadFileWorker downloadFileWorker) {
+    public Items(final DownloadFileWorkerFactory downloadFileWorkerFactory) {
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -43,21 +45,27 @@ public class Items {
         downloadFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                downloadFileWorker.setItemToDownload(itemsTableModel.getItemAt(itemsTable.getSelectedRow()));
-                downloadFileWorker.addPropertyChangeListener(new PropertyChangeListener() {
-                    @Override
-                    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-                        if ("state".equals(propertyChangeEvent.getPropertyName())) {
-                            final SwingWorker.StateValue newValue = (SwingWorker.StateValue) propertyChangeEvent.getNewValue();
-                            if (newValue == SwingWorker.StateValue.PENDING || newValue == SwingWorker.StateValue.STARTED) {
-                                downloadFileButton.setEnabled(false);
-                            } else if (SwingWorker.StateValue.DONE == newValue) {
-                                downloadFileButton.setEnabled(true);
+                for (int row : itemsTable.getSelectedRows()) {
+                    Item item = itemsTableModel.getItemAt(row);
+                    DownloadFileWorker downloadFileWorker =
+                            downloadFileWorkerFactory.createWorker(item);
+                    downloadFileWorker.addPropertyChangeListener(new PropertyChangeListener() {
+                        @Override
+                        public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+                            if ("state".equals(propertyChangeEvent.getPropertyName())) {
+                                final SwingWorker.StateValue newValue = (SwingWorker.StateValue) propertyChangeEvent.getNewValue();
+                                if (newValue == SwingWorker.StateValue.PENDING || newValue == SwingWorker.StateValue.STARTED) {
+                                    downloadFileButton.setEnabled(false);
+                                } else if (SwingWorker.StateValue.DONE == newValue) {
+                                    downloadFileButton.setEnabled(true);
+                                }
                             }
                         }
-                    }
-                });
-                downloadFileWorker.execute();
+                    });
+                    downloadFileWorker.execute();
+
+
+                }
             }
         });
     }
