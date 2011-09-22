@@ -31,4 +31,8 @@ public class ApplicationModelListenerAdapter implements ApplicationModelListener
     @Override
     public void checkServerDone() {
     }
+
+    @Override
+    public void logEvent(LogEvent event) {
+    }
 }

@@ -73,6 +73,13 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     @Override
+    public void publishLogStatus(LogEvent event) {
+        for (ApplicationModelListener listener : listeners) {
+            listener.logEvent(event);
+        }
+    }
+
+    @Override
     public void createAccount(String username, char[] password) {
         Account account = new Account();
         account.setUsername(username);

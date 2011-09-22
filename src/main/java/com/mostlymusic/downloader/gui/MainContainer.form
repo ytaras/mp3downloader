@@ -10,16 +10,11 @@
       <splitpane id="6f0ff">
         <constraints border-constraint="Center"/>
         <properties>
+          <dividerLocation value="300"/>
           <orientation value="0"/>
         </properties>
         <border type="none"/>
         <children>
-          <component id="f246b" class="javax.swing.JList" binding="list1" default-binding="true">
-            <constraints>
-              <splitpane position="right"/>
-            </constraints>
-            <properties/>
-          </component>
           <grid id="340f7" binding="cardPanel" layout-manager="CardLayout" hgap="0" vgap="0">
             <constraints>
               <splitpane position="left"/>
@@ -28,6 +23,19 @@
             <border type="none"/>
             <children/>
           </grid>
+          <scrollpane id="d48fe">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="f246b" class="javax.swing.JList" binding="logList">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
         </children>
       </splitpane>
     </children>

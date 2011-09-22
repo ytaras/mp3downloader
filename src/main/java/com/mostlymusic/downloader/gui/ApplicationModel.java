@@ -25,4 +25,6 @@ public interface ApplicationModel {
     Account getLoggedAccount();
 
     void fireCheckServerDone();
+
+    void publishLogStatus(LogEvent event);
 }

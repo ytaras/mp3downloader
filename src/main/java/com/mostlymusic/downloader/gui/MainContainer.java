@@ -18,11 +18,11 @@ public class MainContainer {
     private static final String ITEMS = "ITEMS";
 
     private JPanel panel1;
-    private JList list1;
+    private JList logList;
     private JPanel cardPanel;
 
-    private ApplicationModel model;
     private CardLayout layout;
+    private DefaultListModel logListModel;
 
     @Inject
     public MainContainer(AccountsList accountsList, Items items, ApplicationModel model) {
@@ -30,13 +30,20 @@ public class MainContainer {
         setAccountsList(accountsList);
         setItems(items);
         layout.show(this.cardPanel, ACCOUNTS);
-        this.model = model;
+        logListModel = new DefaultListModel();
+        logList.setModel(logListModel);
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(Account account) {
                 layout.show(cardPanel, ITEMS);
             }
+
+            @Override
+            public void logEvent(LogEvent event) {
+                logListModel.add(0, event);
+            }
         });
+        model.publishLogStatus(new LogEvent("Started application"));
     }
 
     public Component getContentPane() {
