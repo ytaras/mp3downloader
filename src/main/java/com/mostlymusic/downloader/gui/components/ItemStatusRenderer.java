@@ -20,14 +20,12 @@ public class ItemStatusRenderer extends DefaultTableCellRenderer {
         if (status.isDownloading()) {
             Long totalSize = status.getTotalSize();
             if (null == totalSize || totalSize < 0) {
-                progressBar.setIndeterminate(true);
+                progressBar.setValue(0);
             } else if (totalSize >= Integer.MAX_VALUE) {
-                progressBar.setIndeterminate(false);
                 progressBar.setMaximum((int) (totalSize >> 32));
                 progressBar.setValue((int) (status.getDownloadProgress() >> 32));
                 progressBar.setMinimum(0);
             } else {
-                progressBar.setIndeterminate(false);
                 progressBar.setMaximum(totalSize.intValue());
                 progressBar.setValue((int) (status.getDownloadProgress()));
                 progressBar.setMinimum(0);
