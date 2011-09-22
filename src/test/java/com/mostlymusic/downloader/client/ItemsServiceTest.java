@@ -112,8 +112,10 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     public void shouldDownloadFile() throws IOException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
+        Item item = new Item();
+        item.setLinkHash("HASH");
         // when
-        InputStream stream = itemsService.getTrack("HASH");
+        InputStream stream = itemsService.getTrack(item);
 
         // then
         assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();

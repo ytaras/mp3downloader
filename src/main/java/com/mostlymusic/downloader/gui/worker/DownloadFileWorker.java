@@ -33,8 +33,7 @@ public class DownloadFileWorker extends SwingWorker<Void, Void> {
         if (null == item) {
             throw new IllegalStateException("Not initialized worker");
         }
-        // TODO Service should accept link object, not hash
-        InputStream track = itemsService.getTrack(item.getLinkHash());
+        InputStream track = itemsService.getTrack(item);
         try {
             IOUtils.copy(track, getOutputFile(item));
         } finally {

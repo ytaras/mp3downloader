@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.client;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
+import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.HttpResponse;
@@ -47,8 +48,8 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public InputStream getTrack(String hash) throws IOException {
-        HttpPost httpPost = new HttpPost(serviceUrl + "/download-manager/files/download/id/" + hash);
+    public InputStream getTrack(Item link) throws IOException {
+        HttpPost httpPost = new HttpPost(serviceUrl + "/download-manager/files/download/id/" + link.getLinkHash());
         HttpResponse response = getHttpClient().execute(httpPost);
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             return response.getEntity().getContent();
