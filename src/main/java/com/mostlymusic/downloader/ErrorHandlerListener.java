@@ -3,6 +3,7 @@ package com.mostlymusic.downloader;
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.ApplicationModelListenerAdapter;
+import com.mostlymusic.downloader.gui.MainContainer;
 import com.mostlymusic.downloader.gui.MainLayout;
 
 import javax.swing.*;
@@ -21,10 +22,10 @@ public class ErrorHandlerListener extends ApplicationModelListenerAdapter {
     private Logger logger;
 
     @Inject
-    public ErrorHandlerListener(ApplicationModel model, @MainLayout JPanel panel, Logger logger) {
+    public ErrorHandlerListener(ApplicationModel model, @MainLayout MainContainer panel, Logger logger) {
         this.logger = logger;
         model.addListener(this);
-        root = SwingUtilities.getRoot(panel);
+        root = SwingUtilities.getRoot(panel.getContentPane());
     }
 
     @Override

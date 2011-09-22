@@ -8,6 +8,7 @@ import com.mostlymusic.downloader.LocalStorageModule;
 import com.mostlymusic.downloader.localdata.SchemaCreator;
 
 import javax.swing.*;
+import java.awt.*;
 import java.sql.SQLException;
 
 /**
@@ -23,7 +24,7 @@ public class Main {
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
         injector.getInstance(SchemaCreator.class).createTables();
         final JFrame frame = new JFrame("AccountsList");
-        frame.setContentPane(injector.getInstance(MainPanel.class));
+        frame.setContentPane((Container) injector.getInstance(MainContainer.class).getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setGlassPane(injector.getInstance(ProgressGlassPane.class));

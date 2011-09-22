@@ -1,9 +1,12 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author ytaras
@@ -31,4 +34,6 @@ public interface IItemsService {
      * @return list of tracks on this page
      */
     ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
+
+    Map.Entry<InputStream, Long> getTrack(Item link) throws IOException;
 }

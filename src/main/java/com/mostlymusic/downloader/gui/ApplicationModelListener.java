@@ -19,4 +19,6 @@ public interface ApplicationModelListener {
     void exceptionOccurred(Exception e);
 
     void checkServerDone();
+
+    void logEvent(LogEvent event);
 }

@@ -73,6 +73,16 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     @Override
+    public void publishLogStatus(LogEvent event) {
+        if (null == event) {
+            return;
+        }
+        for (ApplicationModelListener listener : listeners) {
+            listener.logEvent(event);
+        }
+    }
+
+    @Override
     public void createAccount(String username, char[] password) {
         Account account = new Account();
         account.setUsername(username);
@@ -111,12 +121,14 @@ public class DefaultApplicationModel implements ApplicationModel {
         }
     }
 
+    @Override
     public void fireLoginFailedEvent(Account account) {
         for (ApplicationModelListener listener : listeners) {
             listener.loginFailed(account);
         }
     }
 
+    @Override
     public void fireLoggedInEvent(Account account) {
         for (ApplicationModelListener listener : listeners) {
             listener.loggedIn(account);
