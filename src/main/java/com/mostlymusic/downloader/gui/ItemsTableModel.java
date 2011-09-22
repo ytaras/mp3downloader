@@ -8,7 +8,9 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ytaras
@@ -19,6 +21,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private ApplicationModel applicationModel;
     private ItemsMapper itemsMapper;
     private List<Item> data;
+    private Map<Item, Integer> downloadProgress = new HashMap<Item, Integer>();
     private static final String ITEM_ID = "Item id";
     private static final String TITLE = "Title";
     private static final String STATUS = "Status";
@@ -69,7 +72,7 @@ public class ItemsTableModel extends AbstractTableModel {
     @Override
     public Object getValueAt(int row, int col) {
         Item item = getItemAt(row);
-        // No time to put fullblown binding framework here :(
+        // No time to put full-blown binding framework here :(
         // So I have to use this ugly solution to protect myself from mistypes
 
         String columnName = COLUMN_NAMES[col];
@@ -78,7 +81,7 @@ public class ItemsTableModel extends AbstractTableModel {
         } else if (TITLE.equals(columnName)) {
             return item.getLinkTitle();
         } else if (STATUS.equals(columnName)) {
-            return item.getStatus();
+            return new ItemStatus(row);
         } else if (DOWNLOADS_BOUGHT.equals(columnName)) {
             return item.getDownloadsBought();
         } else if (DOWNLOADS_USED.equals(columnName)) {
@@ -95,7 +98,50 @@ public class ItemsTableModel extends AbstractTableModel {
         return COLUMN_NAMES[i];
     }
 
+    @Override
+    public Class<?> getColumnClass(int i) {
+        if (STATUS.equals(COLUMN_NAMES[i])) {
+            return ItemStatus.class;
+        }
+        return super.getColumnClass(i);
+    }
+
     public Item getItemAt(int row) {
         return getData().get(row);
+    }
+
+    public boolean isDownloadingItemAt(int row) {
+        return downloadProgress.containsKey(getItemAt(row));
+    }
+
+    public void stopDownload(Item row) {
+        downloadProgress.remove(row);
+        fireTableDataChanged();
+    }
+
+    public void startDownload(Item row) {
+        downloadProgress.put(row, 0);
+        fireTableDataChanged();
+    }
+
+    public class ItemStatus {
+        private final int row;
+
+        public ItemStatus(int row) {
+            this.row = row;
+        }
+
+        public String getStatus() {
+            return getItemAt(row).getStatus();
+        }
+
+        @Override
+        public String toString() {
+            return getStatus();
+        }
+
+        public boolean isDownloading() {
+            return isDownloadingItemAt(row);
+        }
     }
 }

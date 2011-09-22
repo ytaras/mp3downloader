@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
 
 import javax.swing.*;
@@ -26,6 +27,7 @@ public class Items {
 
     @Inject
     public Items(final DownloadFileWorker downloadFileWorker) {
+        itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {

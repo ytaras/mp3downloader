@@ -26,6 +26,7 @@ public class DownloadFileWorker extends SwingWorker<Void, Void> {
     private ApplicationModel model;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' download finished";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
+    private int row;
 
     @Inject
     public DownloadFileWorker(ItemsService itemsService, Configuration configuration, ApplicationModel model) {
@@ -40,6 +41,7 @@ public class DownloadFileWorker extends SwingWorker<Void, Void> {
             throw new IllegalStateException("Not initialized worker");
         }
         InputStream track = itemsService.getTrack(item);
+        model.getItemsTableModel().startDownload(item);
         model.publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
         try {
             IOUtils.copy(track, getOutputFile(item));
@@ -52,6 +54,7 @@ public class DownloadFileWorker extends SwingWorker<Void, Void> {
     @Override
     protected void done() {
         model.publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle())));
+        model.getItemsTableModel().stopDownload(item);
     }
 
     private FileOutputStream getOutputFile(Item item) throws FileNotFoundException {
@@ -61,5 +64,9 @@ public class DownloadFileWorker extends SwingWorker<Void, Void> {
 
     public void setItemToDownload(Item item) {
         this.item = item;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
     }
 }
