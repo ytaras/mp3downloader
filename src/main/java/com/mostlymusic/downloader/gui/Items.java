@@ -31,7 +31,13 @@ public class Items {
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                downloadFileButton.setEnabled(itemsTable.getSelectedRow() >= 0);
+                boolean rowSelected = itemsTable.getSelectedRow() >= 0;
+                if (rowSelected) {
+                    boolean downloading = itemsTableModel.isDownloadingItemAt(itemsTable.getSelectedRow());
+                    downloadFileButton.setEnabled(!downloading);
+                } else {
+                    downloadFileButton.setEnabled(false);
+                }
             }
         });
         downloadFileButton.addActionListener(new ActionListener() {
