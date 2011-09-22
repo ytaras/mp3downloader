@@ -18,6 +18,13 @@
           </component>
         </children>
       </scrollpane>
+      <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
+        <constraints border-constraint="South"/>
+        <properties>
+          <enabled value="false"/>
+          <text value="&amp;Download"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>

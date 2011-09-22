@@ -44,6 +44,7 @@ public class JsonServiceClient {
     }
 
     protected String getEntityContent(HttpEntity entity) throws IOException {
+        // TODO Use commons-io BAOS in every place
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         entity.writeTo(stream);
         return stream.toString(getEncoding(entity));

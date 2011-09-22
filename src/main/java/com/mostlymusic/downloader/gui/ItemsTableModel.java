@@ -68,7 +68,7 @@ public class ItemsTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int row, int col) {
-        Item item = getData().get(row);
+        Item item = getItemAt(row);
         // No time to put fullblown binding framework here :(
         // So I have to use this ugly solution to protect myself from mistypes
 
@@ -93,5 +93,9 @@ public class ItemsTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int i) {
         return COLUMN_NAMES[i];
+    }
+
+    public Item getItemAt(int row) {
+        return getData().get(row);
     }
 }
