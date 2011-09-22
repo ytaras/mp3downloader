@@ -3,6 +3,7 @@ package com.mostlymusic.downloader;
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.client.IAuthService;
 import com.mostlymusic.downloader.client.JsonServiceClient;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -11,7 +12,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 

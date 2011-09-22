@@ -4,6 +4,7 @@ import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.*;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -13,7 +14,6 @@ import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;

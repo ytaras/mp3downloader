@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -44,7 +44,6 @@ public class JsonServiceClient {
     }
 
     protected String getEntityContent(HttpEntity entity) throws IOException {
-        // TODO Use commons-io BAOS in every place
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         entity.writeTo(stream);
         return stream.toString(getEncoding(entity));
