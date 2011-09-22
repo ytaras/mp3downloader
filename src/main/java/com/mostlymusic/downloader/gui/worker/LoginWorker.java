@@ -4,24 +4,18 @@ import com.mostlymusic.downloader.AuthService;
 import com.mostlymusic.downloader.client.IAuthService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.ApplicationModel;
-import com.mostlymusic.downloader.gui.LogEvent;
-
-import javax.swing.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
  *         Date: 9/20/11
  *         Time: 6:44 PM
  */
-public class LoginWorker extends SwingWorker<Boolean, Void> {
-    private static final String LOGGED_IN_FORMAT = "Logged in as '%s'";
+public class LoginWorker extends AbstractSwingClientWorker<Boolean, Void> {
     private final Account account;
-    private ApplicationModel applicationModel;
     private IAuthService authService;
 
     public LoginWorker(ApplicationModel applicationModel, Account account, AuthService authService) {
-        this.applicationModel = applicationModel;
+        super(applicationModel);
         this.account = account;
         this.authService = authService;
     }
@@ -32,19 +26,16 @@ public class LoginWorker extends SwingWorker<Boolean, Void> {
     }
 
     @Override
-    protected void done() {
-        applicationModel.setStatus(null);
-        applicationModel.publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
-        try {
-            if (get()) {
-                applicationModel.fireLoggedInEvent(account);
-            } else {
-                applicationModel.fireLoginFailedEvent(account);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            throw new RuntimeException("Error while trying to login", e);
+    protected void beforeGet() {
+        getApplicationModel().setStatus(null);
+    }
+
+    @Override
+    protected void doDone(Boolean loggedIn) {
+        if (loggedIn) {
+            getApplicationModel().fireLoggedInEvent(account);
+        } else {
+            getApplicationModel().fireLoginFailedEvent(account);
         }
     }
 }

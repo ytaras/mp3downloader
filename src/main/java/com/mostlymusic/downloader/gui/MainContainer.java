@@ -40,6 +40,10 @@ public class MainContainer {
 
             @Override
             public void logEvent(LogEvent event) {
+                Throwable exception = event.getException();
+                if (exception != null) {
+                    logListModel.add(0, exception.getMessage());
+                }
                 logListModel.add(0, event);
             }
         });

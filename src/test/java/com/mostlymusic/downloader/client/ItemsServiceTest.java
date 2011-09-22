@@ -46,7 +46,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
 
 
     @Test
-    public void shouldGetWithoutParameters() throws IOException {
+    public void shouldGetWithoutParameters() throws IOException, RequestException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
@@ -59,7 +59,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     }
 
     @Test
-    public void shouldGetMetadataWithParameters() throws IOException {
+    public void shouldGetMetadataWithParameters() throws IOException, RequestException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
 
@@ -72,7 +72,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     }
 
     @Test
-    public void shouldReturnList() throws IOException {
+    public void shouldReturnList() throws IOException, RequestException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
         long firstOrderId = 10;

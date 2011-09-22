@@ -29,8 +29,8 @@ public interface ItemsMapper {
             "linkHash VARCHAR(255),\n" +
             "status VARCHAR(255),\n" +
             "fileName VARCHAR(255),\n" +
-            "createdAt DATE,\n" +
-            "updatedAt DATE,\n" +
+            "createdAt DATETIME,\n" +
+            "updatedAt DATETIME,\n" +
             "accountId INT,\n" +
             "dirty SMALLINT)")
     void createSchema();
