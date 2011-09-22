@@ -9,37 +9,45 @@ import java.awt.*;
 
 /**
  * @author ytaras
- *         Date: 9/20/11
- *         Time: 3:43 PM
+ *         Date: 9/22/11
+ *         Time: 12:40 PM
  */
 @Singleton
-public class MainPanel extends JPanel {
+public class MainContainer {
     private static final String ACCOUNTS = "ACCOUNTS";
     private static final String ITEMS = "ITEMS";
-    private CardLayout cardLayout;
+
+    private JPanel panel1;
+    private JList list1;
+    private JPanel cardPanel;
+
     private ApplicationModel model;
+    private CardLayout layout;
 
     @Inject
-    public MainPanel(AccountsList accountsList, Items items, ApplicationModel model) {
-        cardLayout = new CardLayout();
-        setLayout(cardLayout);
+    public MainContainer(AccountsList accountsList, Items items, ApplicationModel model) {
+        layout = (CardLayout) cardPanel.getLayout();
         setAccountsList(accountsList);
         setItems(items);
-        cardLayout.show(this, ACCOUNTS);
+        layout.show(this.cardPanel, ACCOUNTS);
         this.model = model;
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(Account account) {
-                cardLayout.show(MainPanel.this, ITEMS);
+                layout.show(cardPanel, ITEMS);
             }
         });
     }
 
+    public Component getContentPane() {
+        return panel1;
+    }
+
     private void setAccountsList(AccountsList accountsList) {
-        add(accountsList.getContentPane(), ACCOUNTS);
+        cardPanel.add(accountsList.getContentPane(), ACCOUNTS);
     }
 
     private void setItems(Items items) {
-        add(items.getContentPane(), ITEMS);
+        cardPanel.add(items.getContentPane(), ITEMS);
     }
 }

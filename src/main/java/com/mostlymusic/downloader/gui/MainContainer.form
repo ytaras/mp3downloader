@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mostlymusic.downloader.gui.MainContainer">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <splitpane id="6f0ff">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <orientation value="0"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="f246b" class="javax.swing.JList" binding="list1" default-binding="true">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+          </component>
+          <grid id="340f7" binding="cardPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
+          </grid>
+        </children>
+      </splitpane>
+    </children>
+  </grid>
+</form>

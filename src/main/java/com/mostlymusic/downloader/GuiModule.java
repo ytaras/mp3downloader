@@ -3,7 +3,6 @@ package com.mostlymusic.downloader;
 import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.gui.*;
 
-import javax.swing.*;
 import java.io.File;
 
 /**
@@ -16,7 +15,7 @@ public class GuiModule extends AbstractModule {
     protected void configure() {
         bind(AccountsList.class);
         bind(ApplicationModel.class).to(DefaultApplicationModel.class);
-        bind(JPanel.class).annotatedWith(MainLayout.class).to(MainPanel.class);
+        bind(MainContainer.class).annotatedWith(MainLayout.class).to(MainContainer.class);
         bind(ErrorHandlerListener.class).asEagerSingleton();
 
         String userHome = System.getProperty("user.home");
