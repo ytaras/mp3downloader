@@ -4,6 +4,7 @@ import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author ytaras
@@ -31,4 +32,6 @@ public interface IItemsService {
      * @return list of tracks on this page
      */
     ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
+
+    InputStream getTrack(String hash) throws IOException;
 }

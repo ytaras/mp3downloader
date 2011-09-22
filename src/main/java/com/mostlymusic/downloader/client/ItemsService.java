@@ -5,12 +5,16 @@ import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -40,6 +44,17 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
         HttpPost post = new HttpPost(serviceUrl + "/download-manager/sync/itemsList/");
         post.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
         return getResult(post, ItemsDto.class);
+    }
+
+    @Override
+    public InputStream getTrack(String hash) throws IOException {
+        HttpPost httpPost = new HttpPost(serviceUrl + "/download-manager/files/download/id/" + hash);
+        HttpResponse response = getHttpClient().execute(httpPost);
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            return response.getEntity().getContent();
+        }
+        throw new HttpResponseException(response.getStatusLine().getStatusCode(),
+                getEntityContent(response.getEntity()));
     }
 
     @Override

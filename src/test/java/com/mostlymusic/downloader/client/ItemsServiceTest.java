@@ -3,15 +3,19 @@ package com.mostlymusic.downloader.client;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.*;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -30,6 +34,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     protected void registerHandler() {
         localTestServer.register("/download-manager/sync/itemsStatus/", new OrdersHttpHandler());
         localTestServer.register("/download-manager/sync/itemsList/", new TracksHttpHandler());
+        localTestServer.register("/download-manager/files/download/id/*", new Mp3FileHttpHandler());
     }
 
     @Before
@@ -102,6 +107,29 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
             assertThat(e.getStatusCode()).isEqualTo(HttpStatus.SC_BAD_REQUEST);
         }
     }
+
+    @Test
+    public void shouldDownloadFile() throws IOException {
+        // given
+        assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
+        // when
+        InputStream stream = itemsService.getTrack("HASH");
+
+        // then
+        assertThat(localTestServer.getAcceptedConnectionCount()).isPositive();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        IOUtils.copy(stream, byteArrayOutputStream);
+        assertThat(byteArrayOutputStream.toString()).isEqualTo(generateContent("HASH"));
+    }
+
+    private String generateContent(String hash) {
+        StringBuilder builder = new StringBuilder(hash);
+        for (int i = 0; i < 5000; i++) {
+            builder.append(hash);
+        }
+        return builder.toString();
+    }
+
 
     private ItemsDto getMockTracksDtos(long firstItemId, long lastItemId, int page, int pageSize) {
         ItemsDto itemsDto = new ItemsDto();
@@ -178,6 +206,15 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) {
             throw new RuntimeException("Invalid request");
+        }
+    }
+
+    private class Mp3FileHttpHandler implements HttpRequestHandler {
+        @Override
+        public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext) throws HttpException, IOException {
+            String[] uriPart = httpRequest.getRequestLine().getUri().split("/");
+            String hash = uriPart[uriPart.length - 1];
+            httpResponse.setEntity(new StringEntity(generateContent(hash)));
         }
     }
 

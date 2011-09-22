@@ -32,21 +32,29 @@ public class JsonServiceClient {
         return gson.fromJson(getReader(get), type);
     }
 
-    private InputStreamReader getReader(HttpUriRequest get) throws IOException {
+    protected InputStreamReader getReader(HttpUriRequest get) throws IOException {
         HttpResponse response = httpClient.execute(get);
         HttpEntity entity = response.getEntity();
+        if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
+            throw new HttpResponseException(response.getStatusLine().getStatusCode(),
+                    getEntityContent(entity));
+        }
+        String encoding = getEncoding(entity);
+        return new InputStreamReader(entity.getContent(), encoding);
+    }
+
+    protected String getEntityContent(HttpEntity entity) throws IOException {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        entity.writeTo(stream);
+        return stream.toString(getEncoding(entity));
+    }
+
+    private String getEncoding(HttpEntity entity) {
         String encoding = "UTF-8";
         if (entity.getContentEncoding() != null) {
             encoding = entity.getContentEncoding().getValue();
         }
-
-        if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            entity.writeTo(stream);
-            throw new HttpResponseException(response.getStatusLine().getStatusCode(), stream.toString(encoding));
-        }
-
-        return new InputStreamReader(entity.getContent(), encoding);
+        return encoding;
     }
 
     public DefaultHttpClient getHttpClient() {
