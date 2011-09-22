@@ -3,7 +3,8 @@ package com.mostlymusic.downloader.gui.worker;
 import com.mostlymusic.downloader.AuthService;
 import com.mostlymusic.downloader.client.IAuthService;
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.gui.DefaultApplicationModel;
+import com.mostlymusic.downloader.gui.ApplicationModel;
+import com.mostlymusic.downloader.gui.LogEvent;
 
 import javax.swing.*;
 import java.util.concurrent.ExecutionException;
@@ -14,12 +15,13 @@ import java.util.concurrent.ExecutionException;
  *         Time: 6:44 PM
  */
 public class LoginWorker extends SwingWorker<Boolean, Void> {
+    private static final String LOGGED_IN_FORMAT = "Logged in as '%s'";
     private final Account account;
-    private DefaultApplicationModel defaultApplicationModel;
+    private ApplicationModel applicationModel;
     private IAuthService authService;
 
-    public LoginWorker(DefaultApplicationModel defaultApplicationModel, Account account, AuthService authService) {
-        this.defaultApplicationModel = defaultApplicationModel;
+    public LoginWorker(ApplicationModel applicationModel, Account account, AuthService authService) {
+        this.applicationModel = applicationModel;
         this.account = account;
         this.authService = authService;
     }
@@ -31,12 +33,13 @@ public class LoginWorker extends SwingWorker<Boolean, Void> {
 
     @Override
     protected void done() {
-        defaultApplicationModel.setStatus(null);
+        applicationModel.setStatus(null);
+        applicationModel.publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
         try {
             if (get()) {
-                defaultApplicationModel.fireLoggedInEvent(account);
+                applicationModel.fireLoggedInEvent(account);
             } else {
-                defaultApplicationModel.fireLoginFailedEvent(account);
+                applicationModel.fireLoginFailedEvent(account);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

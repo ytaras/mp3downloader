@@ -27,4 +27,8 @@ public interface ApplicationModel {
     void fireCheckServerDone();
 
     void publishLogStatus(LogEvent event);
+
+    void fireLoggedInEvent(Account account);
+
+    void fireLoginFailedEvent(Account account);
 }

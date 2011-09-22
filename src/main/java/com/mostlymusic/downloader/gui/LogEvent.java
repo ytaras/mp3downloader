@@ -10,7 +10,7 @@ import java.util.Date;
 public class LogEvent {
     private final String message;
     private final Date date;
-    private final static String MESSAGE_FORMAT = "%1$tk:%1$tM:%1$tS - %s";
+    private final static String MESSAGE_FORMAT = "%1$tk:%1$tM:%1$tS - %2$s";
 
     public LogEvent(String message) {
         this.message = message;
