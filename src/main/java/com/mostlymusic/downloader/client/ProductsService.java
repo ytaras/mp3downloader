@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.client;
 import com.google.gson.reflect.TypeToken;
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.ServiceUrl;
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
@@ -31,7 +32,7 @@ public class ProductsService extends JsonServiceClient implements IProductsServi
     }
 
     @Override
-    public List<ProductDto> getProducts(int... ids) throws IOException {
+    public List<ProductDto> getProducts(int... ids) throws IOException, RequestException {
         StringBuilder productIds = new StringBuilder();
         for (int id : ids) {
             productIds.append(id).append(',');

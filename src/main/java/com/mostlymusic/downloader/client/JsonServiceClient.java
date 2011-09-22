@@ -2,6 +2,10 @@ package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.mostlymusic.downloader.client.exceptions.ForbiddenException;
+import com.mostlymusic.downloader.client.exceptions.NotFoundException;
+import com.mostlymusic.downloader.client.exceptions.RequestException;
+import com.mostlymusic.downloader.client.exceptions.UnauthorizedException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -25,21 +29,18 @@ public class JsonServiceClient {
     private DefaultHttpClient httpClient;
     private Gson gson;
 
-    protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException {
+    protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException, RequestException {
         return gson.fromJson(getReader(get), aClass);
     }
 
-    protected <T> T getResult(HttpUriRequest get, Type type) throws IOException {
+    protected <T> T getResult(HttpUriRequest get, Type type) throws IOException, RequestException {
         return gson.fromJson(getReader(get), type);
     }
 
-    protected InputStreamReader getReader(HttpUriRequest get) throws IOException {
+    protected InputStreamReader getReader(HttpUriRequest get) throws IOException, RequestException {
         HttpResponse response = httpClient.execute(get);
         HttpEntity entity = response.getEntity();
-        if (HttpStatus.SC_OK != response.getStatusLine().getStatusCode()) {
-            throw new HttpResponseException(response.getStatusLine().getStatusCode(),
-                    EntityUtils.toString(entity, "UTF-8"));
-        }
+        verifyStatus(response);
         String encoding = getEncoding(entity);
         return new InputStreamReader(entity.getContent(), encoding);
     }
@@ -68,5 +69,25 @@ public class JsonServiceClient {
     @Inject
     public void setGson(Gson gson) {
         this.gson = gson;
+    }
+
+    protected void verifyStatus(HttpResponse response) throws IOException, RequestException {
+        final int statusCode = response.getStatusLine().getStatusCode();
+        HttpEntity entity = response.getEntity();
+        if (HttpStatus.SC_UNAUTHORIZED == statusCode) {
+            throw new UnauthorizedException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_NOT_FOUND == statusCode) {
+            throw new NotFoundException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_FORBIDDEN == statusCode) {
+            throw new ForbiddenException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_GONE == statusCode) {
+            throw new ExpiredException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_PAYMENT_REQUIRED == statusCode) {
+            throw new PaymentRequired(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_INTERNAL_SERVER_ERROR == statusCode) {
+            throw new InternalServerErrrorException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_OK != statusCode) {
+            throw new HttpResponseException(response.getStatusLine().getStatusCode(), EntityUtils.toString(entity, "UTF-8"));
+        }
     }
 }
