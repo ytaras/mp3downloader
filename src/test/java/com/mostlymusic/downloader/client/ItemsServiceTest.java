@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
@@ -110,7 +111,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     }
 
     @Test
-    public void shouldDownloadFile() throws IOException {
+    public void shouldDownloadFile() throws IOException, RequestException {
         // given
         assertThat(localTestServer.getAcceptedConnectionCount()).isZero();
         Item item = new Item();

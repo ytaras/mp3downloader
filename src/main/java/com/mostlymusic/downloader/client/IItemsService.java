@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
@@ -35,5 +36,5 @@ public interface IItemsService {
      */
     ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
 
-    Map.Entry<InputStream, Long> getTrack(Item link) throws IOException;
+    Map.Entry<InputStream, Long> getTrack(Item link) throws IOException, RequestException;
 }

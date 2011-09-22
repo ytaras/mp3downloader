@@ -3,9 +3,14 @@ package com.mostlymusic.downloader.client;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
+import com.mostlymusic.downloader.client.exceptions.ForbiddenException;
+import com.mostlymusic.downloader.client.exceptions.NotFoundException;
+import com.mostlymusic.downloader.client.exceptions.RequestException;
+import com.mostlymusic.downloader.client.exceptions.UnauthorizedException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -13,6 +18,7 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,14 +56,32 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public Map.Entry<InputStream, Long> getTrack(Item link) throws IOException {
+    public Map.Entry<InputStream, Long> getTrack(Item link) throws IOException, RequestException {
         HttpPost httpPost = new HttpPost(serviceUrl + "/download-manager/files/download/id/" + link.getLinkHash());
         HttpResponse response = getHttpClient().execute(httpPost);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            return new AbstractMap.SimpleImmutableEntry<InputStream, Long>(response.getEntity().getContent(), response.getEntity().getContentLength());
+        verifyStatus(response);
+        return new AbstractMap.SimpleImmutableEntry<InputStream, Long>(response.getEntity().getContent(),
+                response.getEntity().getContentLength());
+    }
+
+    private void verifyStatus(HttpResponse response) throws IOException, RequestException {
+        final int statusCode = response.getStatusLine().getStatusCode();
+        HttpEntity entity = response.getEntity();
+        if (HttpStatus.SC_UNAUTHORIZED == statusCode) {
+            throw new UnauthorizedException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_NOT_FOUND == statusCode) {
+            throw new NotFoundException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_FORBIDDEN == statusCode) {
+            throw new ForbiddenException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_GONE == statusCode) {
+            throw new ExpiredException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_PAYMENT_REQUIRED == statusCode) {
+            throw new PaymentRequired(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_INTERNAL_SERVER_ERROR == statusCode) {
+            throw new InternalServerErrrorException(EntityUtils.toString(entity));
+        } else if (HttpStatus.SC_OK != statusCode) {
+            throw new HttpResponseException(response.getStatusLine().getStatusCode(), EntityUtils.toString(entity));
         }
-        throw new HttpResponseException(response.getStatusLine().getStatusCode(),
-                getEntityContent(response.getEntity()));
     }
 
     @Override
