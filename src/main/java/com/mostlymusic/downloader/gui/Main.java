@@ -23,7 +23,7 @@ public class Main {
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
         injector.getInstance(SchemaCreator.class).createTables();
-        final JFrame frame = new JFrame("AccountsList");
+        final JFrame frame = new JFrame("MostlyMusic Download Manager");
         frame.setContentPane((Container) injector.getInstance(MainContainer.class).getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
