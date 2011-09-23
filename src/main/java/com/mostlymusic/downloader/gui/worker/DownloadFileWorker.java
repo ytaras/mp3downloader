@@ -35,7 +35,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         if (null == item) {
             throw new IllegalStateException("Not initialized worker");
         }
-        getApplicationModel().getItemsTableModel().startDownload(item);
+        getApplicationModel().getItemsTableModel().downloadStarted(item);
         getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
         publish(0L);
         final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
@@ -75,7 +75,18 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     @Override
     protected void doDone(Void aVoid) {
         getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(), getFile(item).getAbsolutePath())));
-        getApplicationModel().getItemsTableModel().stopDownload(item);
+        getApplicationModel().getItemsTableModel().downloadStopped(item);
+    }
+
+    @Override
+    protected String getErrorMessage(Throwable cause) {
+        return "Error while downloading '" + item.getLinkTitle() + "'";
+    }
+
+    @Override
+    protected void processException(Throwable cause) {
+        super.processException(cause);
+        getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
     private FileOutputStream getOutputFile(Item item) throws FileNotFoundException {

@@ -40,12 +40,16 @@ public abstract class AbstractSwingClientWorker<K, V> extends SwingWorker<K, V> 
     protected abstract void doDone(K k);
 
 
-    private void processException(Throwable cause) {
+    protected void processException(Throwable cause) {
         if (cause instanceof RequestException) {
-            applicationModel.publishLogStatus(new LogEvent("Error ocurred: ", cause));
+            applicationModel.publishLogStatus(new LogEvent(getErrorMessage(cause), cause));
         }
         getApplicationModel().setStatus(null);
         getApplicationModel().fireExceptionEvent(cause);
+    }
+
+    protected String getErrorMessage(Throwable cause) {
+        return "Error occurred: ";
     }
 
     public ApplicationModel getApplicationModel() {

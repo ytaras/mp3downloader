@@ -20,17 +20,19 @@ public class ErrorHandlerListener extends ApplicationModelListenerAdapter {
 
     private Component root;
     private Logger logger;
+    private ApplicationModel model;
 
     @Inject
     public ErrorHandlerListener(ApplicationModel model, @MainLayout MainContainer panel, Logger logger) {
         this.logger = logger;
-        model.addListener(this);
+        this.model = model;
+        this.model.addListener(this);
         root = SwingUtilities.getRoot(panel.getContentPane());
     }
 
     @Override
     public void exceptionOccurred(Throwable e) {
-        JOptionPane.showMessageDialog(root, e, "Error occured", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(root, e, "Error occurred", JOptionPane.ERROR_MESSAGE);
         logger.log(Level.SEVERE, "Exception", e);
     }
 }

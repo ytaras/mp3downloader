@@ -42,9 +42,15 @@ public class MainContainer {
             public void logEvent(LogEvent event) {
                 Throwable exception = event.getException();
                 if (exception != null) {
-                    logListModel.add(0, exception.getMessage());
+                    if (exception.getMessage() == null || exception.getMessage().isEmpty()) {
+                        logListModel.add(0, event.toString() + " " + exception.getClass().getSimpleName());
+                    } else {
+                        logListModel.add(0, exception.getMessage());
+                        logListModel.add(0, event);
+                    }
+                } else {
+                    logListModel.add(0, event);
                 }
-                logListModel.add(0, event);
             }
         });
         model.publishLogStatus(new LogEvent("Started application"));

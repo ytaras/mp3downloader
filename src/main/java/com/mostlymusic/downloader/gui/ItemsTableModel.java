@@ -31,6 +31,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private static final String ISSUED_AT = "Issued at";
     private static final String[] COLUMN_NAMES = new String[]{ITEM_ID, TITLE,
             STATUS, DOWNLOADS_BOUGHT, DOWNLOADS_USED, ISSUED_AT};
+    private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
 
 
     public ItemsTableModel(ApplicationModel applicationModel, ItemsMapper itemsMapper) {
@@ -48,8 +49,13 @@ public class ItemsTableModel extends AbstractTableModel {
         Account loggedAccount = applicationModel.getLoggedAccount();
         if (null == loggedAccount) {
             this.data = Collections.emptyList();
+            this.itemIdToRowMap = Collections.emptyMap();
         } else {
             this.data = itemsMapper.listLinks(loggedAccount);
+            this.itemIdToRowMap = new HashMap<Long, Integer>();
+            for (int row = 0; row < data.size(); row++) {
+                itemIdToRowMap.put(data.get(row).getItemId(), row);
+            }
         }
     }
 
@@ -115,14 +121,14 @@ public class ItemsTableModel extends AbstractTableModel {
         return downloadProgress.containsKey(getItemAt(row).getItemId());
     }
 
-    public void stopDownload(Item item) {
+    public void downloadStopped(Item item) {
         downloadProgress.remove(item.getItemId());
-        fireTableDataChanged();
+        fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
     }
 
-    public void startDownload(Item item) {
+    public void downloadStarted(Item item) {
         downloadProgress.put(item.getItemId(), 0L);
-        fireTableDataChanged();
+        fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
     }
 
     private long getDownloadProgress(Item item) {
@@ -134,8 +140,21 @@ public class ItemsTableModel extends AbstractTableModel {
         if (!progress.equals(oldValue)) {
             downloadProgress.put(item.getItemId(), progress);
             // TODO Redraw cell only
-            fireTableDataChanged();
+            fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
         }
+    }
+
+    private int getColumn(String status) {
+        for (int col = 0; col < COLUMN_NAMES.length; col++) {
+            if (COLUMN_NAMES[col].equals(status)) {
+                return col;
+            }
+        }
+        return -1;
+    }
+
+    private int getItemRow(Item item) {
+        return itemIdToRowMap.get(item.getItemId());
     }
 
     public void setFileSize(Item item, Long value) {
