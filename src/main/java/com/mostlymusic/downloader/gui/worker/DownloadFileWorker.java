@@ -39,25 +39,29 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
         publish(0L);
         final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
-        try {
-            if (track.getValue() < 0) {
-                // We don't know size of entry, so don't bother calculating
-                IOUtils.copy(track.getKey(), getOutputFile(item));
-            } else {
-                // Rock-n-roll
-                getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
-                copy(track.getKey(), getOutputFile(item), new StreamCopyListener() {
-                    private long bytesWritten = 0;
-
-                    @Override
-                    public void bytesWritten(int counter) {
-                        bytesWritten += counter;
-                        publish(bytesWritten);
-                    }
-                });
+        if (track.getValue() < 0) {
+            // We don't know size of entry, so don't bother calculating
+            OutputStream outputFile = null;
+            try {
+                outputFile = new BufferedOutputStream(getOutputFile(item));
+                IOUtils.copy(track.getKey(), outputFile);
+            } finally {
+                IOUtils.closeQuietly(track.getKey());
+                IOUtils.closeQuietly(outputFile);
             }
-        } finally {
-            IOUtils.closeQuietly(track.getKey());
+
+        } else {
+            // Rock-n-roll
+            getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
+            copy(track.getKey(), getOutputFile(item), new StreamCopyListener() {
+                private long bytesWritten = 0;
+
+                @Override
+                public void bytesWritten(int counter) {
+                    bytesWritten += counter;
+                    publish(bytesWritten);
+                }
+            });
         }
         return null;
     }
@@ -80,23 +84,30 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
-        BufferedInputStream in = new BufferedInputStream(from);
-        BufferedOutputStream out = new BufferedOutputStream(to);
-        int counter = 0;
-        while (true) {
-            int data = in.read();
-            if (data == -1) {
-                break;
+        BufferedInputStream in = null;
+        BufferedOutputStream out = null;
+        try {
+            in = new BufferedInputStream(from);
+            out = new BufferedOutputStream(to);
+            int counter = 0;
+            while (true) {
+                int data = in.read();
+                if (data == -1) {
+                    break;
+                }
+                out.write(data);
+                counter++;
+                if (counter >= 1024) {
+                    listener.bytesWritten(counter);
+                    counter = 0;
+                }
             }
-            out.write(data);
-            counter++;
-            if (counter >= 1024) {
+            if (counter != 0) {
                 listener.bytesWritten(counter);
-                counter = 0;
             }
-        }
-        if (counter != 0) {
-            listener.bytesWritten(counter);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
         }
     }
 
