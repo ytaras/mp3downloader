@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.client.exceptions.RequestException;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -11,5 +13,5 @@ import java.util.List;
 public interface IProductsService {
     String ID_PARAM_NAME = "id";
 
-    List<ProductDto> getProducts(int... ids) throws IOException;
+    List<ProductDto> getProducts(int... ids) throws IOException, RequestException;
 }

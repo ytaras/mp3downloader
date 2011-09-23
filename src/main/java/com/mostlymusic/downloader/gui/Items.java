@@ -46,6 +46,9 @@ public class Items {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 for (int row : itemsTable.getSelectedRows()) {
+                    if (itemsTableModel.isDownloadingItemAt(row)) {
+                        continue;
+                    }
                     Item item = itemsTableModel.getItemAt(row);
                     DownloadFileWorker downloadFileWorker =
                             downloadFileWorkerFactory.createWorker(item);

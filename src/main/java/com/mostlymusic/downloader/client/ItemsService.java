@@ -3,13 +3,12 @@ package com.mostlymusic.downloader.client;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
@@ -36,7 +35,7 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException {
+    public ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException, RequestException {
         LinkedList<NameValuePair> params = new LinkedList<NameValuePair>();
         if (null != firstOrderId) {
             params.add(new BasicNameValuePair(FIRST_ITEM_ID_PARAM_NAME, "" + firstOrderId));
@@ -50,18 +49,16 @@ public class ItemsService extends JsonServiceClient implements IItemsService {
     }
 
     @Override
-    public Map.Entry<InputStream, Long> getTrack(Item link) throws IOException {
+    public Map.Entry<InputStream, Long> getTrack(Item link) throws IOException, RequestException {
         HttpPost httpPost = new HttpPost(serviceUrl + "/download-manager/files/download/id/" + link.getLinkHash());
         HttpResponse response = getHttpClient().execute(httpPost);
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            return new AbstractMap.SimpleImmutableEntry<InputStream, Long>(response.getEntity().getContent(), response.getEntity().getContentLength());
-        }
-        throw new HttpResponseException(response.getStatusLine().getStatusCode(),
-                getEntityContent(response.getEntity()));
+        verifyStatus(response);
+        return new AbstractMap.SimpleImmutableEntry<InputStream, Long>(response.getEntity().getContent(),
+                response.getEntity().getContentLength());
     }
 
     @Override
-    public ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException {
+    public ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException, RequestException {
         HttpPost get = new HttpPost(serviceUrl + "/download-manager/sync/itemsStatus/");
         if (null != lastOrderId) {
             UrlEncodedFormEntity formEntity = new UrlEncodedFormEntity(Collections.singletonList(

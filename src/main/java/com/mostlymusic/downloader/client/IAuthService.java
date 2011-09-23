@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.client.exceptions.RequestException;
+
 import java.io.IOException;
 
 /**
@@ -11,5 +13,5 @@ public interface IAuthService {
     String USERNAME = "login[username]";
     String PASSWORD = "login[password]";
 
-    boolean auth(String name, String pass) throws IOException;
+    boolean auth(String name, String pass) throws IOException, RequestException;
 }

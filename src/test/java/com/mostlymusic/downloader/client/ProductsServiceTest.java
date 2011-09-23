@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.client;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -36,7 +37,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
     }
 
     @Test
-    public void shouldGetProductDescriptions() throws IOException {
+    public void shouldGetProductDescriptions() throws IOException, RequestException {
         // given
         // when
         List<ProductDto> products = productsService.getProducts(1, 2, 3);

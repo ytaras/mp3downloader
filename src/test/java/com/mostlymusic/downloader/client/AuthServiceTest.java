@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.http.*;
 import org.apache.http.client.utils.URLEncodedUtils;
@@ -54,7 +55,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     }
 
     @Test
-    public void shouldNotAuth() throws IOException {
+    public void shouldNotAuth() throws IOException, RequestException {
         // given
         IAuthService authService = injector.getInstance(IAuthService.class);
 
@@ -69,7 +70,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     @Test
     @Ignore
     // TODO Fix test
-    public void shouldSendCookie() throws IOException {
+    public void shouldSendCookie() throws IOException, RequestException {
         // given
         IAuthService authService = injector.getInstance(IAuthService.class);
         IItemsService itemsService = injector.getInstance(IItemsService.class);

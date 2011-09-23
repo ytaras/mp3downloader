@@ -25,6 +25,7 @@ public class DefaultApplicationModel implements ApplicationModel {
     private List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
     private ItemsTableModel itemsTableModel;
     private Account loggedAccount;
+    private static final String LOGGED_IN_FORMAT = "Logged in as '%s'";
 
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
@@ -36,6 +37,7 @@ public class DefaultApplicationModel implements ApplicationModel {
         addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(final Account account) {
+                publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
                 loggedAccount = account;
                 worker.setAccount(account);
                 worker.execute();
@@ -115,7 +117,7 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public void fireExceptionEvent(Exception e) {
+    public void fireExceptionEvent(Throwable e) {
         for (ApplicationModelListener listener : listeners) {
             listener.exceptionOccurred(e);
         }

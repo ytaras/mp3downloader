@@ -18,7 +18,7 @@ public interface ApplicationModel {
 
     void setStatus(String status);
 
-    void fireExceptionEvent(Exception e);
+    void fireExceptionEvent(Throwable e);
 
     ItemsTableModel getItemsTableModel();
 

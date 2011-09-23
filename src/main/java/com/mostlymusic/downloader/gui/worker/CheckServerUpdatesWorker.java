@@ -11,30 +11,27 @@ import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ItemsMapper;
 
-import javax.swing.*;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
  *         Date: 9/20/11
  *         Time: 6:44 PM
  */
-public class CheckServerUpdatesWorker extends SwingWorker<Void, CheckServerStatusStage> {
+public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, CheckServerStatusStage> {
 
     private static final String METADATA_FETCHED_FORMAT = "Server has %d new items";
     private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
     private Account account;
     private IItemsService itemsService;
-    private ApplicationModel applicationModel;
     private ItemsMapper itemsMapper;
     private AccountMapper accountMapper;
 
 
     @Inject
     public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemsMapper itemsMapper, AccountMapper accountMapper) {
+        super(applicationModel);
         this.itemsService = itemsService;
-        this.applicationModel = applicationModel;
         this.itemsMapper = itemsMapper;
         this.accountMapper = accountMapper;
     }
@@ -71,29 +68,22 @@ public class CheckServerUpdatesWorker extends SwingWorker<Void, CheckServerStatu
     protected void process(List<CheckServerStatusStage> checkServerStatusStages) {
         for (CheckServerStatusStage checkServerStatusStage : checkServerStatusStages) {
             if (checkServerStatusStage.getMessage() != null) {
-                applicationModel.setStatus(checkServerStatusStage.getMessage());
+                getApplicationModel().setStatus(checkServerStatusStage.getMessage());
             }
-            applicationModel.publishLogStatus(checkServerStatusStage.getLogEvent());
+            getApplicationModel().publishLogStatus(checkServerStatusStage.getLogEvent());
         }
     }
 
     @Override
-    protected void done() {
-        applicationModel.setStatus(null);
-        applicationModel.fireCheckServerDone();
-        try {
-            get();
-        } catch (InterruptedException e) {
-            handleException(e);
-        } catch (ExecutionException e) {
-            handleException(e);
-        }
+    protected void beforeGet() {
+        getApplicationModel().setStatus(null);
+        getApplicationModel().fireCheckServerDone();
     }
 
-    private void handleException(Exception e) {
-        applicationModel.setStatus(null);
-        applicationModel.fireExceptionEvent(e);
+    @Override
+    protected void doDone(Void aVoid) {
     }
+
 
     public void setAccount(Account account) {
         this.account = account;

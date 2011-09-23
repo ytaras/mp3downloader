@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.client;
 
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
@@ -24,7 +25,7 @@ public interface IItemsService {
      * @param lastOrderId Last order id that we know about
      * @return Orders list metadata like last order id and count of available orders after supplied last order
      */
-    ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException;
+    ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException, RequestException;
 
 
     /**
@@ -33,7 +34,7 @@ public interface IItemsService {
      * @param pageSize    page size
      * @return list of tracks on this page
      */
-    ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException;
+    ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException, RequestException;
 
-    Map.Entry<InputStream, Long> getTrack(Item link) throws IOException;
+    Map.Entry<InputStream, Long> getTrack(Item link) throws IOException, RequestException;
 }

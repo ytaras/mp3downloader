@@ -29,7 +29,7 @@ public class ErrorHandlerListener extends ApplicationModelListenerAdapter {
     }
 
     @Override
-    public void exceptionOccurred(Exception e) {
+    public void exceptionOccurred(Throwable e) {
         JOptionPane.showMessageDialog(root, e, "Error occured", JOptionPane.ERROR_MESSAGE);
         logger.log(Level.SEVERE, "Exception", e);
     }

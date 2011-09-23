@@ -10,11 +10,22 @@ import java.util.Date;
 public class LogEvent {
     private final String message;
     private final Date date;
+    private final Throwable exception;
     private final static String MESSAGE_FORMAT = "%1$tk:%1$tM:%1$tS - %2$s";
 
+
     public LogEvent(String message) {
+        this(message, null);
+    }
+
+    public LogEvent(String message, Throwable cause) {
         this.message = message;
+        this.exception = cause;
         this.date = new Date();
+    }
+
+    public Throwable getException() {
+        return exception;
     }
 
     public String getMessage() {

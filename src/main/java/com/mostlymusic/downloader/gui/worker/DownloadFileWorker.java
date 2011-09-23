@@ -7,7 +7,6 @@ import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
 import org.apache.commons.io.IOUtils;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
@@ -17,18 +16,17 @@ import java.util.Map;
  *         Date: 9/22/11
  *         Time: 11:54 AM
  */
-public class DownloadFileWorker extends SwingWorker<Void, Long> {
+public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private final Item item;
     private final ItemsService itemsService;
     private final Configuration configuration;
-    private final ApplicationModel model;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' download finished";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
 
     public DownloadFileWorker(ItemsService itemsService, Configuration configuration, ApplicationModel model, Item item) {
+        super(model);
         this.itemsService = itemsService;
         this.configuration = configuration;
-        this.model = model;
         this.item = item;
     }
 
@@ -37,29 +35,33 @@ public class DownloadFileWorker extends SwingWorker<Void, Long> {
         if (null == item) {
             throw new IllegalStateException("Not initialized worker");
         }
-        model.getItemsTableModel().startDownload(item);
-        model.publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
+        getApplicationModel().getItemsTableModel().startDownload(item);
+        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
         publish(0L);
         final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
-        try {
-            if (track.getValue() < 0) {
-                // We don't know size of entry, so don't bother calculating
-                IOUtils.copy(track.getKey(), getOutputFile(item));
-            } else {
-                // Rock-n-roll
-                model.getItemsTableModel().setFileSize(item, track.getValue());
-                copy(track.getKey(), getOutputFile(item), new StreamCopyListener() {
-                    private long bytesWritten = 0;
-
-                    @Override
-                    public void bytesWritten(int counter) {
-                        bytesWritten += counter;
-                        publish(bytesWritten);
-                    }
-                });
+        if (track.getValue() < 0) {
+            // We don't know size of entry, so don't bother calculating
+            OutputStream outputFile = null;
+            try {
+                outputFile = new BufferedOutputStream(getOutputFile(item));
+                IOUtils.copy(track.getKey(), outputFile);
+            } finally {
+                IOUtils.closeQuietly(track.getKey());
+                IOUtils.closeQuietly(outputFile);
             }
-        } finally {
-            IOUtils.closeQuietly(track.getKey());
+
+        } else {
+            // Rock-n-roll
+            getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
+            copy(track.getKey(), getOutputFile(item), new StreamCopyListener() {
+                private long bytesWritten = 0;
+
+                @Override
+                public void bytesWritten(int counter) {
+                    bytesWritten += counter;
+                    publish(bytesWritten);
+                }
+            });
         }
         return null;
     }
@@ -67,13 +69,13 @@ public class DownloadFileWorker extends SwingWorker<Void, Long> {
     @Override
     protected void process(List<Long> integers) {
         Long integer = integers.get(integers.size() - 1);
-        model.getItemsTableModel().setDownloadProgress(item, integer);
+        getApplicationModel().getItemsTableModel().setDownloadProgress(item, integer);
     }
 
     @Override
-    protected void done() {
-        model.publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle())));
-        model.getItemsTableModel().stopDownload(item);
+    protected void doDone(Void aVoid) {
+        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle())));
+        getApplicationModel().getItemsTableModel().stopDownload(item);
     }
 
     private FileOutputStream getOutputFile(Item item) throws FileNotFoundException {
@@ -82,23 +84,30 @@ public class DownloadFileWorker extends SwingWorker<Void, Long> {
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
-        BufferedInputStream in = new BufferedInputStream(from);
-        BufferedOutputStream out = new BufferedOutputStream(to);
-        int counter = 0;
-        while (true) {
-            int data = in.read();
-            if (data == -1) {
-                break;
+        BufferedInputStream in = null;
+        BufferedOutputStream out = null;
+        try {
+            in = new BufferedInputStream(from);
+            out = new BufferedOutputStream(to);
+            int counter = 0;
+            while (true) {
+                int data = in.read();
+                if (data == -1) {
+                    break;
+                }
+                out.write(data);
+                counter++;
+                if (counter >= 1024) {
+                    listener.bytesWritten(counter);
+                    counter = 0;
+                }
             }
-            out.write(data);
-            counter++;
-            if (counter >= 1024) {
+            if (counter != 0) {
                 listener.bytesWritten(counter);
-                counter = 0;
             }
-        }
-        if (counter != 0) {
-            listener.bytesWritten(counter);
+        } finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(out);
         }
     }
 
