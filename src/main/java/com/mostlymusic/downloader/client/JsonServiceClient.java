@@ -6,6 +6,7 @@ import com.mostlymusic.downloader.client.exceptions.ForbiddenException;
 import com.mostlymusic.downloader.client.exceptions.NotFoundException;
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.client.exceptions.UnauthorizedException;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -30,11 +31,23 @@ public class JsonServiceClient {
     private Gson gson;
 
     protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException, RequestException {
-        return gson.fromJson(getReader(get), aClass);
+        InputStreamReader reader = null;
+        try {
+            reader = getReader(get);
+            return gson.fromJson(reader, aClass);
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
     }
 
     protected <T> T getResult(HttpUriRequest get, Type type) throws IOException, RequestException {
-        return gson.fromJson(getReader(get), type);
+        InputStreamReader reader = null;
+        try {
+            reader = getReader(get);
+            return gson.fromJson(reader, type);
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
     }
 
     protected InputStreamReader getReader(HttpUriRequest get) throws IOException, RequestException {
