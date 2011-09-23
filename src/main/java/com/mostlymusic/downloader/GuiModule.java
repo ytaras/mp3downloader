@@ -19,6 +19,14 @@ public class GuiModule extends AbstractModule {
         bind(ErrorHandlerListener.class).asEagerSingleton();
 
         String userHome = System.getProperty("user.home");
-        bind(File.class).annotatedWith(DownloadDirectory.class).toInstance(new File(userHome, "Downloads"));
+        bind(File.class).annotatedWith(DownloadDirectory.class).toInstance(getDownloadsDir(userHome));
+    }
+
+    private File getDownloadsDir(String userHome) {
+        File downloads = new File(userHome, "Downloads");
+        if (!downloads.exists()) {
+            downloads.mkdirs();
+        }
+        return downloads;
     }
 }

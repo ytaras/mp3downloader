@@ -20,7 +20,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private final Item item;
     private final ItemsService itemsService;
     private final Configuration configuration;
-    private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' download finished";
+    private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
 
     public DownloadFileWorker(ItemsService itemsService, Configuration configuration, ApplicationModel model, Item item) {
@@ -74,13 +74,17 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected void doDone(Void aVoid) {
-        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle())));
+        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(), getFile(item).getAbsolutePath())));
         getApplicationModel().getItemsTableModel().stopDownload(item);
     }
 
     private FileOutputStream getOutputFile(Item item) throws FileNotFoundException {
-        File file = new File(configuration.getDownloadDirectory(), item.getFileName());
+        File file = getFile(item);
         return new FileOutputStream(file);
+    }
+
+    private File getFile(Item item) {
+        return new File(configuration.getDownloadDirectory(), item.getFileName());
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
