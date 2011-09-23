@@ -80,7 +80,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected String getErrorMessage(Throwable cause) {
-        return "Error while downloading '" + item.getLinkTitle() + "'";
+        return "Error while downloading '" + item.getLinkTitle() + "': ";
     }
 
     @Override
