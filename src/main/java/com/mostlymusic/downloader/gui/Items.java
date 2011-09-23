@@ -33,13 +33,13 @@ public class Items {
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                boolean rowSelected = itemsTable.getSelectedRow() >= 0;
-                if (rowSelected) {
-                    boolean downloading = itemsTableModel.isDownloadingItemAt(itemsTable.getSelectedRow());
-                    downloadFileButton.setEnabled(!downloading);
-                } else {
-                    downloadFileButton.setEnabled(false);
+                for (int row : itemsTable.getSelectedRows()) {
+                    if (!itemsTableModel.isDownloadingItemAt(row)) {
+                        downloadFileButton.setEnabled(true);
+                        return;
+                    }
                 }
+                downloadFileButton.setEnabled(false);
             }
         });
         downloadFileButton.addActionListener(new ActionListener() {
