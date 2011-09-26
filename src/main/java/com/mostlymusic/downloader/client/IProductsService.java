@@ -11,7 +11,7 @@ import java.util.List;
  *         Time: 1:47 PM
  */
 public interface IProductsService {
-    String ID_PARAM_NAME = "id";
+    String ID_PARAM_NAME = "product_ids";
 
-    List<Product> getProducts(int... ids) throws IOException, RequestException;
+    List<Product> getProducts(List<Long> ids) throws IOException, RequestException;
 }

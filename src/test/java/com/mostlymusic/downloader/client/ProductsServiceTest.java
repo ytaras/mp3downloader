@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
 
     @Override
     protected void registerHandler() {
-        localTestServer.register("/download-manager/sync/products", new ProductsHttpHandler());
+        localTestServer.register("/download-manager/sync/productsInfo/", new ProductsHttpHandler());
     }
 
     @Before
@@ -40,7 +41,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
     public void shouldGetProductDescriptions() throws IOException, RequestException {
         // given
         // when
-        List<Product> products = productsService.getProducts(1, 2, 3);
+        List<Product> products = productsService.getProducts(Arrays.asList(1L, 2L, 3L));
 
         // then
         assertThat(products).isEqualTo(getProductMocks(1, 2, 3));

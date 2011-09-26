@@ -28,13 +28,13 @@ public class ProductsService extends JsonServiceClient implements IProductsServi
         if (serviceUrl.isEmpty()) {
             throw new RuntimeException("service url should not be null");
         }
-        this.serviceUrl = serviceUrl + "/download-manager/sync/products";
+        this.serviceUrl = serviceUrl + "/download-manager/sync/productsInfo/";
     }
 
     @Override
-    public List<Product> getProducts(int... ids) throws IOException, RequestException {
+    public List<Product> getProducts(List<Long> ids) throws IOException, RequestException {
         StringBuilder productIds = new StringBuilder();
-        for (int id : ids) {
+        for (long id : ids) {
             productIds.append(id).append(',');
         }
         productIds.deleteCharAt(productIds.length() - 1);

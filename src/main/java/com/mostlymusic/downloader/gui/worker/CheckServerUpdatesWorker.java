@@ -2,6 +2,8 @@ package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.client.IItemsService;
+import com.mostlymusic.downloader.client.IProductsService;
+import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -10,6 +12,7 @@ import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
+import com.mostlymusic.downloader.localdata.ProductMapper;
 
 import java.util.List;
 
@@ -25,15 +28,20 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private Account account;
     private IItemsService itemsService;
     private ItemMapper itemMapper;
+    private ProductMapper productMapper;
+    private IProductsService productsService;
     private AccountMapper accountMapper;
 
 
     @Inject
-    public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper, AccountMapper accountMapper) {
+    public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
+                                    AccountMapper accountMapper, ProductMapper productMapper, IProductsService productsService) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.itemMapper = itemMapper;
         this.accountMapper = accountMapper;
+        this.productMapper = productMapper;
+        this.productsService = productsService;
     }
 
 
@@ -45,22 +53,30 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
         LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
         publish(new CheckServerStatusStage("Fetching list of tracks from server", metadataFetchedLog));
-        if (0 == ordersMetadata.getTotalItems()) {
-            // No updates
-            return null;
-        }
-        int pageSize = 10;
-        for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
-            ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
-            LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size()));
-            publish(new CheckServerStatusStage("Fetching list of tracks from server", itemsFetchedLog));
+        if (0 != ordersMetadata.getTotalItems()) {
+            int pageSize = 10;
+            for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
+                ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
+                LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size()));
+                publish(new CheckServerStatusStage("Fetching list of tracks from server", itemsFetchedLog));
 
-            for (Item item : tracks.getItems()) {
-                itemMapper.insertItem(item, account);
+                for (Item item : tracks.getItems()) {
+                    itemMapper.insertItem(item, account);
+                }
+            }
+            account.setLastOrderId(ordersMetadata.getLastItemId());
+            accountMapper.updateAccount(account);
+        }
+
+        while (!productMapper.findUnknownProducts().isEmpty()) {
+            List<Long> unknownProducts = productMapper.findUnknownProducts();
+            LogEvent itemsFetchedLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
+            publish(new CheckServerStatusStage("Fetching products from server", itemsFetchedLog));
+            List<Product> products = productsService.getProducts(unknownProducts);
+            for (Product product : products) {
+                productMapper.insertProduct(product);
             }
         }
-        account.setLastOrderId(ordersMetadata.getLastItemId());
-        accountMapper.updateAccount(account);
         return null;
     }
 
