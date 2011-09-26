@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
  * @author ytaras
  *         Date: 9/23/11
@@ -30,4 +32,8 @@ public interface ProductMapper {
     @Update("UPDATE " + TABLE_NAME + " SET name = #{name:VARCHAR}, description = #{description:VARCHAR}, " +
             "mainImage = #{mainImage:VARCHAR} WHERE productId = #{productId:NUMERIC}")
     void updateProduct(Product product);
+
+    @Select("SELECT l.productId FROM " + TABLE_NAME + " p RIGHT OUTER JOIN " +
+            ItemMapper.TABLE_NAME + " l ON l.productId = p.ProductId WHERE p.productId IS NULL")
+    List<Long> findUnknownProducts();
 }

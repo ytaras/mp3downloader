@@ -1,11 +1,14 @@
 package com.mostlymusic.downloader.localdata;
 
 import com.mostlymusic.downloader.client.Product;
+import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.dto.Item;
 import org.junit.Before;
 import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -24,6 +27,7 @@ public class ProductsMapperTest extends StoragetTestBase {
         Connection connection = injector.getInstance(DataSource.class).getConnection();
         try {
             connection.prepareStatement("DELETE FROM PRODUCTS").execute();
+            connection.prepareStatement("DELETE FROM LINKS").execute();
         } finally {
             connection.close();
         }
@@ -67,5 +71,27 @@ public class ProductsMapperTest extends StoragetTestBase {
 
         // then
         assertThat(loaded).isEqualTo(product);
+    }
+
+    @Test
+    public void shouldFindUnknownProducts() {
+        // given
+        ItemMapper itemMapper = injector.getInstance(ItemMapper.class);
+        ProductMapper productMapper = injector.getInstance(ProductMapper.class);
+        Item item = new Item();
+        item.setProductId(123);
+        itemMapper.insertItem(item, new Account());
+        Product product = new Product();
+        product.setName("Name");
+        product.setDescription("Description");
+        product.setProductId(123);
+
+        // when
+        List<Long> unknownProducts1 = productMapper.findUnknownProducts();
+        productMapper.insertProduct(product);
+        List<Long> unknownProducts2 = productMapper.findUnknownProducts();
+        // then
+        assertThat(unknownProducts1).containsOnly(123L);
+        assertThat(unknownProducts2).isEmpty();
     }
 }
