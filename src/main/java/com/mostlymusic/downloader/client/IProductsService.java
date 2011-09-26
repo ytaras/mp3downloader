@@ -13,5 +13,5 @@ import java.util.List;
 public interface IProductsService {
     String ID_PARAM_NAME = "id";
 
-    List<ProductDto> getProducts(int... ids) throws IOException, RequestException;
+    List<Product> getProducts(int... ids) throws IOException, RequestException;
 }

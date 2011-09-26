@@ -13,16 +13,20 @@ import java.sql.SQLException;
  *         Time: 5:19 PM
  */
 public class SchemaCreator {
+
+
     @Inject
-    public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemsMapper itemsMapper) {
+    public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper, ProductMapper productMapper) {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
-        this.itemsMapper = itemsMapper;
+        this.itemMapper = itemMapper;
+        this.productMapper = productMapper;
     }
 
     private DataSource dataSource;
     private AccountMapper accountMapper;
-    private ItemsMapper itemsMapper;
+    private ItemMapper itemMapper;
+    private ProductMapper productMapper;
 
     public void createTables() throws SQLException {
         Connection connection = dataSource.getConnection();
@@ -30,8 +34,11 @@ public class SchemaCreator {
             if (!tableExists(connection, AccountMapper.TABLE_NAME)) {
                 accountMapper.createSchema();
             }
-            if (!tableExists(connection, ItemsMapper.TABLE_NAME)) {
-                itemsMapper.createSchema();
+            if (!tableExists(connection, ItemMapper.TABLE_NAME)) {
+                itemMapper.createSchema();
+            }
+            if (!tableExists(connection, ProductMapper.TABLE_NAME)) {
+                productMapper.createSchema();
             }
         } finally {
             connection.close();

@@ -4,7 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
 import com.mostlymusic.downloader.localdata.AccountMapper;
-import com.mostlymusic.downloader.localdata.ItemsMapper;
+import com.mostlymusic.downloader.localdata.ItemMapper;
+import com.mostlymusic.downloader.localdata.ProductMapper;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.MyBatisModule;
@@ -36,7 +37,8 @@ public class LocalStorageModule extends MyBatisModule {
         bindTransactionFactoryType(JdbcTransactionFactory.class);
 
         addMapperClass(AccountMapper.class);
-        addMapperClass(ItemsMapper.class);
+        addMapperClass(ItemMapper.class);
+        addMapperClass(ProductMapper.class);
     }
 
     private String getDatabaseFile() {

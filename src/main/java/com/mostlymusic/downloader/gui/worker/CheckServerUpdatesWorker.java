@@ -9,7 +9,7 @@ import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.AccountMapper;
-import com.mostlymusic.downloader.localdata.ItemsMapper;
+import com.mostlymusic.downloader.localdata.ItemMapper;
 
 import java.util.List;
 
@@ -24,15 +24,15 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
     private Account account;
     private IItemsService itemsService;
-    private ItemsMapper itemsMapper;
+    private ItemMapper itemMapper;
     private AccountMapper accountMapper;
 
 
     @Inject
-    public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemsMapper itemsMapper, AccountMapper accountMapper) {
+    public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper, AccountMapper accountMapper) {
         super(applicationModel);
         this.itemsService = itemsService;
-        this.itemsMapper = itemsMapper;
+        this.itemMapper = itemMapper;
         this.accountMapper = accountMapper;
     }
 
@@ -56,7 +56,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             publish(new CheckServerStatusStage("Fetching list of tracks from server", itemsFetchedLog));
 
             for (Item item : tracks.getItems()) {
-                itemsMapper.insertItem(item, account);
+                itemMapper.insertItem(item, account);
             }
         }
         account.setLastOrderId(ordersMetadata.getLastItemId());

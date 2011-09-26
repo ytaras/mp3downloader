@@ -7,14 +7,17 @@ import java.util.List;
  *         Date: 9/19/11
  *         Time: 1:47 PM
  */
-public class ProductDto {
+public class Product {
     private int productId;
     private String name;
     private String description;
+    private String mainImage;
     private List<Media> media;
 
+    public Product() {
+    }
 
-    public ProductDto(int productId) {
+    public Product(int productId) {
         this.productId = productId;
     }
 
@@ -50,15 +53,24 @@ public class ProductDto {
         this.media = media;
     }
 
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProductDto that = (ProductDto) o;
+        Product that = (Product) o;
 
         if (productId != that.productId) return false;
         if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (mainImage != null ? !mainImage.equals(that.mainImage) : that.mainImage != null) return false;
         if (media != null ? !media.equals(that.media) : that.media != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
 
@@ -70,16 +82,18 @@ public class ProductDto {
         int result = productId;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (mainImage != null ? mainImage.hashCode() : 0);
         result = 31 * result + (media != null ? media.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "ProductDto{" +
+        return "Product{" +
                 "productId=" + productId +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
+                ", mainImage='" + mainImage + '\'' +
                 ", media=" + media +
                 '}';
     }

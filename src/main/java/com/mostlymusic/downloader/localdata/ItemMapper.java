@@ -14,7 +14,7 @@ import java.util.List;
  *         Date: 9/20/11
  *         Time: 5:00 PM
  */
-public interface ItemsMapper {
+public interface ItemMapper {
     String TABLE_NAME = "LINKS";
 
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE accountId = #{id}")

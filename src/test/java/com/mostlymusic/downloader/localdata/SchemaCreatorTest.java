@@ -37,7 +37,8 @@ public class SchemaCreatorTest extends StoragetTestBase {
 
         // then
         assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ItemsMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
     }
 
     @Test
@@ -52,7 +53,8 @@ public class SchemaCreatorTest extends StoragetTestBase {
         // then
         DataSource dataSource = injector.getInstance(DataSource.class);
         assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ItemsMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
     }
 
     private boolean tableExists(DataSource dataSource, String tableName) throws SQLException {
@@ -61,3 +63,4 @@ public class SchemaCreatorTest extends StoragetTestBase {
 
     }
 }
+

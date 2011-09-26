@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ProductsService extends JsonServiceClient implements IProductsService {
     private final String serviceUrl;
-    private static final Type PRODUCTS_TYPE = new TypeToken<List<ProductDto>>() {
+    private static final Type PRODUCTS_TYPE = new TypeToken<List<Product>>() {
     }.getType();
 
     @Inject
@@ -32,7 +32,7 @@ public class ProductsService extends JsonServiceClient implements IProductsServi
     }
 
     @Override
-    public List<ProductDto> getProducts(int... ids) throws IOException, RequestException {
+    public List<Product> getProducts(int... ids) throws IOException, RequestException {
         StringBuilder productIds = new StringBuilder();
         for (int id : ids) {
             productIds.append(id).append(',');

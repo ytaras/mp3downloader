@@ -21,13 +21,13 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class ItemsMapperTest extends StoragetTestBase {
     private DataSource dataSource;
-    private ItemsMapper itemsMapper;
+    private ItemMapper itemMapper;
 
 
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        itemsMapper = injector.getInstance(ItemsMapper.class);
+        itemMapper = injector.getInstance(ItemMapper.class);
         dataSource = injector.getInstance(DataSource.class);
         injector.getInstance(SchemaCreator.class).createTables();
     }
@@ -36,7 +36,7 @@ public class ItemsMapperTest extends StoragetTestBase {
     public void shouldInitMyBatis() {
         // given
         // when
-        List<Item> items = itemsMapper.listLinks(new Account());
+        List<Item> items = itemMapper.listLinks(new Account());
 
         // then
         assertThat(items).isNotNull();
@@ -50,10 +50,10 @@ public class ItemsMapperTest extends StoragetTestBase {
         Item item = getMockItem(account);
 
         // when
-        itemsMapper.insertItem(item, account);
+        itemMapper.insertItem(item, account);
 
         // then
-        List<Item> items = itemsMapper.listLinks(account);
+        List<Item> items = itemMapper.listLinks(account);
         assertThat(items).contains(item);
     }
 
@@ -80,13 +80,13 @@ public class ItemsMapperTest extends StoragetTestBase {
         Account account = new Account();
         account.setId(1);
         Item mockItem = getMockItem(account);
-        itemsMapper.insertItem(mockItem, account);
+        itemMapper.insertItem(mockItem, account);
         Account account2 = new Account();
         account2.setId(2);
-        itemsMapper.insertItem(getMockItem(account2), account2);
+        itemMapper.insertItem(getMockItem(account2), account2);
 
         // when
-        List<Item> items = itemsMapper.listLinks(account);
+        List<Item> items = itemMapper.listLinks(account);
 
         // then
         assertThat(items).containsExactly(mockItem);
@@ -96,7 +96,7 @@ public class ItemsMapperTest extends StoragetTestBase {
     public void cleanTable() throws SQLException {
         Connection connection = dataSource.getConnection();
         try {
-            connection.prepareStatement("DELETE FROM " + ItemsMapper.TABLE_NAME).executeUpdate();
+            connection.prepareStatement("DELETE FROM " + ItemMapper.TABLE_NAME).executeUpdate();
         } finally {
             connection.close();
         }

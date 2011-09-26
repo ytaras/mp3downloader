@@ -40,16 +40,16 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
     public void shouldGetProductDescriptions() throws IOException, RequestException {
         // given
         // when
-        List<ProductDto> products = productsService.getProducts(1, 2, 3);
+        List<Product> products = productsService.getProducts(1, 2, 3);
 
         // then
         assertThat(products).isEqualTo(getProductMocks(1, 2, 3));
     }
 
-    private List<ProductDto> getProductMocks(int... ids) {
-        List<ProductDto> result = new LinkedList<ProductDto>();
+    private List<Product> getProductMocks(int... ids) {
+        List<Product> result = new LinkedList<Product>();
         for (int id : ids) {
-            result.add(new ProductDto(id));
+            result.add(new Product(id));
         }
         return result;
     }

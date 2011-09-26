@@ -6,7 +6,7 @@ import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.localdata.AccountMapper;
-import com.mostlymusic.downloader.localdata.ItemsMapper;
+import com.mostlymusic.downloader.localdata.ItemMapper;
 
 import javax.inject.Inject;
 import java.util.LinkedList;
@@ -29,11 +29,11 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
-                                   final CheckServerUpdatesWorker worker, ItemsMapper itemsMapper) {
+                                   final CheckServerUpdatesWorker worker, ItemMapper itemMapper) {
         this.accountMapper = accountMapper;
         this.authService = authService;
         accountTableModel = new AccountTableModel(accountMapper);
-        itemsTableModel = new ItemsTableModel(this, itemsMapper);
+        itemsTableModel = new ItemsTableModel(this, itemMapper);
         addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(final Account account) {

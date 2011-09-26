@@ -2,7 +2,7 @@ package com.mostlymusic.downloader.gui;
 
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.localdata.ItemsMapper;
+import com.mostlymusic.downloader.localdata.ItemMapper;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
@@ -19,7 +19,7 @@ import java.util.Map;
  */
 public class ItemsTableModel extends AbstractTableModel {
     private ApplicationModel applicationModel;
-    private ItemsMapper itemsMapper;
+    private ItemMapper itemMapper;
     private List<Item> data;
     private Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private Map<Long, Long> fileSizes = new HashMap<Long, Long>();
@@ -34,9 +34,9 @@ public class ItemsTableModel extends AbstractTableModel {
     private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
 
 
-    public ItemsTableModel(ApplicationModel applicationModel, ItemsMapper itemsMapper) {
+    public ItemsTableModel(ApplicationModel applicationModel, ItemMapper itemMapper) {
         this.applicationModel = applicationModel;
-        this.itemsMapper = itemsMapper;
+        this.itemMapper = itemMapper;
         addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent tableModelEvent) {
@@ -51,7 +51,7 @@ public class ItemsTableModel extends AbstractTableModel {
             this.data = Collections.emptyList();
             this.itemIdToRowMap = Collections.emptyMap();
         } else {
-            this.data = itemsMapper.listLinks(loggedAccount);
+            this.data = itemMapper.listLinks(loggedAccount);
             this.itemIdToRowMap = new HashMap<Long, Integer>();
             for (int row = 0; row < data.size(); row++) {
                 itemIdToRowMap.put(data.get(row).getItemId(), row);
