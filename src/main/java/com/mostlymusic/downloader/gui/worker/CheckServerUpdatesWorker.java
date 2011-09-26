@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.IItemsService;
-import com.mostlymusic.downloader.client.IProductsService;
+import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.client.Product;
+import com.mostlymusic.downloader.client.ProductsService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -26,16 +26,16 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private static final String METADATA_FETCHED_FORMAT = "Server has %d new items";
     private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
     private Account account;
-    private IItemsService itemsService;
+    private ItemsService itemsService;
     private ItemMapper itemMapper;
     private ProductMapper productMapper;
-    private IProductsService productsService;
+    private ProductsService productsService;
     private AccountMapper accountMapper;
 
 
     @Inject
-    public CheckServerUpdatesWorker(IItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
-                                    AccountMapper accountMapper, ProductMapper productMapper, IProductsService productsService) {
+    public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
+                                    AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.itemMapper = itemMapper;

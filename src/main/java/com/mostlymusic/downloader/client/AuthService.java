@@ -9,7 +9,7 @@ import java.io.IOException;
  *         Date: 9/19/11
  *         Time: 5:57 PM
  */
-public interface IAuthService {
+public interface AuthService {
     String USERNAME = "login[username]";
     String PASSWORD = "login[password]";
 

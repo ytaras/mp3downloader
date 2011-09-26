@@ -1,7 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Singleton;
-import com.mostlymusic.downloader.AuthService;
+import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;

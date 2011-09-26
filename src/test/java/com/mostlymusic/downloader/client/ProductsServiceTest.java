@@ -24,7 +24,7 @@ import static org.fest.assertions.Assertions.assertThat;
  */
 public class ProductsServiceTest extends BaseHttpClientTestCase {
 
-    private IProductsService productsService;
+    private ProductsService productsService;
 
     @Override
     protected void registerHandler() {
@@ -34,7 +34,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
     @Before
     public void setUp() throws Exception {
         Injector injector = Guice.createInjector(new DownloaderModule(serverUrl));
-        productsService = injector.getInstance(IProductsService.class);
+        productsService = injector.getInstance(ProductsService.class);
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
             List<NameValuePair> parse = URLEncodedUtils.parse(httpRequest.getEntity());
             for (NameValuePair pair : parse) {
-                if (pair.getName().equals(IProductsService.ID_PARAM_NAME)) {
+                if (pair.getName().equals(ProductsService.ID_PARAM_NAME)) {
                     String[] strIds = pair.getValue().split(",");
                     int[] ids = new int[strIds.length];
                     for (int i = 0; i < strIds.length; i++) {

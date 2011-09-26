@@ -1,7 +1,6 @@
 package com.mostlymusic.downloader.gui.worker;
 
-import com.mostlymusic.downloader.AuthService;
-import com.mostlymusic.downloader.client.IAuthService;
+import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 
@@ -12,7 +11,7 @@ import com.mostlymusic.downloader.gui.ApplicationModel;
  */
 public class LoginWorker extends AbstractSwingClientWorker<Boolean, Void> {
     private final Account account;
-    private IAuthService authService;
+    private AuthService authService;
 
     public LoginWorker(ApplicationModel applicationModel, Account account, AuthService authService) {
         super(applicationModel);

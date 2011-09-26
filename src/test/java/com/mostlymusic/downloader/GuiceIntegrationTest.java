@@ -2,7 +2,7 @@ package com.mostlymusic.downloader;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mostlymusic.downloader.client.IItemsService;
+import com.mostlymusic.downloader.client.ItemsService;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -30,7 +30,7 @@ public class GuiceIntegrationTest {
     @Test
     public void shouldCreateInjector() throws Exception {
         Injector injector = Guice.createInjector(new DownloaderModule("serviceUrl"), new LocalStorageModule());
-        IItemsService instance = injector.getInstance(IItemsService.class);
+        ItemsService instance = injector.getInstance(ItemsService.class);
     }
 
     @Test

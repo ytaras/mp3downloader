@@ -33,9 +33,9 @@ public class DownloaderModule extends AbstractModule {
 
         bind(DefaultHttpClient.class).toInstance(defaultHttpClient);
 
-        bind(IItemsService.class).to(ItemsService.class);
-        bind(IProductsService.class).to(ProductsService.class);
-        bind(IAuthService.class).to(AuthService.class);
+        bind(ItemsService.class).to(JsonItemsService.class);
+        bind(ProductsService.class).to(JsonProductsService.class);
+        bind(AuthService.class).to(PostAuthService.class);
         bind(ArtistsService.class).to(JsonArtistsService.class);
     }
 
@@ -69,7 +69,7 @@ public class DownloaderModule extends AbstractModule {
             //  reported proxy list... Mod to accomodate this...
             //  Expecting proxyList of "HTTP=XXX.XXX.XXX.XXX:Port" OR
             //  "XXX.XXX.XXX.XXX:Port" & assuming HTTP...
-            String proxyIP = "";
+            String proxyIP;
             if (proxyList.contains("HTTP=")) {
                 proxyIP = proxyList.substring(proxyList.indexOf("HTTP=") + 5, proxyList.indexOf(":"));
             } else {

@@ -44,7 +44,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldAuth() throws Exception {
         // given
-        IAuthService authService = injector.getInstance(IAuthService.class);
+        AuthService authService = injector.getInstance(AuthService.class);
 
 
         // when
@@ -57,7 +57,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     @Test
     public void shouldNotAuth() throws IOException, RequestException {
         // given
-        IAuthService authService = injector.getInstance(IAuthService.class);
+        AuthService authService = injector.getInstance(AuthService.class);
 
 
         // when
@@ -72,8 +72,8 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     // TODO Fix test
     public void shouldSendCookie() throws IOException, RequestException {
         // given
-        IAuthService authService = injector.getInstance(IAuthService.class);
-        IItemsService itemsService = injector.getInstance(IItemsService.class);
+        AuthService authService = injector.getInstance(AuthService.class);
+        ItemsService itemsService = injector.getInstance(ItemsService.class);
 
         // when
         authService.auth("name", "pass");
@@ -90,9 +90,9 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
             String name = null;
             String password = null;
             for (NameValuePair pair : parse) {
-                if (pair.getName().equals(IAuthService.USERNAME)) {
+                if (pair.getName().equals(AuthService.USERNAME)) {
                     name = pair.getValue();
-                } else if (pair.getName().equals(IAuthService.PASSWORD)) {
+                } else if (pair.getName().equals(AuthService.PASSWORD)) {
                     password = pair.getValue();
                 }
             }

@@ -1,7 +1,7 @@
 package com.mostlymusic.downloader;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.IAuthService;
+import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.client.JsonServiceClient;
 import com.mostlymusic.downloader.client.exceptions.ForbiddenException;
 import com.mostlymusic.downloader.client.exceptions.RequestException;
@@ -19,11 +19,11 @@ import java.util.LinkedList;
  *         Date: 9/19/11
  *         Time: 6:26 PM
  */
-public class AuthService extends JsonServiceClient implements IAuthService {
+public class PostAuthService extends JsonServiceClient implements AuthService {
     private String serviceUrl;
 
     @Inject
-    public AuthService(@ServiceUrl String serviceUrl) {
+    public PostAuthService(@ServiceUrl String serviceUrl) {
         this.serviceUrl = serviceUrl + "/download-manager/sync/loginPost/";
     }
 

@@ -30,7 +30,7 @@ import static org.junit.Assert.fail;
  */
 public class ItemsServiceTest extends BaseHttpClientTestCase {
 
-    private IItemsService itemsService;
+    private ItemsService itemsService;
 
     @Override
     protected void registerHandler() {
@@ -41,7 +41,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
 
     @Before
     public void createInstance() {
-        itemsService = injector.getInstance(IItemsService.class);
+        itemsService = injector.getInstance(ItemsService.class);
     }
 
 
@@ -166,7 +166,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
-                if (pair.getName().equals(IItemsService.FIRST_ITEM_ID_PARAM_NAME)) {
+                if (pair.getName().equals(ItemsService.FIRST_ITEM_ID_PARAM_NAME)) {
                     Long aLong = Long.parseLong(pair.getValue());
                     return getMockOrdersMetadata(aLong);
                 }
@@ -185,13 +185,13 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
             long firstItemId = 0;
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
                 String name = pair.getName();
-                if (name.equals(IItemsService.LAST_ITEM_ID_PARAM_NAME)) {
+                if (name.equals(ItemsService.LAST_ITEM_ID_PARAM_NAME)) {
                     lastItemId = Long.parseLong(pair.getValue());
-                } else if (IItemsService.PAGE_PARAM_NAME.equals(name)) {
+                } else if (ItemsService.PAGE_PARAM_NAME.equals(name)) {
                     page = Integer.parseInt(pair.getValue());
-                } else if (IItemsService.PAGE_SIZE_PARAM_NAME.equals(name)) {
+                } else if (ItemsService.PAGE_SIZE_PARAM_NAME.equals(name)) {
                     pageSize = Integer.parseInt(pair.getValue());
-                } else if (IItemsService.FIRST_ITEM_ID_PARAM_NAME.equals(name)) {
+                } else if (ItemsService.FIRST_ITEM_ID_PARAM_NAME.equals(name)) {
                     firstItemId = Long.parseLong(pair.getValue());
                 }
             }
