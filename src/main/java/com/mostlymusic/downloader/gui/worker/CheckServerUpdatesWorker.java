@@ -1,9 +1,7 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.ItemsService;
-import com.mostlymusic.downloader.client.Product;
-import com.mostlymusic.downloader.client.ProductsService;
+import com.mostlymusic.downloader.client.*;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -11,6 +9,7 @@ import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.AccountMapper;
+import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
 
@@ -26,22 +25,27 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private static final String METADATA_FETCHED_FORMAT = "Server has %d new items";
     private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
     private Account account;
-    private ItemsService itemsService;
-    private ItemMapper itemMapper;
-    private ProductMapper productMapper;
-    private ProductsService productsService;
-    private AccountMapper accountMapper;
+    private final ItemsService itemsService;
+    private final ItemMapper itemMapper;
+    private final ProductsService productsService;
+    private final ProductMapper productMapper;
+    private final AccountMapper accountMapper;
+    private final ArtistsService artistsService;
+    private final ArtistMapper artistMapper;
 
 
     @Inject
     public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
-                                    AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService) {
+                                    AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
+                                    ArtistsService artistsService, ArtistMapper artistMapper) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.itemMapper = itemMapper;
         this.accountMapper = accountMapper;
         this.productMapper = productMapper;
         this.productsService = productsService;
+        this.artistsService = artistsService;
+        this.artistMapper = artistMapper;
     }
 
 
@@ -70,13 +74,25 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
         while (!productMapper.findUnknownProducts().isEmpty()) {
             List<Long> unknownProducts = productMapper.findUnknownProducts();
-            LogEvent itemsFetchedLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
-            publish(new CheckServerStatusStage("Fetching products from server", itemsFetchedLog));
+            LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
+            publish(new CheckServerStatusStage("Fetching products from server", productToFetchLog));
             List<Product> products = productsService.getProducts(unknownProducts);
             for (Product product : products) {
                 productMapper.insertProduct(product);
             }
         }
+
+        // TODO Enable once this will be fixed
+        while (false || !artistMapper.findUnknownArtists().isEmpty()) {
+            List<Long> unknownArtists = artistMapper.findUnknownArtists();
+            LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
+            publish(new CheckServerStatusStage("Fetching artists from server", productToFetchLog));
+            List<Artist> products = artistsService.getArtists(unknownArtists);
+            for (Artist product : products) {
+                artistMapper.insertArtist(product);
+            }
+        }
+
         return null;
     }
 
