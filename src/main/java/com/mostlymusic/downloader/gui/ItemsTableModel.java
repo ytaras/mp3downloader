@@ -1,16 +1,17 @@
 package com.mostlymusic.downloader.gui;
 
+import com.mostlymusic.downloader.client.Artist;
+import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
+import com.mostlymusic.downloader.localdata.ProductMapper;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author ytaras
@@ -20,8 +21,12 @@ import java.util.Map;
 public class ItemsTableModel extends AbstractTableModel {
     private ApplicationModel applicationModel;
     private ItemMapper itemMapper;
+    private ProductMapper productMapper;
+    private ArtistMapper artistMapper;
     private List<Item> data;
     private Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
+    private Map<Long, Product> products = new HashMap<Long, Product>();
+    private Map<Long, Artist> artists = new HashMap<Long, Artist>();
     private Map<Long, Long> fileSizes = new HashMap<Long, Long>();
     private static final String ITEM_ID = "Item id";
     private static final String TITLE = "Title";
@@ -29,14 +34,18 @@ public class ItemsTableModel extends AbstractTableModel {
     private static final String DOWNLOADS_BOUGHT = "Downloads bought";
     private static final String DOWNLOADS_USED = "Downloads used";
     private static final String ISSUED_AT = "Issued at";
-    private static final String[] COLUMN_NAMES = new String[]{ITEM_ID, TITLE,
-            STATUS, DOWNLOADS_BOUGHT, DOWNLOADS_USED, ISSUED_AT};
+    private static final String ARTIST_NAME = "Artist name";
+    private static final String PRODUCT_NAME = "Product name";
+    private static final String[] COLUMN_NAMES = new String[]{PRODUCT_NAME, TITLE, STATUS};
     private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
 
 
-    public ItemsTableModel(ApplicationModel applicationModel, ItemMapper itemMapper) {
+    public ItemsTableModel(ApplicationModel applicationModel, ItemMapper itemMapper,
+                           ProductMapper productMapper, ArtistMapper artistMapper) {
         this.applicationModel = applicationModel;
         this.itemMapper = itemMapper;
+        this.productMapper = productMapper;
+        this.artistMapper = artistMapper;
         addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent tableModelEvent) {
@@ -53,8 +62,14 @@ public class ItemsTableModel extends AbstractTableModel {
         } else {
             this.data = itemMapper.listLinks(loggedAccount);
             this.itemIdToRowMap = new HashMap<Long, Integer>();
+            List<Long> productIds = new LinkedList<Long>();
             for (int row = 0; row < data.size(); row++) {
-                itemIdToRowMap.put(data.get(row).getItemId(), row);
+                Item item = data.get(row);
+                itemIdToRowMap.put(item.getItemId(), row);
+                productIds.add(item.getProductId());
+            }
+            for (Long productId : productIds) {
+                products.put(productId, productMapper.loadProduct(productId));
             }
         }
     }
@@ -63,6 +78,15 @@ public class ItemsTableModel extends AbstractTableModel {
     public int getRowCount() {
         return getData().size();
     }
+
+    private Product getProduct(long id) {
+        return products.get(id);
+    }
+
+    private Artist getArtist(long id) {
+        return artists.get(id);
+    }
+
 
     private synchronized List<Item> getData() {
         if (null == data) {
@@ -95,6 +119,10 @@ public class ItemsTableModel extends AbstractTableModel {
             return item.getDownloadsUsed();
         } else if (ISSUED_AT.equals(columnName)) {
             return item.getCreatedAt();
+        } else if (ARTIST_NAME.equals(columnName)) {
+            return getArtist(item.getMainArtistId()).getName();
+        } else if (PRODUCT_NAME.equals(columnName)) {
+            return getProduct(item.getProductId()).getName();
         }
         throw new RuntimeException("Unknown column - " + columnName);
 
@@ -139,7 +167,6 @@ public class ItemsTableModel extends AbstractTableModel {
         Long oldValue = downloadProgress.get(item.getItemId());
         if (!progress.equals(oldValue)) {
             downloadProgress.put(item.getItemId(), progress);
-            // TODO Redraw cell only
             fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
         }
     }

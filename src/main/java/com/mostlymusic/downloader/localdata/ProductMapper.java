@@ -23,11 +23,11 @@ public interface ProductMapper {
             "VALUES (#{productId:NUMERIC}, #{name:VARCHAR}, #{description:VARCHAR}, #{mainImage:VARCHAR})")
     void insertProduct(Product product);
 
-    @Select("SELECT * FROM " + TABLE_NAME)
-    Product loadProduct(int id);
+    @Select("SELECT * FROM " + TABLE_NAME + " WHERE productId = #{id}")
+    Product loadProduct(long id);
 
     @Select("SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE productId = #{id}")
-    boolean productExists(int id);
+    boolean productExists(long id);
 
     @Update("UPDATE " + TABLE_NAME + " SET name = #{name:VARCHAR}, description = #{description:VARCHAR}, " +
             "mainImage = #{mainImage:VARCHAR} WHERE productId = #{productId:NUMERIC}")

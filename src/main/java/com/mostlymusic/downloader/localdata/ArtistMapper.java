@@ -19,13 +19,13 @@ public interface ArtistMapper {
     void createSchema();
 
     @Select("SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE artistId = #{id}")
-    boolean artistExists(int id);
+    boolean artistExists(long id);
 
     @Insert("INSERT INTO " + TABLE_NAME + " (artistId, name) VALUES (#{artistId:NUMERIC}, #{name:VARCHAR})")
     void insertArtist(Artist artist);
 
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE artistId = #{id}")
-    Artist loadArtist(int id);
+    Artist loadArtist(long id);
 
     @Select("SELECT l.mainArtistId FROM " + TABLE_NAME + " a RIGHT OUTER JOIN " +
             ItemMapper.TABLE_NAME + " l ON l.mainArtistId = a.artistId WHERE a.artistId IS NULL")
