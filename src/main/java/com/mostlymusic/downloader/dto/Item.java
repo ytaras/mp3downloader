@@ -10,6 +10,9 @@ import java.util.Date;
 public class Item {
     private long itemId;
     private long productId;
+    private Long parentProductId;
+    private long mainArtistId;
+    private String productName;
     private String linkHash;
     private int downloadsBought;
     private int downloadsUsed;
@@ -118,6 +121,30 @@ public class Item {
         this.dirty = dirty;
     }
 
+    public Long getParentProductId() {
+        return parentProductId;
+    }
+
+    public void setParentProductId(Long parentProductId) {
+        this.parentProductId = parentProductId;
+    }
+
+    public long getMainArtistId() {
+        return mainArtistId;
+    }
+
+    public void setMainArtistId(long mainArtistId) {
+        this.mainArtistId = mainArtistId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,10 +157,14 @@ public class Item {
         if (downloadsUsed != item.downloadsUsed) return false;
         if (itemId != item.itemId) return false;
         if (linkId != item.linkId) return false;
+        if (mainArtistId != item.mainArtistId) return false;
         if (productId != item.productId) return false;
         if (fileName != null ? !fileName.equals(item.fileName) : item.fileName != null) return false;
         if (linkHash != null ? !linkHash.equals(item.linkHash) : item.linkHash != null) return false;
         if (linkTitle != null ? !linkTitle.equals(item.linkTitle) : item.linkTitle != null) return false;
+        if (parentProductId != null ? !parentProductId.equals(item.parentProductId) : item.parentProductId != null)
+            return false;
+        if (productName != null ? !productName.equals(item.productName) : item.productName != null) return false;
         if (status != null ? !status.equals(item.status) : item.status != null) return false;
 
         return true;
@@ -143,6 +174,9 @@ public class Item {
     public int hashCode() {
         int result = (int) (itemId ^ (itemId >>> 32));
         result = 31 * result + (int) (productId ^ (productId >>> 32));
+        result = 31 * result + (parentProductId != null ? parentProductId.hashCode() : 0);
+        result = 31 * result + (int) (mainArtistId ^ (mainArtistId >>> 32));
+        result = 31 * result + (productName != null ? productName.hashCode() : 0);
         result = 31 * result + (linkHash != null ? linkHash.hashCode() : 0);
         result = 31 * result + downloadsBought;
         result = 31 * result + downloadsUsed;
@@ -159,6 +193,9 @@ public class Item {
         return "Item{" +
                 "itemId=" + itemId +
                 ", productId=" + productId +
+                ", parentProductId=" + parentProductId +
+                ", mainArtistId=" + mainArtistId +
+                ", productName='" + productName + '\'' +
                 ", linkHash='" + linkHash + '\'' +
                 ", downloadsBought=" + downloadsBought +
                 ", downloadsUsed=" + downloadsUsed +

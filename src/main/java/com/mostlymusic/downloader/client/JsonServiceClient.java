@@ -30,20 +30,20 @@ public class JsonServiceClient {
     private DefaultHttpClient httpClient;
     private Gson gson;
 
-    protected <T> T getResult(HttpUriRequest get, Class<T> aClass) throws IOException, RequestException {
+    protected <T> T getResult(HttpUriRequest request, Class<T> aClass) throws IOException, RequestException {
         InputStreamReader reader = null;
         try {
-            reader = getReader(get);
+            reader = getReader(request);
             return gson.fromJson(reader, aClass);
         } finally {
             IOUtils.closeQuietly(reader);
         }
     }
 
-    protected <T> T getResult(HttpUriRequest get, Type type) throws IOException, RequestException {
+    protected <T> T getResult(HttpUriRequest request, Type type) throws IOException, RequestException {
         InputStreamReader reader = null;
         try {
-            reader = getReader(get);
+            reader = getReader(request);
             return gson.fromJson(reader, type);
         } finally {
             IOUtils.closeQuietly(reader);

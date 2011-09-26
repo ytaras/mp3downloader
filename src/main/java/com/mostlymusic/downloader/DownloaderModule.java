@@ -36,6 +36,7 @@ public class DownloaderModule extends AbstractModule {
         bind(IItemsService.class).to(ItemsService.class);
         bind(IProductsService.class).to(ProductsService.class);
         bind(IAuthService.class).to(AuthService.class);
+        bind(ArtistsService.class).to(JsonArtistsService.class);
     }
 
     private Gson createGson() {

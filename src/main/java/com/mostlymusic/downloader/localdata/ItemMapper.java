@@ -22,6 +22,9 @@ public interface ItemMapper {
 
     @Update("CREATE TABLE " + TABLE_NAME + " (itemId BIGINT NOT NULL PRIMARY KEY,\n" +
             "productId BIGINT ,\n" +
+            "parentProductId BIGINT ,\n" +
+            "mainArtistId BIGINT,\n" +
+            "productName VARCHAR(255),\n" +
             "downloadsBought INT,\n" +
             "downloadsUsed INT,\n" +
             "linkId BIGINT,\n" +
@@ -36,9 +39,10 @@ public interface ItemMapper {
     void createSchema();
 
     @Insert("INSERT INTO " + TABLE_NAME + "(linkId, linkTitle, itemId, productId, downloadsBought, linkHash, " +
-            "downloadsUsed, status, fileName, createdAt, updatedAt, accountId, dirty) \n" +
+            "parentProductId, mainArtistId, productName, downloadsUsed, status, fileName, createdAt, updatedAt, accountId, dirty) \n" +
             "VALUES (#{item.linkId:NUMERIC}, #{item.linkTitle:VARCHAR}, #{item.itemId:NUMERIC}, #{item.productId:NUMERIC}, " +
             "#{item.downloadsBought:NUMERIC}, #{item.linkHash:VARCHAR}, " +
+            "#{item.parentProductId:NUMERIC}, #{item.mainArtistId:VARCHAR}, #{item.productName:VARCHAR}, " +
             "#{item.downloadsUsed:NUMERIC}, #{item.status:VARCHAR}, #{item.fileName:VARCHAR}, #{item.createdAt:DATE}, " +
             "#{item.updatedAt:DATE}, #{account.id:NUMERIC}, #{item.dirty:BOOLEAN})")
     void insertItem(@Param("item") Item item, @Param("account") Account account);
