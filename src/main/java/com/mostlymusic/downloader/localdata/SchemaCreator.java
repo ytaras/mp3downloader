@@ -16,17 +16,20 @@ public class SchemaCreator {
 
 
     @Inject
-    public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper, ProductMapper productMapper) {
+    public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,
+                         ProductMapper productMapper, ArtistMapper artistMapper) {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
         this.itemMapper = itemMapper;
         this.productMapper = productMapper;
+        this.artistMapper = artistMapper;
     }
 
     private DataSource dataSource;
     private AccountMapper accountMapper;
     private ItemMapper itemMapper;
     private ProductMapper productMapper;
+    private ArtistMapper artistMapper;
 
     public void createTables() throws SQLException {
         Connection connection = dataSource.getConnection();
@@ -39,6 +42,9 @@ public class SchemaCreator {
             }
             if (!tableExists(connection, ProductMapper.TABLE_NAME)) {
                 productMapper.createSchema();
+            }
+            if (!tableExists(connection, ArtistMapper.TABLE_NAME)) {
+                artistMapper.createSchema();
             }
         } finally {
             connection.close();

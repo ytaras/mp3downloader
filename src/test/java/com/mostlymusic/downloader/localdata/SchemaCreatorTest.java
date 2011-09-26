@@ -39,6 +39,7 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
     }
 
     @Test
@@ -55,6 +56,7 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
     }
 
     private boolean tableExists(DataSource dataSource, String tableName) throws SQLException {
