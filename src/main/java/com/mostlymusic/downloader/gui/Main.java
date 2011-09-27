@@ -27,6 +27,7 @@ public class Main {
         frame.setContentPane((Container) injector.getInstance(MainContainer.class).getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+        frame.setJMenuBar(injector.getInstance(JMenuBar.class));
         frame.setGlassPane(injector.getInstance(ProgressGlassPane.class));
         frame.setVisible(true);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
