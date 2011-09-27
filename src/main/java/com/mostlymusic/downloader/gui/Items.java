@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
@@ -25,6 +26,9 @@ public class Items {
     private JPanel contentPane;
     private JTable itemsTable;
     private JButton downloadFileButton;
+    private JPanel itemsPane;
+    private JTextArea description;
+    private JLabel image;
     private ItemsTableModel itemsTableModel;
 
     @Inject
@@ -33,6 +37,11 @@ public class Items {
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
+                if (itemsTable.getSelectedRow() >= 0) {
+                    Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
+                    description.setText(product.getDescription());
+                    image.setText("<html><img src='" + product.getMainImage() + "'");
+                }
                 for (int row : itemsTable.getSelectedRows()) {
                     if (!itemsTableModel.isDownloadingItemAt(row)) {
                         downloadFileButton.setEnabled(true);

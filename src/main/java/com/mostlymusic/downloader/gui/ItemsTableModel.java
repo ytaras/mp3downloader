@@ -188,6 +188,10 @@ public class ItemsTableModel extends AbstractTableModel {
         fileSizes.put(item.getItemId(), value);
     }
 
+    public Product getProductAt(int selectedRow) {
+        return getProduct(getItemAt(selectedRow).getProductId());
+    }
+
 
     public class ItemStatus {
         private final int row;

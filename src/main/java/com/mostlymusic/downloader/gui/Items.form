@@ -1,30 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mostlymusic.downloader.gui.Items">
-  <grid id="27dc6" binding="contentPane" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="22b10" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <scrollpane id="9391d">
+      <splitpane id="306a0">
         <constraints border-constraint="Center"/>
-        <properties/>
+        <properties>
+          <dividerLocation value="200"/>
+          <dividerSize value="10"/>
+          <oneTouchExpandable value="true"/>
+        </properties>
         <border type="none"/>
         <children>
-          <component id="35c51" class="javax.swing.JTable" binding="itemsTable">
-            <constraints/>
-            <properties/>
-          </component>
+          <grid id="27dc6" binding="itemsPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties>
+              <minimumSize width="200" height="200"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
+                <constraints border-constraint="South"/>
+                <properties>
+                  <enabled value="false"/>
+                  <text value="&amp;Download"/>
+                </properties>
+              </component>
+              <scrollpane id="9391d">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="35c51" class="javax.swing.JTable" binding="itemsTable">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+          <grid id="6bfbb" layout-manager="GridBagLayout">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties>
+              <minimumSize width="200" height="200"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="4acf2" class="javax.swing.JTextArea" binding="description">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties>
+                  <background swing-color="Panel.background"/>
+                  <disabledTextColor swing-color="Label.foreground"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <font swing-font="Label.font"/>
+                  <foreground swing-color="Button.foreground"/>
+                  <lineWrap value="true"/>
+                  <selectionColor swing-color="List.foreground"/>
+                  <text value="sadfasdfasf"/>
+                  <wrapStyleWord value="false"/>
+                </properties>
+              </component>
+              <component id="7ea6d" class="javax.swing.JLabel" binding="image">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value=""/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
-      </scrollpane>
-      <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
-        <constraints border-constraint="South"/>
-        <properties>
-          <enabled value="false"/>
-          <text value="&amp;Download"/>
-        </properties>
-      </component>
+      </splitpane>
     </children>
   </grid>
 </form>

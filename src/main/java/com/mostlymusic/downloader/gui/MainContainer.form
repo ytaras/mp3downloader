@@ -11,7 +11,9 @@
         <constraints border-constraint="Center"/>
         <properties>
           <dividerLocation value="300"/>
+          <oneTouchExpandable value="true"/>
           <orientation value="0"/>
+          <resizeWeight value="1.0"/>
         </properties>
         <border type="none"/>
         <children>
