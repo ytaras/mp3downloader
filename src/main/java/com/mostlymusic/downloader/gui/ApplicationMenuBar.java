@@ -16,8 +16,8 @@ import java.io.File;
 @Singleton
 public class ApplicationMenuBar extends JMenuBar {
     public ApplicationMenuBar() {
-        JMenu file = new JMenu("&File");
-        file.add(new AbstractAction("Set &download path") {
+        JMenu file = new JMenu("File");
+        file.add(new AbstractAction("Set download path") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
@@ -31,7 +31,7 @@ public class ApplicationMenuBar extends JMenuBar {
                 }
             }
         });
-        file.add(new AbstractAction("E&xit") {
+        file.add(new AbstractAction("Exit") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);

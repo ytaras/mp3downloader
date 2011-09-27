@@ -1,10 +1,11 @@
 package com.mostlymusic.downloader.gui.worker;
 
-import com.mostlymusic.downloader.Configuration;
+import com.google.inject.Inject;
 import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
+import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -17,17 +18,17 @@ import java.util.Map;
  *         Time: 11:54 AM
  */
 public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
-    private final Item item;
+    private Item item;
     private final ItemsService itemsService;
-    private final Configuration configuration;
+    private final ConfigurationMapper configuration;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
 
-    public DownloadFileWorker(ItemsService itemsService, Configuration configuration, ApplicationModel model, Item item) {
+    @Inject
+    public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model) {
         super(model);
         this.itemsService = itemsService;
         this.configuration = configuration;
-        this.item = item;
     }
 
     @Override
@@ -95,7 +96,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     }
 
     private File getFile(Item item) {
-        return new File(configuration.getDownloadDirectory(), item.getFileName());
+        return new File(configuration.getDownloadPath(), item.getFileName());
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
@@ -124,6 +125,10 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
             IOUtils.closeQuietly(in);
             IOUtils.closeQuietly(out);
         }
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     private interface StreamCopyListener {

@@ -1,10 +1,8 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.Configuration;
-import com.mostlymusic.downloader.client.ItemsService;
+import com.google.inject.Injector;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.gui.ApplicationModel;
 
 /**
  * @author ytaras
@@ -12,18 +10,16 @@ import com.mostlymusic.downloader.gui.ApplicationModel;
  *         Time: 4:35 PM
  */
 public class DownloadFileWorkerFactory {
-    private ItemsService itemsService;
-    private Configuration configuration;
-    private ApplicationModel model;
+    private Injector injector;
 
     @Inject
-    public DownloadFileWorkerFactory(ItemsService itemsService, Configuration configuration, ApplicationModel model) {
-        this.itemsService = itemsService;
-        this.configuration = configuration;
-        this.model = model;
+    public DownloadFileWorkerFactory(Injector injector) {
+        this.injector = injector;
     }
 
     public DownloadFileWorker createWorker(Item itemAt) {
-        return new DownloadFileWorker(itemsService, configuration, model, itemAt);
+        DownloadFileWorker instance = injector.getInstance(DownloadFileWorker.class);
+        instance.setItem(itemAt);
+        return instance;
     }
 }
