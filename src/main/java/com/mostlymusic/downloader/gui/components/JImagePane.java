@@ -10,6 +10,11 @@ import java.awt.*;
  */
 public class JImagePane extends JPanel {
     private Image image;
+    private JLabel textLabel = new JLabel();
+
+    public JImagePane() {
+        add(textLabel);
+    }
 
     @Override
     protected void paintComponent(Graphics graphics) {
@@ -17,7 +22,10 @@ public class JImagePane extends JPanel {
             Dimension size = getSize();
             size = getImageSize(size);
             graphics.drawImage(image, 0, 0, size.width, size.height, null);
+        } else {
+            super.paintComponent(graphics);
         }
+
     }
 
     private Dimension getImageSize(Dimension size) {
@@ -38,7 +46,7 @@ public class JImagePane extends JPanel {
     @Override
     public Dimension getPreferredSize() {
         if (null == image) {
-            return new Dimension(100, 100);
+            return super.getPreferredSize();
         } else {
             return new Dimension(image.getWidth(null), image.getHeight(null));
         }
@@ -51,5 +59,13 @@ public class JImagePane extends JPanel {
     public void setImage(Image image) {
         this.image = image;
         repaint();
+    }
+
+    public void setNoImageText(String text) {
+        textLabel.setText(text);
+    }
+
+    public String getNoImageText() {
+        return textLabel.getText();
     }
 }
