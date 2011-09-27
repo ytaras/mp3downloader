@@ -34,6 +34,7 @@ public class Items {
     private JPanel itemsPane;
     private JTextArea description;
     private JImagePane image;
+    private JSplitPane splitPane;
     private ItemsTableModel itemsTableModel;
 
     @Inject
@@ -94,6 +95,13 @@ public class Items {
                 }
             }
         });
+        splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                image.setPreferredWidth(splitPane.getDividerLocation());
+            }
+        });
+        image.setPreferredWidth(splitPane.getDividerLocation());
     }
 
     public JPanel getContentPane() {

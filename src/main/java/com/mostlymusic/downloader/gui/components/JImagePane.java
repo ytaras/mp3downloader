@@ -11,6 +11,7 @@ import java.awt.*;
 public class JImagePane extends JPanel {
     private Image image;
     private JLabel textLabel = new JLabel();
+    private int preferredWidth;
 
     public JImagePane() {
         // add(textLabel);
@@ -37,7 +38,7 @@ public class JImagePane extends JPanel {
             double heightScale = ((double) height) / size.height;
             double scale = Math.max(widthScale, heightScale);
             int newWidth = (int) (width / scale);
-            int newHeight = (int) (width / scale);
+            int newHeight = (int) (height / scale);
             return new Dimension(newWidth, newHeight);
         }
     }
@@ -47,7 +48,7 @@ public class JImagePane extends JPanel {
         if (null == image) {
             return super.getPreferredSize();
         } else {
-            return new Dimension(image.getWidth(null), image.getHeight(null));
+            return getImageSize(new Dimension(preferredWidth, Integer.MAX_VALUE));
         }
     }
 
@@ -67,5 +68,9 @@ public class JImagePane extends JPanel {
 
     public String getNoImageText() {
         return textLabel.getText();
+    }
+
+    public void setPreferredWidth(int preferredWidth) {
+        this.preferredWidth = preferredWidth;
     }
 }
