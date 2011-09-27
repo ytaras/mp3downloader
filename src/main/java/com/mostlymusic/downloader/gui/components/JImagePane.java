@@ -13,7 +13,7 @@ public class JImagePane extends JPanel {
     private JLabel textLabel = new JLabel();
 
     public JImagePane() {
-        add(textLabel);
+        // add(textLabel);
     }
 
     @Override
@@ -25,7 +25,6 @@ public class JImagePane extends JPanel {
         } else {
             super.paintComponent(graphics);
         }
-
     }
 
     private Dimension getImageSize(Dimension size) {
@@ -58,6 +57,7 @@ public class JImagePane extends JPanel {
 
     public void setImage(Image image) {
         this.image = image;
+        revalidate();
         repaint();
     }
 

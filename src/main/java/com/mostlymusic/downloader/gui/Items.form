@@ -45,7 +45,8 @@
               </scrollpane>
             </children>
           </grid>
-          <grid id="6bfbb" layout-manager="GridBagLayout">
+          <grid id="6bfbb" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <splitpane position="left"/>
             </constraints>
@@ -54,33 +55,38 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="4acf2" class="javax.swing.JTextArea" binding="description">
+              <component id="1eaec" class="com.mostlymusic.downloader.gui.components.JImagePane" binding="image">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="1.0" weighty="1.0"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <background swing-color="Panel.background"/>
-                  <disabledTextColor swing-color="Label.foreground"/>
-                  <editable value="false"/>
-                  <enabled value="false"/>
-                  <font swing-font="Label.font"/>
-                  <foreground swing-color="Button.foreground"/>
-                  <lineWrap value="true"/>
-                  <selectionColor swing-color="List.foreground"/>
-                  <text value="sadfasdfasf"/>
-                  <wrapStyleWord value="false"/>
+                  <noImageText value="No image"/>
                 </properties>
               </component>
-              <component id="7ea6d" class="javax.swing.JLabel" binding="image">
+              <scrollpane id="9d9f4">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties>
-                  <text value=""/>
-                </properties>
-              </component>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <component id="4acf2" class="javax.swing.JTextArea" binding="description">
+                    <constraints/>
+                    <properties>
+                      <background swing-color="Panel.background"/>
+                      <disabledTextColor swing-color="Label.foreground"/>
+                      <editable value="false"/>
+                      <enabled value="false"/>
+                      <font swing-font="Label.font"/>
+                      <foreground swing-color="Button.foreground"/>
+                      <lineWrap value="true"/>
+                      <selectionColor swing-color="List.foreground"/>
+                      <text value="aaa"/>
+                      <wrapStyleWord value="false"/>
+                    </properties>
+                  </component>
+                </children>
+              </scrollpane>
             </children>
           </grid>
         </children>

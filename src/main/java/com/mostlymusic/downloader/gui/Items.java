@@ -5,16 +5,21 @@ import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
+import com.mostlymusic.downloader.gui.components.JImagePane;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorkerFactory;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * @author ytaras
@@ -28,7 +33,7 @@ public class Items {
     private JButton downloadFileButton;
     private JPanel itemsPane;
     private JTextArea description;
-    private JLabel image;
+    private JImagePane image;
     private ItemsTableModel itemsTableModel;
 
     @Inject
@@ -38,9 +43,20 @@ public class Items {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 if (itemsTable.getSelectedRow() >= 0) {
-                    Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
+                    final Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
                     description.setText(product.getDescription());
-                    image.setText("<html><img src='" + product.getMainImage() + "'");
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                BufferedImage bufferedImage = ImageIO.read(new URL(product.getMainImage()));
+                                image.setImage(bufferedImage);
+                            } catch (IOException e) {
+                                image.setImage(null);
+                            }
+
+                        }
+                    });
                 }
                 for (int row : itemsTable.getSelectedRows()) {
                     if (!itemsTableModel.isDownloadingItemAt(row)) {
