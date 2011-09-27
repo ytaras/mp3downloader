@@ -40,6 +40,7 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ConfigurationMapper.TABLE_NAME)).isTrue();
     }
 
     @Test
@@ -57,6 +58,11 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, ConfigurationMapper.TABLE_NAME)).isTrue();
+        ResultSet resultSet = dataSource.getConnection()
+                .prepareStatement("SELECT COUNT(*) FROM " + ConfigurationMapper.TABLE_NAME).executeQuery();
+        resultSet.next();
+        assertThat(resultSet.getInt(1)).as("count of configuration records").isEqualTo(1);
     }
 
     private boolean tableExists(DataSource dataSource, String tableName) throws SQLException {

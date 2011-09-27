@@ -17,19 +17,21 @@ public class SchemaCreator {
 
     @Inject
     public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,
-                         ProductMapper productMapper, ArtistMapper artistMapper) {
+                         ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper) {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
         this.itemMapper = itemMapper;
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
+        this.configurationMapper = configurationMapper;
     }
 
-    private DataSource dataSource;
-    private AccountMapper accountMapper;
-    private ItemMapper itemMapper;
-    private ProductMapper productMapper;
-    private ArtistMapper artistMapper;
+    private final DataSource dataSource;
+    private final AccountMapper accountMapper;
+    private final ItemMapper itemMapper;
+    private final ProductMapper productMapper;
+    private final ArtistMapper artistMapper;
+    private final ConfigurationMapper configurationMapper;
 
     public void createTables() throws SQLException {
         Connection connection = dataSource.getConnection();
@@ -45,6 +47,10 @@ public class SchemaCreator {
             }
             if (!tableExists(connection, ArtistMapper.TABLE_NAME)) {
                 artistMapper.createSchema();
+            }
+            if (!tableExists(connection, ConfigurationMapper.TABLE_NAME)) {
+                configurationMapper.createSchema();
+                configurationMapper.insertConfig();
             }
         } finally {
             connection.close();
