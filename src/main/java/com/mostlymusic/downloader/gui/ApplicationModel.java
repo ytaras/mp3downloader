@@ -8,7 +8,6 @@ import com.mostlymusic.downloader.dto.Account;
  *         Time: 7:37 PM
  */
 public interface ApplicationModel {
-    AccountTableModel getAccountsTableModel();
 
     void addListener(ApplicationModelListener mock);
 

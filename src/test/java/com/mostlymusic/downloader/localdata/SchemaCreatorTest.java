@@ -33,7 +33,6 @@ public class SchemaCreatorTest extends StoragetTestBase {
 
         // when
         instance.createTables();
-        injector.getInstance(AccountMapper.class).listAccounts();
 
         // then
         assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();

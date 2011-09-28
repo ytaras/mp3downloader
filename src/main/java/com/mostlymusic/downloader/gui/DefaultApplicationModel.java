@@ -22,7 +22,6 @@ import java.util.List;
 @Singleton
 public class DefaultApplicationModel implements ApplicationModel {
 
-    private AccountTableModel accountTableModel;
     private AuthService authService;
     private List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
     private ItemsTableModel itemsTableModel;
@@ -35,7 +34,6 @@ public class DefaultApplicationModel implements ApplicationModel {
                                    ProductMapper productMapper, ArtistMapper artistMapper) {
         this.accountMapper = accountMapper;
         this.authService = authService;
-        accountTableModel = new AccountTableModel(accountMapper);
         itemsTableModel = new ItemsTableModel(this, itemMapper, productMapper, artistMapper);
         addListener(new ApplicationModelListenerAdapter() {
             @Override
@@ -54,11 +52,6 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     private final AccountMapper accountMapper;
-
-    @Override
-    public AccountTableModel getAccountsTableModel() {
-        return accountTableModel;
-    }
 
     @Override
     public ItemsTableModel getItemsTableModel() {

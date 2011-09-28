@@ -14,9 +14,6 @@ public interface AccountMapper {
 
     String TABLE_NAME = "ACCOUNTS";
 
-    @Select("SELECT * FROM " + TABLE_NAME + " ORDER BY username")
-    List<Account> listAccounts();
-
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
             "username VARCHAR(128) NOT NULL, lastOrderId BIGINT)")
     void createSchema();
@@ -33,4 +30,7 @@ public interface AccountMapper {
 
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE username = #{login}")
     Account findByLoginName(String login);
+
+    @Select("SELECT username FROM " + TABLE_NAME + " WHERE username LIKE '${pattern}%' ORDER BY username")
+    List<String> listLoginNames(@Param("pattern") String pattern);
 }

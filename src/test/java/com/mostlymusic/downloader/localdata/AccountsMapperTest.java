@@ -32,15 +32,6 @@ public class AccountsMapperTest extends StoragetTestBase {
     }
 
     @Test
-    public void shouldInitMyBatis() throws Exception {
-        // given
-        // when
-        List<Account> accounts = accountMapper.listAccounts();
-        // then
-        assertThat(accounts).isNotNull();
-    }
-
-    @Test
     public void shouldFindByLoginName() {
         // given
         Account account = new Account("ytaras");
@@ -55,6 +46,22 @@ public class AccountsMapperTest extends StoragetTestBase {
     }
 
     @Test
+    public void shouldListLoginNames() {
+        // given
+        accountMapper.createAccount(new Account("acc2"));
+        accountMapper.createAccount(new Account("bacc1"));
+        accountMapper.createAccount(new Account("cacc3"));
+
+        // when
+        List<String> loginNames = accountMapper.listLoginNames("");
+        List<String> aLoginNames = accountMapper.listLoginNames("a");
+
+        // then
+        assertThat(loginNames).containsExactly("acc2", "bacc1", "cacc3");
+        assertThat(aLoginNames).containsExactly("acc2");
+    }
+
+    @Test
     public void shouldCR() throws SQLException {
         // given
         Account account = new Account("ytaras");
@@ -64,11 +71,11 @@ public class AccountsMapperTest extends StoragetTestBase {
         accountMapper.createAccount(account);
 
         // then
-        List<Account> accounts = accountMapper.listAccounts();
-        Account actual = accounts.get(0);
+        List<String> accounts = accountMapper.listLoginNames("");
+        String actual = accounts.get(0);
         assertThat(accounts).hasSize(1);
-        assertThat(actual.getUsername()).isEqualTo(account.getUsername());
-        assertThat(actual.getLastOrderId()).isEqualTo(14L);
+        assertThat(actual).isEqualTo(account.getUsername());
+        assertThat(getFirstAccount().getLastOrderId()).isEqualTo(14L);
     }
 
     @Test
@@ -76,7 +83,7 @@ public class AccountsMapperTest extends StoragetTestBase {
         // given
         Account account = new Account("ytaras");
         accountMapper.createAccount(account);
-        account = accountMapper.listAccounts().get(0);
+        account = getFirstAccount();
         account.setLastOrderId(12L);
         account.setUsername("123");
         // when
@@ -84,8 +91,14 @@ public class AccountsMapperTest extends StoragetTestBase {
 
         // then
         // Not saving password
-        Account actual = accountMapper.listAccounts().get(0);
+        Account actual = getFirstAccount();
         assertThat(actual).isEqualTo(account);
+    }
+
+    private Account getFirstAccount() {
+        String accountName;
+        accountName = accountMapper.listLoginNames("").get(0);
+        return accountMapper.findByLoginName(accountName);
     }
 
     @Test
@@ -93,14 +106,13 @@ public class AccountsMapperTest extends StoragetTestBase {
         // given
         Account account = new Account("ytaras");
         accountMapper.createAccount(account);
-        List<Account> accounts = accountMapper.listAccounts();
-        Account actual = accounts.get(0);
+        Account actual = getFirstAccount();
 
         // when
         accountMapper.deleteAccount(actual.getId());
 
         // then
-        assertThat(accountMapper.listAccounts()).isEmpty();
+        assertThat(accountMapper.listLoginNames("")).isEmpty();
     }
 
     @After
