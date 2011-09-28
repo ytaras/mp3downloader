@@ -87,22 +87,6 @@ public class DefaultApplicationModel implements ApplicationModel {
         }
     }
 
-    @Override
-    public void createAccount(String username, char[] password) {
-        Account account = new Account();
-        account.setUsername(username);
-        account.setPassword(new String(password));
-        accountMapper.createAccount(account);
-        accountTableModel.fireTableDataChanged();
-    }
-
-    @Override
-    public void loginToAccountAt(int selectedRow) {
-        final Account account = accountTableModel.getAccountAt(selectedRow);
-        this.setStatus("Trying to log in...");
-        new LoginWorker(this, account, authService).execute();
-    }
-
 
     @Override
     public void addListener(ApplicationModelListener listener) {
@@ -131,6 +115,17 @@ public class DefaultApplicationModel implements ApplicationModel {
         for (ApplicationModelListener listener : listeners) {
             listener.loginFailed(account);
         }
+    }
+
+    @Override
+    public void login(String login, String password) {
+        Account account = accountMapper.findByLoginName(login);
+        if (null == account) {
+            accountMapper.createAccount(new Account(login));
+            account = accountMapper.findByLoginName(login);
+        }
+        this.setStatus("Trying to log in...");
+        new LoginWorker(this, account, authService, password).execute();
     }
 
     @Override

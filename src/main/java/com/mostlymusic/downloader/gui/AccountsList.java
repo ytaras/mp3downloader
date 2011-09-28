@@ -5,8 +5,6 @@ import com.mostlymusic.downloader.dto.Account;
 
 import javax.inject.Inject;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,45 +15,17 @@ import java.awt.event.ActionListener;
  */
 @Singleton
 public class AccountsList {
-    private JTable accountsTable;
     private JPanel contentPane;
-    private JButton newAccount;
-    private JButton deleteAccount;
-    private JButton login;
+    private JComboBox usernameComboBox;
+    private JPasswordField passwordPasswordField;
+    private JButton loginButton;
 
     public AccountsList() {
-        accountsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        accountsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent listSelectionEvent) {
-                boolean rowSelected = accountsTable.getSelectedRow() >= 0;
-                deleteAccount.setEnabled(rowSelected);
-                login.setEnabled(rowSelected);
-            }
-        });
-        newAccount.addActionListener(new ActionListener() {
+        loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JDialog addAccount = new AddAccount(model);
-                addAccount.pack();
-                addAccount.setLocationRelativeTo(contentPane);
-                addAccount.setVisible(true);
-            }
-        });
-        deleteAccount.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                int result = JOptionPane.
-                        showConfirmDialog(contentPane, "Are you sure?", "Are you sure to delete this account", JOptionPane.YES_NO_OPTION);
-                if (JOptionPane.YES_OPTION == result) {
-                    model.getAccountsTableModel().deleteAccountAt(accountsTable.getSelectedRow());
-                }
-            }
-        });
-        login.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                model.loginToAccountAt(accountsTable.getSelectedRow());
+                String password = new String(passwordPasswordField.getPassword());
+                model.login(usernameComboBox.getSelectedItem().toString(), password);
             }
         });
     }
@@ -69,7 +39,6 @@ public class AccountsList {
     @Inject
     public void setModel(ApplicationModel model) {
         this.model = model;
-        accountsTable.setModel(model.getAccountsTableModel());
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loginFailed(Account account) {

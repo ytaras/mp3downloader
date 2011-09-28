@@ -17,7 +17,7 @@ import static org.fest.assertions.Assertions.assertThat;
  *         Date: 9/19/11
  *         Time: 3:28 PM
  */
-public class AccountsServiceTest extends StoragetTestBase {
+public class AccountsMapperTest extends StoragetTestBase {
 
     private AccountMapper accountMapper;
     private DataSource dataSource;
@@ -28,6 +28,7 @@ public class AccountsServiceTest extends StoragetTestBase {
         accountMapper = injector.getInstance(AccountMapper.class);
         dataSource = injector.getInstance(DataSource.class);
         injector.getInstance(SchemaCreator.class).createTables();
+        injector.getInstance(DataSource.class).getConnection().prepareStatement("DELETE FROM " + AccountMapper.TABLE_NAME);
     }
 
     @Test
@@ -40,9 +41,23 @@ public class AccountsServiceTest extends StoragetTestBase {
     }
 
     @Test
+    public void shouldFindByLoginName() {
+        // given
+        Account account = new Account("ytaras");
+        accountMapper.createAccount(account);
+
+        // when
+        Account loaded = accountMapper.findByLoginName("ytaras");
+
+        // then
+        assertThat(loaded).isNotNull();
+        assertThat(loaded.getUsername()).isEqualTo("ytaras");
+    }
+
+    @Test
     public void shouldCR() throws SQLException {
         // given
-        Account account = new Account("ytaras", "password");
+        Account account = new Account("ytaras");
         account.setLastOrderId(14L);
 
         // when
@@ -53,23 +68,22 @@ public class AccountsServiceTest extends StoragetTestBase {
         Account actual = accounts.get(0);
         assertThat(accounts).hasSize(1);
         assertThat(actual.getUsername()).isEqualTo(account.getUsername());
-        assertThat(actual.getPassword()).isEqualTo(account.getPassword());
         assertThat(actual.getLastOrderId()).isEqualTo(14L);
     }
 
     @Test
     public void shouldUpdate() {
         // given
-        Account account = new Account("ytaras", "password");
+        Account account = new Account("ytaras");
         accountMapper.createAccount(account);
         account = accountMapper.listAccounts().get(0);
         account.setLastOrderId(12L);
         account.setUsername("123");
-        account.setPassword("321");
         // when
         accountMapper.updateAccount(account);
 
         // then
+        // Not saving password
         Account actual = accountMapper.listAccounts().get(0);
         assertThat(actual).isEqualTo(account);
     }
@@ -77,7 +91,7 @@ public class AccountsServiceTest extends StoragetTestBase {
     @Test
     public void shouldCD() throws SQLException {
         // given
-        Account account = new Account("ytaras", "password");
+        Account account = new Account("ytaras");
         accountMapper.createAccount(account);
         List<Account> accounts = accountMapper.listAccounts();
         Account actual = accounts.get(0);

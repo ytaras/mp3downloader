@@ -11,17 +11,19 @@ import com.mostlymusic.downloader.gui.ApplicationModel;
  */
 public class LoginWorker extends AbstractSwingClientWorker<Boolean, Void> {
     private final Account account;
-    private AuthService authService;
+    private final AuthService authService;
+    private final String password;
 
-    public LoginWorker(ApplicationModel applicationModel, Account account, AuthService authService) {
+    public LoginWorker(ApplicationModel applicationModel, Account account, AuthService authService, String password) {
         super(applicationModel);
         this.account = account;
         this.authService = authService;
+        this.password = password;
     }
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        return authService.auth(account.getUsername(), account.getPassword());
+        return authService.auth(account.getUsername(), password);
     }
 
     @Override

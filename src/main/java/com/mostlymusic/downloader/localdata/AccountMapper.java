@@ -18,17 +18,19 @@ public interface AccountMapper {
     List<Account> listAccounts();
 
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-            "username VARCHAR(128) NOT NULL, password VARCHAR(123) NOT NULL, lastOrderId BIGINT)")
+            "username VARCHAR(128) NOT NULL, lastOrderId BIGINT)")
     void createSchema();
 
-    @Insert("INSERT INTO " + TABLE_NAME + "(username, password, lastOrderId) VALUES (#{account.username:VARCHAR}," +
-            " #{account.password:VARCHAR}, #{account.lastOrderId:NUMERIC})")
+    @Insert("INSERT INTO " + TABLE_NAME + "(username, lastOrderId) VALUES (#{account.username:VARCHAR}, #{account.lastOrderId:NUMERIC})")
     void createAccount(@Param("account") Account account);
 
     @Delete("DELETE FROM " + TABLE_NAME + " WHERE id = #{id:NUMERIC}")
     void deleteAccount(int id);
 
-    @Update("UPDATE " + TABLE_NAME + " SET username = #{username:VARCHAR}, password = #{password:VARCHAR}, " +
-            "lastOrderId = #{lastOrderId:NUMERIC} WHERE id = #{id:NUMERIC}")
+    @Update("UPDATE " + TABLE_NAME + " SET username = #{username:VARCHAR}, lastOrderId = #{lastOrderId:NUMERIC} " +
+            "WHERE id = #{id:NUMERIC}")
     void updateAccount(Account account);
+
+    @Select("SELECT * FROM " + TABLE_NAME + " WHERE username = #{login}")
+    Account findByLoginName(String login);
 }

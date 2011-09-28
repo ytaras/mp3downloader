@@ -10,10 +10,6 @@ import com.mostlymusic.downloader.dto.Account;
 public interface ApplicationModel {
     AccountTableModel getAccountsTableModel();
 
-    void createAccount(String text, char[] password);
-
-    void loginToAccountAt(int selectedRow);
-
     void addListener(ApplicationModelListener mock);
 
     void setStatus(String status);
@@ -31,4 +27,6 @@ public interface ApplicationModel {
     void fireLoggedInEvent(Account account);
 
     void fireLoginFailedEvent(Account account);
+
+    void login(String login, String password);
 }
