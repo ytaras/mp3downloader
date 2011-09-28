@@ -39,6 +39,7 @@ public class AccountsList {
     @Inject
     public void setModel(ApplicationModel model) {
         this.model = model;
+        usernameComboBox.setModel(model.getUsernamesModel());
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loginFailed(Account account) {

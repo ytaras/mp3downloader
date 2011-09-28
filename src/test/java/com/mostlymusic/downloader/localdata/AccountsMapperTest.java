@@ -115,6 +115,25 @@ public class AccountsMapperTest extends StoragetTestBase {
         assertThat(accountMapper.listLoginNames("")).isEmpty();
     }
 
+    @Test
+    public void shouldSetLastLogin() {
+        // given
+        accountMapper.createAccount(new Account("acc1"));
+        accountMapper.createAccount(new Account("acc2"));
+        accountMapper.createAccount(new Account("acc3"));
+        accountMapper.createAccount(new Account("acc4"));
+
+        // when
+        assertThat(accountMapper.findByLoginName("acc1").isLastLoggedIn()).isFalse();
+        accountMapper.setLastLoggedIn("acc1");
+        assertThat(accountMapper.findByLoginName("acc1").isLastLoggedIn()).isTrue();
+        accountMapper.setLastLoggedIn("acc2");
+        assertThat(accountMapper.findByLoginName("acc1").isLastLoggedIn()).isFalse();
+        assertThat(accountMapper.findByLoginName("acc2").isLastLoggedIn()).isTrue();
+
+        // then
+    }
+
     @After
     public void tearDown() throws Exception {
         Connection connection = dataSource.getConnection();

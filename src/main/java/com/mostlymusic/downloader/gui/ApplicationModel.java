@@ -2,6 +2,8 @@ package com.mostlymusic.downloader.gui;
 
 import com.mostlymusic.downloader.dto.Account;
 
+import javax.swing.*;
+
 /**
  * @author ytaras
  *         Date: 9/19/11
@@ -28,4 +30,6 @@ public interface ApplicationModel {
     void fireLoginFailedEvent(Account account);
 
     void login(String login, String password);
+
+    ComboBoxModel getUsernamesModel();
 }

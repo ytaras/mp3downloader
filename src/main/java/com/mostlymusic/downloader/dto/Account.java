@@ -9,6 +9,7 @@ public class Account {
     private String username;
     private int id;
     private Long lastOrderId;
+    private boolean lastLoggedIn;
 
     public Account() {
     }
@@ -47,6 +48,14 @@ public class Account {
         return lastOrderId;
     }
 
+    public boolean isLastLoggedIn() {
+        return lastLoggedIn;
+    }
+
+    public void setLastLoggedIn(boolean lastLoggedIn) {
+        this.lastLoggedIn = lastLoggedIn;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -55,6 +64,7 @@ public class Account {
         Account account = (Account) o;
 
         if (id != account.id) return false;
+        if (lastLoggedIn != account.lastLoggedIn) return false;
         if (lastOrderId != null ? !lastOrderId.equals(account.lastOrderId) : account.lastOrderId != null) return false;
         if (username != null ? !username.equals(account.username) : account.username != null) return false;
 
@@ -66,6 +76,7 @@ public class Account {
         int result = username != null ? username.hashCode() : 0;
         result = 31 * result + id;
         result = 31 * result + (lastOrderId != null ? lastOrderId.hashCode() : 0);
+        result = 31 * result + (lastLoggedIn ? 1 : 0);
         return result;
     }
 
@@ -75,6 +86,7 @@ public class Account {
                 "username='" + username + '\'' +
                 ", id=" + id +
                 ", lastOrderId=" + lastOrderId +
+                ", lastLoggedIn=" + lastLoggedIn +
                 '}';
     }
 }

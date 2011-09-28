@@ -15,7 +15,7 @@ public interface AccountMapper {
     String TABLE_NAME = "ACCOUNTS";
 
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-            "username VARCHAR(128) NOT NULL, lastOrderId BIGINT)")
+            "username VARCHAR(128) NOT NULL, lastOrderId BIGINT, lastLoggedIn SMALLINT)")
     void createSchema();
 
     @Insert("INSERT INTO " + TABLE_NAME + "(username, lastOrderId) VALUES (#{account.username:VARCHAR}, #{account.lastOrderId:NUMERIC})")
@@ -31,6 +31,9 @@ public interface AccountMapper {
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE username = #{login}")
     Account findByLoginName(String login);
 
-    @Select("SELECT username FROM " + TABLE_NAME + " WHERE username LIKE '${pattern}%' ORDER BY username")
+    @Select("SELECT username FROM " + TABLE_NAME + " WHERE username LIKE '${pattern}%' ORDER BY lastLoggedIn, username")
     List<String> listLoginNames(@Param("pattern") String pattern);
+
+    @Update("UPDATE " + TABLE_NAME + " SET lastLoggedIn = CASE WHEN username = #{loginName} THEN 1 ELSE 0 END")
+    void setLastLoggedIn(String loginName);
 }

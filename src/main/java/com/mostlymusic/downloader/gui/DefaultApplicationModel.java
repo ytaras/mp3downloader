@@ -11,8 +11,10 @@ import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
 
 import javax.inject.Inject;
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * @author ytaras
@@ -40,6 +42,7 @@ public class DefaultApplicationModel implements ApplicationModel {
             public void loggedIn(final Account account) {
                 publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
                 loggedAccount = account;
+                DefaultApplicationModel.this.accountMapper.setLastLoggedIn(account.getUsername());
                 worker.setAccount(account);
                 worker.execute();
             }
@@ -122,6 +125,12 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     @Override
+    public ComboBoxModel getUsernamesModel() {
+        List<String> strings = accountMapper.listLoginNames("");
+        return new DefaultComboBoxModel(new Vector<String>(strings));
+    }
+
+    @Override
     public void fireLoggedInEvent(Account account) {
         for (ApplicationModelListener listener : listeners) {
             listener.loggedIn(account);
@@ -139,4 +148,5 @@ public class DefaultApplicationModel implements ApplicationModel {
             listener.statusUnset();
         }
     }
+
 }
