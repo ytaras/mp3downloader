@@ -68,7 +68,11 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                 publish(new CheckServerStatusStage("Fetching list of tracks from server", itemsFetchedLog));
 
                 for (Item item : tracks.getItems()) {
-                    itemMapper.insertItem(item, account);
+                    if (itemMapper.contains(item.getItemId())) {
+                        itemMapper.updateItem(item, account);
+                    } else {
+                        itemMapper.insertItem(item, account);
+                    }
                 }
             }
             account.setLastOrderId(ordersMetadata.getLastItemId());

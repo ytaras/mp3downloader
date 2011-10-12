@@ -46,4 +46,15 @@ public interface ItemMapper {
             "#{item.downloadsUsed:NUMERIC}, #{item.status:VARCHAR}, #{item.fileName:VARCHAR}, #{item.createdAt:DATE}, " +
             "#{item.updatedAt:DATE}, #{account.id:NUMERIC}, #{item.dirty:BOOLEAN})")
     void insertItem(@Param("item") Item item, @Param("account") Account account);
+
+
+    @Update("UPDATE " + TABLE_NAME + " SET linkTitle = #{item.linkTitle}, productId = #{item.productId}, " +
+            "downloadsBought = #{item.downloadsBought}, linkId = #{item.linkId}," +
+            "linkHash = #{item.linkHash}, parentProductId = #{item.parentProductId}, mainArtistId = #{item.mainArtistId}," +
+            "productName = #{item.productName}, downloadsUsed = #{item.downloadsUsed}, status = #{item.status}," +
+            "fileName = #{item.fileName}, createdAt = #{item.createdAt}, dirty = #{item.dirty}, accountId = #{account.id}")
+    void updateItem(@Param("item") Item item, @Param("account") Account account);
+
+    @Select("SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE itemId = #{itemId}")
+    boolean contains(long itemId);
 }

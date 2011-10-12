@@ -59,22 +59,26 @@ public class ItemsMapperTest extends StoragetTestBase {
 
     private Item getMockItem(Account account) {
         Item item = new Item();
+        setProperties(account, item, 0);
+        return item;
+    }
+
+    private void setProperties(Account account, Item item, Integer suffix) {
         item.setCreatedAt(new Date());
         item.setUpdatedAt(new Date());
-        item.setDownloadsBought(4 + account.getId());
-        item.setDownloadsUsed(3 + account.getId());
-        item.setFileName("FileName");
-        item.setItemId(123 + account.getId());
-        item.setLinkId(321 + account.getId());
-        item.setLinkHash("LHASH" + account.getId());
-        item.setLinkTitle("LTITLE" + account.getId());
-        item.setStatus("STATUS" + account.getId());
-        item.setProductId(444 + account.getId());
-        item.setProductName("ProductName");
-        item.setParentProductId(1L);
-        item.setMainArtistId(123);
+        item.setDownloadsBought(4 + account.getId() + suffix);
+        item.setDownloadsUsed(3 + account.getId() + suffix);
+        item.setFileName("FileName" + suffix);
+        item.setItemId(123 + account.getId() + suffix);
+        item.setLinkId(321 + account.getId() + suffix);
+        item.setLinkHash("LHASH" + account.getId() + suffix);
+        item.setLinkTitle("LTITLE" + account.getId() + suffix);
+        item.setStatus("STATUS" + account.getId() + suffix);
+        item.setProductId(444 + account.getId() + suffix);
+        item.setProductName("ProductName" + suffix);
+        item.setParentProductId(1L + suffix);
+        item.setMainArtistId(123 + suffix);
         item.setDirty(true);
-        return item;
     }
 
     @Test
@@ -93,6 +97,40 @@ public class ItemsMapperTest extends StoragetTestBase {
 
         // then
         assertThat(items).containsExactly(mockItem);
+    }
+
+    @Test
+    public void shouldUpgrade() {
+        // given
+        Account account = new Account();
+        account.setId(1);
+        Item mockItem = getMockItem(account);
+        itemMapper.insertItem(mockItem, account);
+        long savedId = mockItem.getItemId();
+        setProperties(account, mockItem, 2);
+        mockItem.setItemId(savedId);
+
+        // when
+        itemMapper.updateItem(mockItem, account);
+
+        // then
+        assertThat(itemMapper.listLinks(account)).containsExactly(mockItem);
+    }
+
+    @Test
+    public void shouldDetectIfContains() {
+        // given
+        Account account = new Account();
+        account.setId(1);
+        Item mockItem = getMockItem(account);
+
+
+        // when
+        itemMapper.insertItem(mockItem, account);
+
+        // then
+        assertThat(itemMapper.contains(mockItem.getItemId() + 1)).isFalse();
+        assertThat(itemMapper.contains(mockItem.getItemId())).isTrue();
     }
 
     @After
