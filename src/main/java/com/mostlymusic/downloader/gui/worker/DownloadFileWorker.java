@@ -96,7 +96,9 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     }
 
     private File getFile(Item item) {
-        return new File(configuration.getDownloadPath(), item.getFileName());
+        String downloadPath = configuration.getDownloadPath();
+        new File(downloadPath).mkdirs();
+        return new File(downloadPath, item.getFileName());
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
