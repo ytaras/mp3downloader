@@ -17,15 +17,16 @@ import java.awt.event.ActionListener;
 public class AccountsList {
     private JPanel contentPane;
     private JComboBox usernameComboBox;
-    private JPasswordField passwordPasswordField;
+    private JPasswordField password;
     private JButton loginButton;
+    private JCheckBox rememberPassword;
 
     public AccountsList() {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String password = new String(passwordPasswordField.getPassword());
-                model.login(usernameComboBox.getSelectedItem().toString(), password);
+                String password = new String(AccountsList.this.password.getPassword());
+                model.login(usernameComboBox.getSelectedItem().toString(), password, rememberPassword.isSelected());
             }
         });
     }
@@ -40,6 +41,13 @@ public class AccountsList {
     public void setModel(ApplicationModel model) {
         this.model = model;
         usernameComboBox.setModel(model.getUsernamesModel());
+        updatePasswordField();
+        usernameComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePasswordField();
+            }
+        });
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loginFailed(Account account) {
@@ -47,6 +55,17 @@ public class AccountsList {
                         "Login failed", JOptionPane.ERROR_MESSAGE);
             }
         });
+    }
+
+    private void updatePasswordField() {
+        Account account = this.model.getAccount((String) usernameComboBox.getSelectedItem());
+        if (account != null && account.getPassword() != null) {
+            password.setText(account.getPassword());
+            rememberPassword.setSelected(true);
+        } else {
+            password.setText(null);
+            rememberPassword.setSelected(false);
+        }
     }
 
     public JPanel getContentPane() {

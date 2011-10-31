@@ -15,16 +15,18 @@ public interface AccountMapper {
     String TABLE_NAME = "ACCOUNTS";
 
     @Update("CREATE TABLE " + TABLE_NAME + " (id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), " +
-            "username VARCHAR(128) NOT NULL, lastOrderId BIGINT, lastLoggedIn SMALLINT)")
+            "username VARCHAR(128) NOT NULL, lastOrderId BIGINT, lastLoggedIn SMALLINT, password VARCHAR(128))")
     void createSchema();
 
-    @Insert("INSERT INTO " + TABLE_NAME + "(username, lastOrderId) VALUES (#{account.username:VARCHAR}, #{account.lastOrderId:NUMERIC})")
+    @Insert("INSERT INTO " + TABLE_NAME + "(username, lastOrderId, password) VALUES (#{account.username:VARCHAR}, #{account.lastOrderId:NUMERIC}, " +
+            "#{account.password:VARCHAR})")
     void createAccount(@Param("account") Account account);
 
     @Delete("DELETE FROM " + TABLE_NAME + " WHERE id = #{id:NUMERIC}")
     void deleteAccount(int id);
 
-    @Update("UPDATE " + TABLE_NAME + " SET username = #{username:VARCHAR}, lastOrderId = #{lastOrderId:NUMERIC} " +
+    @Update("UPDATE " + TABLE_NAME + " SET username = #{username:VARCHAR}, lastOrderId = #{lastOrderId:NUMERIC}, " +
+            "password = #{password:VARCHAR} " +
             "WHERE id = #{id:NUMERIC}")
     void updateAccount(Account account);
 

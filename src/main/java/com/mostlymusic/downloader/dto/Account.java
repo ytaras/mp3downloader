@@ -10,6 +10,7 @@ public class Account {
     private int id;
     private Long lastOrderId;
     private boolean lastLoggedIn;
+    private String password;
 
     public Account() {
     }
@@ -56,6 +57,14 @@ public class Account {
         this.lastLoggedIn = lastLoggedIn;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +75,7 @@ public class Account {
         if (id != account.id) return false;
         if (lastLoggedIn != account.lastLoggedIn) return false;
         if (lastOrderId != null ? !lastOrderId.equals(account.lastOrderId) : account.lastOrderId != null) return false;
+        if (password != null ? !password.equals(account.password) : account.password != null) return false;
         if (username != null ? !username.equals(account.username) : account.username != null) return false;
 
         return true;
@@ -77,6 +87,7 @@ public class Account {
         result = 31 * result + id;
         result = 31 * result + (lastOrderId != null ? lastOrderId.hashCode() : 0);
         result = 31 * result + (lastLoggedIn ? 1 : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
         return result;
     }
 

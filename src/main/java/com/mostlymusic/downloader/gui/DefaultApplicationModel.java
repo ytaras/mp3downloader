@@ -114,11 +114,16 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public void login(String login, String password) {
+    public void login(String login, String password, boolean savePassword) {
         Account account = accountMapper.findByLoginName(login);
         if (null == account) {
             accountMapper.createAccount(new Account(login));
             account = accountMapper.findByLoginName(login);
+        }
+        if (savePassword) {
+            account.setPassword(password);
+        } else {
+            account.setPassword(null);
         }
         this.setStatus("Trying to log in...");
         new LoginWorker(this, account, authService, password).execute();
@@ -128,6 +133,11 @@ public class DefaultApplicationModel implements ApplicationModel {
     public ComboBoxModel getUsernamesModel() {
         List<String> strings = accountMapper.listLoginNames("");
         return new DefaultComboBoxModel(new Vector<String>(strings));
+    }
+
+    @Override
+    public Account getAccount(String selectedItem) {
+        return accountMapper.findByLoginName(selectedItem);
     }
 
     @Override

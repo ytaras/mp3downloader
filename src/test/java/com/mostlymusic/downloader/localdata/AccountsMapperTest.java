@@ -66,6 +66,7 @@ public class AccountsMapperTest extends StoragetTestBase {
         // given
         Account account = new Account("ytaras");
         account.setLastOrderId(14L);
+        account.setPassword("pwd");
 
         // when
         accountMapper.createAccount(account);
@@ -76,6 +77,7 @@ public class AccountsMapperTest extends StoragetTestBase {
         assertThat(accounts).hasSize(1);
         assertThat(actual).isEqualTo(account.getUsername());
         assertThat(getFirstAccount().getLastOrderId()).isEqualTo(14L);
+        assertThat(getFirstAccount().getPassword()).isEqualTo("pwd");
     }
 
     @Test
@@ -86,6 +88,7 @@ public class AccountsMapperTest extends StoragetTestBase {
         account = getFirstAccount();
         account.setLastOrderId(12L);
         account.setUsername("123");
+        account.setPassword("pwd");
         // when
         accountMapper.updateAccount(account);
 

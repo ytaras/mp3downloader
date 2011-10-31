@@ -29,7 +29,9 @@ public interface ApplicationModel {
 
     void fireLoginFailedEvent(Account account);
 
-    void login(String login, String password);
+    void login(String login, String password, boolean savePassword);
 
     ComboBoxModel getUsernamesModel();
+
+    Account getAccount(String selectedItem);
 }
