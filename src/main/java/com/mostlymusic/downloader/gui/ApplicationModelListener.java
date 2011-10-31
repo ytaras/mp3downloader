@@ -21,4 +21,6 @@ public interface ApplicationModelListener {
     void checkServerDone();
 
     void logEvent(LogEvent event);
+
+    void configurationChanged();
 }

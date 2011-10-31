@@ -23,12 +23,13 @@ public class ConfigurationMapperTest extends StoragetTestBase {
         configurationMapper = injector.getInstance(ConfigurationMapper.class);
         injector.getInstance(SchemaCreator.class).createTables();
         injector.getInstance(DataSource.class).getConnection()
-                .prepareStatement("DELETE FROM " + ConfigurationMapper.TABLE_NAME).execute();
+                .prepareStatement("DROP TABLE " + ConfigurationMapper.TABLE_NAME).execute();
+        configurationMapper.createSchema();
         configurationMapper.insertConfig();
     }
 
     @Test
-    public void shouldSaveFilePath() throws Exception {
+    public void shouldSaveConfigPath() throws Exception {
         // given
         assertThat(configurationMapper.getDownloadPath()).isNull();
         // when
@@ -36,5 +37,17 @@ public class ConfigurationMapperTest extends StoragetTestBase {
 
         // then
         assertThat(configurationMapper.getDownloadPath()).isEqualTo("A path");
+    }
+
+    @Test
+    public void shouldSaveRefreshRate() {
+        // given
+        assertThat(configurationMapper.getRefreshRate()).isEqualTo(5 * 60 * 1000);
+
+        // when
+        configurationMapper.setRefreshRate(987654321);
+
+        // then
+        assertThat(configurationMapper.getRefreshRate()).isEqualTo(987654321);
     }
 }

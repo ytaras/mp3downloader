@@ -31,6 +31,12 @@ public class ApplicationMenuBar extends JMenuBar {
                 }
             }
         });
+        file.add(new AbstractAction("Configuration") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ConfigurationDialog(configurationMapper, model).setVisible(true);
+            }
+        });
         file.add(new AbstractAction("Exit") {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -41,9 +47,15 @@ public class ApplicationMenuBar extends JMenuBar {
     }
 
     private ConfigurationMapper configurationMapper;
+    private ApplicationModel model;
 
     @Inject
     public void setConfigurationMapper(ConfigurationMapper configurationMapper) {
         this.configurationMapper = configurationMapper;
+    }
+
+    @Inject
+    public void setModel(ApplicationModel model) {
+        this.model = model;
     }
 }

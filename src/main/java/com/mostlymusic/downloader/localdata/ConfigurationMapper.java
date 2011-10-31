@@ -12,10 +12,10 @@ import org.apache.ibatis.annotations.Update;
 public interface ConfigurationMapper {
     String TABLE_NAME = "CONFIGURATION";
 
-    @Update("CREATE TABLE " + TABLE_NAME + " (savePath VARCHAR(255))")
+    @Update("CREATE TABLE " + TABLE_NAME + " (savePath VARCHAR(255), refreshRate BIGINT)")
     void createSchema();
 
-    @Insert("INSERT INTO " + TABLE_NAME + "(savePath) VALUES (NULL)")
+    @Insert("INSERT INTO " + TABLE_NAME + "(savePath, refreshRate) VALUES (NULL, 5 * 60 * 1000)")
     void insertConfig();
 
     @Select("SELECT savePath FROM " + TABLE_NAME + " FETCH FIRST ROW ONLY")
@@ -23,4 +23,10 @@ public interface ConfigurationMapper {
 
     @Update("UPDATE " + TABLE_NAME + " SET savePath = #{path}")
     void setDownloadPath(String path);
+
+    @Select("SELECT refreshRate FROM " + TABLE_NAME + " FETCH FIRST ROW ONLY")
+    int getRefreshRate();
+
+    @Select("UPDATE " + TABLE_NAME + " SET refreshRate = #{rate}")
+    void setRefreshRate(long rate);
 }

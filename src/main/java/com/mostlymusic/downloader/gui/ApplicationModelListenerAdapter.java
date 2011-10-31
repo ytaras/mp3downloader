@@ -35,4 +35,8 @@ public class ApplicationModelListenerAdapter implements ApplicationModelListener
     @Override
     public void logEvent(LogEvent event) {
     }
+
+    @Override
+    public void configurationChanged() {
+    }
 }

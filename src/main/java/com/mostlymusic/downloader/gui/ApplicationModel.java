@@ -34,4 +34,6 @@ public interface ApplicationModel {
     ComboBoxModel getUsernamesModel();
 
     Account getAccount(String selectedItem);
+
+    void fireConfigurationChanged();
 }

@@ -50,6 +50,11 @@ public class DefaultApplicationModel implements ApplicationModel {
             public void checkServerDone() {
                 itemsTableModel.fireTableDataChanged();
             }
+
+            @Override
+            public void configurationChanged() {
+                workerFactory.schedule(loggedAccount);
+            }
         });
     }
 
@@ -137,6 +142,13 @@ public class DefaultApplicationModel implements ApplicationModel {
     @Override
     public Account getAccount(String selectedItem) {
         return accountMapper.findByLoginName(selectedItem);
+    }
+
+    @Override
+    public void fireConfigurationChanged() {
+        for (ApplicationModelListener listener : listeners) {
+            listener.configurationChanged();
+        }
     }
 
     @Override
