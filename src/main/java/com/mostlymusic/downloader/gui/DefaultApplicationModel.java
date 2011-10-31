@@ -3,7 +3,7 @@ package com.mostlymusic.downloader.gui;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorker;
+import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorkerFactory;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
@@ -32,7 +32,7 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
-                                   final CheckServerUpdatesWorker worker, ItemMapper itemMapper,
+                                   final CheckServerUpdatesWorkerFactory workerFactory, ItemMapper itemMapper,
                                    ProductMapper productMapper, ArtistMapper artistMapper) {
         this.accountMapper = accountMapper;
         this.authService = authService;
@@ -43,8 +43,7 @@ public class DefaultApplicationModel implements ApplicationModel {
                 publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
                 loggedAccount = account;
                 DefaultApplicationModel.this.accountMapper.setLastLoggedIn(account.getUsername());
-                worker.setAccount(account);
-                worker.execute();
+                workerFactory.schedule(account);
             }
 
             @Override

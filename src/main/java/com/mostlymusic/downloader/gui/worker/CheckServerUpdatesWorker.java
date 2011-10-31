@@ -54,18 +54,18 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
     @Override
     protected Void doInBackground() throws Exception {
-        publish(new CheckServerStatusStage("Checking for updates from server", null));
+        publish(new CheckServerStatusStage(null));
         Long loadedLastOrderId = account.getLastOrderId();
         ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
 
         LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
-        publish(new CheckServerStatusStage("Fetching list of tracks from server", metadataFetchedLog));
+        publish(new CheckServerStatusStage(metadataFetchedLog));
         if (0 != ordersMetadata.getTotalItems()) {
             int pageSize = 10;
             for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
                 ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
                 LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size()));
-                publish(new CheckServerStatusStage("Fetching list of tracks from server", itemsFetchedLog));
+                publish(new CheckServerStatusStage(itemsFetchedLog));
 
                 for (Item item : tracks.getItems()) {
                     if (itemMapper.contains(item.getItemId())) {
@@ -82,7 +82,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         while (!productMapper.findUnknownProducts().isEmpty()) {
             List<Long> unknownProducts = productMapper.findUnknownProducts();
             LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
-            publish(new CheckServerStatusStage("Fetching products from server", productToFetchLog));
+            publish(new CheckServerStatusStage(productToFetchLog));
             List<Product> products = productsService.getProducts(unknownProducts);
             for (Product product : products) {
                 productMapper.insertProduct(product);
@@ -107,9 +107,6 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     @Override
     protected void process(List<CheckServerStatusStage> checkServerStatusStages) {
         for (CheckServerStatusStage checkServerStatusStage : checkServerStatusStages) {
-            if (checkServerStatusStage.getMessage() != null) {
-                getApplicationModel().setStatus(checkServerStatusStage.getMessage());
-            }
             getApplicationModel().publishLogStatus(checkServerStatusStage.getLogEvent());
         }
     }
@@ -132,15 +129,9 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
 class CheckServerStatusStage {
     private LogEvent logEvent;
-    private String message;
 
-    CheckServerStatusStage(String message, LogEvent logEvent) {
-        this.message = message;
+    CheckServerStatusStage(LogEvent logEvent) {
         this.logEvent = logEvent;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public LogEvent getLogEvent() {

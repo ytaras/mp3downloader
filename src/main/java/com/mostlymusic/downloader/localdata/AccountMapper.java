@@ -30,7 +30,7 @@ public interface AccountMapper {
             "WHERE id = #{id:NUMERIC}")
     void updateAccount(Account account);
 
-    @Select("SELECT * FROM " + TABLE_NAME + " WHERE username = #{login}")
+    @Select("SELECT * FROM " + TABLE_NAME + " WHERE username = #{login:VARCHAR}")
     Account findByLoginName(String login);
 
     @Select("SELECT username FROM " + TABLE_NAME + " WHERE username LIKE '${pattern}%' ORDER BY lastLoggedIn, username")
