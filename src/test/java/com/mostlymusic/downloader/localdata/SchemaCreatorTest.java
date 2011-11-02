@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.localdata;
 
 import com.google.inject.Guice;
 import com.mostlymusic.downloader.LocalStorageModule;
+import com.mostlymusic.downloader.dto.Account;
 import org.junit.Test;
 
 import javax.sql.DataSource;
@@ -40,6 +41,7 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ConfigurationMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, VersionMapper.TABLE_NAME)).isTrue();
     }
 
     @Test
@@ -58,10 +60,31 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
         assertThat(tableExists(dataSource, ConfigurationMapper.TABLE_NAME)).isTrue();
+        assertThat(tableExists(dataSource, VersionMapper.TABLE_NAME)).isTrue();
         ResultSet resultSet = dataSource.getConnection()
                 .prepareStatement("SELECT COUNT(*) FROM " + ConfigurationMapper.TABLE_NAME).executeQuery();
         resultSet.next();
         assertThat(resultSet.getInt(1)).as("count of configuration records").isEqualTo(1);
+    }
+
+    @Test
+    public void shouldRecreateSchemaIfNoVersionTable() throws SQLException {
+        // given
+        DataSource dataSource = injector.getInstance(DataSource.class);
+        dropTable(dataSource, VersionMapper.TABLE_NAME);
+        AccountMapper accountMapper = injector.getInstance(AccountMapper.class);
+        accountMapper.createAccount(new Account("user"));
+        assertThat(accountMapper.listLoginNames("")).isNotEmpty();
+
+        // when
+        injector.getInstance(SchemaCreator.class).createTables();
+
+        // then
+        assertThat(accountMapper.listLoginNames("")).isEmpty();
+    }
+
+    private void dropTable(DataSource dataSource, String tableName) throws SQLException {
+        dataSource.getConnection().prepareStatement("DROP TABLE " + tableName).execute();
     }
 
     private boolean tableExists(DataSource dataSource, String tableName) throws SQLException {

@@ -15,6 +15,8 @@ import java.sql.SQLException;
 public class SchemaCreator {
 
 
+    private static final String VERSION_TABLE_NAME = "DOWNLOADER_VERSION";
+
     @Inject
     public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,
                          ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper)
@@ -25,7 +27,6 @@ public class SchemaCreator {
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
         this.configurationMapper = configurationMapper;
-        createTables();
     }
 
     private final DataSource dataSource;
@@ -35,9 +36,18 @@ public class SchemaCreator {
     private final ArtistMapper artistMapper;
     private final ConfigurationMapper configurationMapper;
 
+    @Inject
     public void createTables() throws SQLException {
         Connection connection = dataSource.getConnection();
         try {
+            if (!tableExists(connection, VERSION_TABLE_NAME)) {
+                dropTable(connection, AccountMapper.TABLE_NAME);
+                dropTable(connection, ItemMapper.TABLE_NAME);
+                dropTable(connection, ProductMapper.TABLE_NAME);
+                dropTable(connection, ArtistMapper.TABLE_NAME);
+                dropTable(connection, ConfigurationMapper.TABLE_NAME);
+                createVersionTable(connection);
+            }
             if (!tableExists(connection, AccountMapper.TABLE_NAME)) {
                 accountMapper.createSchema();
             }
@@ -56,6 +66,17 @@ public class SchemaCreator {
             }
         } finally {
             connection.close();
+        }
+    }
+
+    private void createVersionTable(Connection connection) throws SQLException {
+        connection.prepareStatement("CREATE TABLE " + VERSION_TABLE_NAME + " (version INT NOT NULL)").execute();
+        connection.prepareStatement("INSERT INTO " + VERSION_TABLE_NAME + " (version) VALUES (1)").execute();
+    }
+
+    private void dropTable(Connection connection, String tableName) throws SQLException {
+        if (tableExists(connection, tableName)) {
+            connection.prepareStatement("DROP TABLE " + tableName).execute();
         }
     }
 
