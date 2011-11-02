@@ -19,7 +19,8 @@ public class SchemaCreator {
 
     @Inject
     public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,
-                         ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper)
+                         ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper,
+                         VersionMapper versionMapper)
             throws SQLException {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
@@ -27,6 +28,7 @@ public class SchemaCreator {
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
         this.configurationMapper = configurationMapper;
+        this.versionMapper = versionMapper;
     }
 
     private final DataSource dataSource;
@@ -35,6 +37,7 @@ public class SchemaCreator {
     private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
     private final ConfigurationMapper configurationMapper;
+    private final VersionMapper versionMapper;
 
     @Inject
     public void createTables() throws SQLException {
@@ -46,7 +49,8 @@ public class SchemaCreator {
                 dropTable(connection, ProductMapper.TABLE_NAME);
                 dropTable(connection, ArtistMapper.TABLE_NAME);
                 dropTable(connection, ConfigurationMapper.TABLE_NAME);
-                createVersionTable(connection);
+                versionMapper.createSchema();
+                versionMapper.createInitialConfig();
             }
             if (!tableExists(connection, AccountMapper.TABLE_NAME)) {
                 accountMapper.createSchema();
@@ -67,11 +71,6 @@ public class SchemaCreator {
         } finally {
             connection.close();
         }
-    }
-
-    private void createVersionTable(Connection connection) throws SQLException {
-        connection.prepareStatement("CREATE TABLE " + VERSION_TABLE_NAME + " (version INT NOT NULL)").execute();
-        connection.prepareStatement("INSERT INTO " + VERSION_TABLE_NAME + " (version) VALUES (1)").execute();
     }
 
     private void dropTable(Connection connection, String tableName) throws SQLException {

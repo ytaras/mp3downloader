@@ -1,5 +1,8 @@
 package com.mostlymusic.downloader.localdata;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Update;
+
 /**
  * @author ytaras
  *         Date: 11/2/11
@@ -7,4 +10,10 @@ package com.mostlymusic.downloader.localdata;
  */
 public interface VersionMapper {
     String TABLE_NAME = "DOWNLOADER_VERSION";
+
+    @Update("CREATE TABLE " + TABLE_NAME + " (version INT NOT NULL)")
+    void createSchema();
+
+    @Insert("INSERT INTO " + TABLE_NAME + "(version) VALUES (1)")
+    void createInitialConfig();
 }
