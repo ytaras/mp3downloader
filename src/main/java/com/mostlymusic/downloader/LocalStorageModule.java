@@ -30,6 +30,7 @@ public class LocalStorageModule extends MyBatisModule {
     protected void initialize() {
         bindConstant().annotatedWith(Names.named("mybatis.environment.id")).to("production");
         bindConstant().annotatedWith(DatabaseFilename.class).to(getDatabaseFile());
+        bind(SchemaCreator.class).asEagerSingleton();
 
         bindDataSourceProviderType(DataSourceProvider.class);
         bindTransactionFactoryType(JdbcTransactionFactory.class);

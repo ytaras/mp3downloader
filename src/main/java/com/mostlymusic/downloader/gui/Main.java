@@ -5,7 +5,6 @@ import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
 import com.mostlymusic.downloader.GuiModule;
 import com.mostlymusic.downloader.LocalStorageModule;
-import com.mostlymusic.downloader.localdata.SchemaCreator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +21,6 @@ public class Main {
             args = new String[]{"http://www.mostlymusic.com/"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
-        injector.getInstance(SchemaCreator.class).createTables();
         final JFrame frame = new JFrame("MostlyMusic Download Manager");
         frame.setContentPane((Container) injector.getInstance(MainContainer.class).getContentPane());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

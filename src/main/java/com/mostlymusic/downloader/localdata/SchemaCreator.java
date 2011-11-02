@@ -17,13 +17,15 @@ public class SchemaCreator {
 
     @Inject
     public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,
-                         ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper) {
+                         ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper)
+            throws SQLException {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
         this.itemMapper = itemMapper;
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
         this.configurationMapper = configurationMapper;
+        createTables();
     }
 
     private final DataSource dataSource;
