@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -20,18 +21,16 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     @Before
     public void setUp() throws Exception {
         super.setUp();
-        configurationMapper = injector.getInstance(ConfigurationMapper.class);
-        injector.getInstance(SchemaCreator.class).createTables();
         injector.getInstance(DataSource.class).getConnection()
                 .prepareStatement("DROP TABLE " + ConfigurationMapper.TABLE_NAME).execute();
-        configurationMapper.createSchema();
-        configurationMapper.insertConfig();
+        configurationMapper = injector.getInstance(ConfigurationMapper.class);
+        injector.getInstance(SchemaCreator.class).createTables();
     }
 
     @Test
     public void shouldSaveConfigPath() throws Exception {
         // given
-        assertThat(configurationMapper.getDownloadPath()).isNull();
+        assertThat(configurationMapper.getDownloadPath()).isEqualTo(System.getProperty("user.home") + "/Downloads");
         // when
         configurationMapper.setDownloadPath("A path");
 
@@ -40,7 +39,7 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     }
 
     @Test
-    public void shouldSaveRefreshRate() {
+    public void shouldSaveRefreshRate() throws SQLException {
         // given
         assertThat(configurationMapper.getRefreshRate()).isEqualTo(5 * 60 * 1000);
 

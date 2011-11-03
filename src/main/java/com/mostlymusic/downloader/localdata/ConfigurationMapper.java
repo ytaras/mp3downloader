@@ -15,8 +15,8 @@ public interface ConfigurationMapper {
     @Update("CREATE TABLE " + TABLE_NAME + " (savePath VARCHAR(255), refreshRate BIGINT)")
     void createSchema();
 
-    @Insert("INSERT INTO " + TABLE_NAME + "(savePath, refreshRate) VALUES (NULL, 5 * 60 * 1000)")
-    void insertConfig();
+    @Insert("INSERT INTO " + TABLE_NAME + "(savePath, refreshRate) VALUES (#{defaultDownloadPath}, 5 * 60 * 1000)")
+    void insertConfig(String defaultDownloadPath);
 
     @Select("SELECT savePath FROM " + TABLE_NAME + " FETCH FIRST ROW ONLY")
     String getDownloadPath();

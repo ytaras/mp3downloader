@@ -30,7 +30,10 @@ public class LocalStorageModule extends MyBatisModule {
     protected void initialize() {
         bindConstant().annotatedWith(Names.named("mybatis.environment.id")).to("production");
         bindConstant().annotatedWith(DatabaseFilename.class).to(getDatabaseFile());
+        bind(File.class).annotatedWith(DownloadDirectory.class)
+                .toInstance(getDownloadsDir(System.getProperty("user.home")));
         bind(SchemaCreator.class).asEagerSingleton();
+
 
         bindDataSourceProviderType(DataSourceProvider.class);
         bindTransactionFactoryType(JdbcTransactionFactory.class);
@@ -40,6 +43,15 @@ public class LocalStorageModule extends MyBatisModule {
         addMapperClass(ProductMapper.class);
         addMapperClass(ArtistMapper.class);
         addMapperClass(ConfigurationMapper.class);
+        addMapperClass(VersionMapper.class);
+    }
+
+    private File getDownloadsDir(String userHome) {
+        File downloads = new File(userHome, "Downloads");
+        if (!downloads.exists()) {
+            downloads.mkdirs();
+        }
+        return downloads;
     }
 
     private String getDatabaseFile() {

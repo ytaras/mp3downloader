@@ -1,8 +1,10 @@
 package com.mostlymusic.downloader.localdata;
 
 import com.google.inject.Inject;
+import com.mostlymusic.downloader.DownloadDirectory;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,12 +17,12 @@ import java.sql.SQLException;
 public class SchemaCreator {
 
 
-    private static final String VERSION_TABLE_NAME = "DOWNLOADER_VERSION";
+    private File defaultDownloadPath;
 
     @Inject
     public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,
                          ProductMapper productMapper, ArtistMapper artistMapper, ConfigurationMapper configurationMapper,
-                         VersionMapper versionMapper)
+                         VersionMapper versionMapper, @DownloadDirectory File defaultDownloadPath)
             throws SQLException {
         this.dataSource = dataSource;
         this.accountMapper = accountMapper;
@@ -29,6 +31,8 @@ public class SchemaCreator {
         this.artistMapper = artistMapper;
         this.configurationMapper = configurationMapper;
         this.versionMapper = versionMapper;
+        this.defaultDownloadPath = defaultDownloadPath;
+        createTables();
     }
 
     private final DataSource dataSource;
@@ -39,11 +43,10 @@ public class SchemaCreator {
     private final ConfigurationMapper configurationMapper;
     private final VersionMapper versionMapper;
 
-    @Inject
     public void createTables() throws SQLException {
         Connection connection = dataSource.getConnection();
         try {
-            if (!tableExists(connection, VERSION_TABLE_NAME)) {
+            if (!tableExists(connection, VersionMapper.TABLE_NAME)) {
                 dropTable(connection, AccountMapper.TABLE_NAME);
                 dropTable(connection, ItemMapper.TABLE_NAME);
                 dropTable(connection, ProductMapper.TABLE_NAME);
@@ -66,7 +69,7 @@ public class SchemaCreator {
             }
             if (!tableExists(connection, ConfigurationMapper.TABLE_NAME)) {
                 configurationMapper.createSchema();
-                configurationMapper.insertConfig();
+                configurationMapper.insertConfig(defaultDownloadPath.getAbsolutePath());
             }
         } finally {
             connection.close();

@@ -4,7 +4,6 @@ import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.gui.*;
 
 import javax.swing.*;
-import java.io.File;
 
 /**
  * @author ytaras
@@ -19,16 +18,6 @@ public class GuiModule extends AbstractModule {
         bind(MainContainer.class).annotatedWith(MainLayout.class).to(MainContainer.class);
         bind(ErrorHandlerListener.class).asEagerSingleton();
         bind(JMenuBar.class).to(ApplicationMenuBar.class);
-
-        String userHome = System.getProperty("user.home");
-        bind(File.class).annotatedWith(DownloadDirectory.class).toInstance(getDownloadsDir(userHome));
     }
 
-    private File getDownloadsDir(String userHome) {
-        File downloads = new File(userHome, "Downloads");
-        if (!downloads.exists()) {
-            downloads.mkdirs();
-        }
-        return downloads;
-    }
 }
