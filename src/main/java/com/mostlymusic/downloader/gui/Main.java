@@ -46,7 +46,7 @@ public class Main {
 
     private static void addTray(final JFrame frame) {
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/favicon.gif"));
+        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/favicon.jpg"));
         ActionListener showWindowAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
