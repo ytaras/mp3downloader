@@ -8,6 +8,10 @@ import com.mostlymusic.downloader.LocalStorageModule;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 /**
@@ -35,6 +39,54 @@ public class Main {
                 throwable.printStackTrace();
             }
         });
+        if (SystemTray.isSupported()) {
+            addTray(frame);
+        }
+    }
+
+    private static void addTray(final JFrame frame) {
+        SystemTray systemTray = SystemTray.getSystemTray();
+        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/favicon.gif"));
+        ActionListener showWindowAction = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(true);
+                frame.toFront();
+            }
+        };
+        PopupMenu popupMenu = getTrayMenu(showWindowAction);
+
+        TrayIcon trayIcon = new TrayIcon(image, "MostlyMusic Download Manager", popupMenu);
+
+        trayIcon.setImageAutoSize(true);
+        trayIcon.addActionListener(showWindowAction);
+        try {
+            systemTray.add(trayIcon);
+            frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowIconified(WindowEvent e) {
+                    frame.setVisible(false);
+                }
+            });
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static PopupMenu getTrayMenu(ActionListener showWindowAction) {
+        PopupMenu popupMenu = new PopupMenu();
+        MenuItem restore = new MenuItem("Restore");
+        restore.addActionListener(showWindowAction);
+        popupMenu.add(restore);
+        MenuItem exit = new MenuItem("Exit");
+        exit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        popupMenu.add(exit);
+        return popupMenu;
     }
 
 }
