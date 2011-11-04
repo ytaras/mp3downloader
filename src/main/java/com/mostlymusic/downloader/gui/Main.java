@@ -37,6 +37,17 @@ public class Main {
                 throwable.printStackTrace();
             }
         });
+        if (SystemTray.isSupported()) {
+            SystemTray systemTray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/favicon.gif"));
+            TrayIcon trayIcon = new TrayIcon(image);
+            trayIcon.setImageAutoSize(true);
+            try {
+                systemTray.add(trayIcon);
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
