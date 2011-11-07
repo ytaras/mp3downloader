@@ -10,6 +10,8 @@ public class ConfigurationDialog extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JSpinner refreshRate;
+    private JTextField downloadLocation;
+    private JButton button1;
     private final ConfigurationMapper configurationMapper;
     private final ApplicationModel applicationModel;
 
