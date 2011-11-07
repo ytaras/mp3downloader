@@ -19,7 +19,7 @@ public class GuiModule extends AbstractModule {
         bind(ErrorHandlerListener.class).asEagerSingleton();
         bind(JMenuBar.class).to(ApplicationMenuBar.class);
         bind(MainWindow.class);
-        bind(ILoginDialog.class).to(LoginDialog.class);
+        bind(LoginDialog.class).to(JDialogLoginDialog.class);
     }
 
 }

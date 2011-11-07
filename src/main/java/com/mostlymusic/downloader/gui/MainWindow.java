@@ -20,7 +20,7 @@ public class MainWindow extends JFrame {
 
     @Inject
     public MainWindow(JMenuBar menuBar, ProgressGlassPane progressGlassPane,
-                      MainContainer mainContainer, ILoginDialog loginDialog) throws HeadlessException {
+                      MainContainer mainContainer, LoginDialog loginDialog) throws HeadlessException {
         final JFrame frame = new JFrame("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
         setContentPane(contentPane);
