@@ -18,6 +18,7 @@ public class GuiModule extends AbstractModule {
         bind(MainContainer.class).annotatedWith(MainLayout.class).to(MainContainer.class);
         bind(ErrorHandlerListener.class).asEagerSingleton();
         bind(JMenuBar.class).to(ApplicationMenuBar.class);
+        bind(MainFrame.class);
     }
 
 }

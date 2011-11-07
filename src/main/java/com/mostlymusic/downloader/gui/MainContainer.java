@@ -56,7 +56,7 @@ public class MainContainer {
         model.publishLogStatus(new LogEvent("Started application"));
     }
 
-    public Component getContentPane() {
+    public Container getContentPane() {
         return panel1;
     }
 
