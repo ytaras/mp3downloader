@@ -13,7 +13,6 @@ import javax.swing.*;
 public class GuiModule extends AbstractModule {
     @Override
     protected void configure() {
-        bind(AccountsList.class);
         bind(ApplicationModel.class).to(DefaultApplicationModel.class);
         bind(MainContainer.class).annotatedWith(MainLayout.class).to(MainContainer.class);
         bind(ErrorHandlerListener.class).asEagerSingleton();

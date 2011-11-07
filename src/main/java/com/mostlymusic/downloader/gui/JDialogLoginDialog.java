@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,14 +23,20 @@ public class JDialogLoginDialog implements LoginDialog {
 
     @Override
     public void showDialog(MainWindow window) {
-        JDialog dialog = new JDialog(window, "Login", true);
+        final JDialog dialog = new JDialog(window, "Login", true);
+        applicationModel.addListener(new ApplicationModelListenerAdapter() {
+            @Override
+            public void loggedIn(Account account) {
+                dialog.setVisible(false);
+            }
+        });
         AccountsList accountsList = new AccountsList();
         accountsList.setModel(applicationModel);
         JPanel contentPane = accountsList.getContentPane();
         dialog.getContentPane().add(contentPane, BorderLayout.CENTER);
-        dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        dialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         dialog.pack();
-        dialog.setResizable(true);
+        dialog.setResizable(false);
         dialog.setLocationRelativeTo(window);
         dialog.setVisible(true);
     }

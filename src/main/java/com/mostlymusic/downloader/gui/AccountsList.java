@@ -1,9 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 
-import javax.inject.Inject;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +11,6 @@ import java.awt.event.ActionListener;
  *         Date: 9/19/11
  *         Time: 7:22 PM
  */
-@Singleton
 public class AccountsList {
     private JPanel contentPane;
     private JComboBox usernameComboBox;
@@ -37,7 +34,6 @@ public class AccountsList {
         return model;
     }
 
-    @Inject
     public void setModel(ApplicationModel model) {
         this.model = model;
         usernameComboBox.setModel(model.getUsernamesModel());

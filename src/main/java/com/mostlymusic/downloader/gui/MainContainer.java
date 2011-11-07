@@ -14,7 +14,6 @@ import java.awt.*;
  */
 @Singleton
 public class MainContainer {
-    private static final String ACCOUNTS = "ACCOUNTS";
     private static final String ITEMS = "ITEMS";
 
     private JPanel panel1;
@@ -25,11 +24,10 @@ public class MainContainer {
     private DefaultListModel logListModel;
 
     @Inject
-    public MainContainer(AccountsList accountsList, Items items, ApplicationModel model) {
+    public MainContainer(Items items, ApplicationModel model) {
         layout = (CardLayout) cardPanel.getLayout();
-        setAccountsList(accountsList);
         setItems(items);
-        layout.show(this.cardPanel, ACCOUNTS);
+        layout.show(this.cardPanel, ITEMS);
         logListModel = new DefaultListModel();
         logList.setModel(logListModel);
         model.addListener(new ApplicationModelListenerAdapter() {
@@ -58,10 +56,6 @@ public class MainContainer {
 
     public Container getContentPane() {
         return panel1;
-    }
-
-    private void setAccountsList(AccountsList accountsList) {
-        cardPanel.add(accountsList.getContentPane(), ACCOUNTS);
     }
 
     private void setItems(Items items) {
