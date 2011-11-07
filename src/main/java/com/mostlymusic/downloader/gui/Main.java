@@ -51,6 +51,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.setVisible(true);
+                frame.setState(JFrame.MAXIMIZED_BOTH);
                 frame.toFront();
             }
         };
