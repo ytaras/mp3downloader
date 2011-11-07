@@ -1,6 +1,5 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javax.swing.*;
@@ -11,12 +10,17 @@ import javax.swing.*;
  *         Time: 1:09 PM
  */
 @Singleton
-public class LoginDialog extends JDialog {
-    @Inject
+public class LoginDialog implements ILoginDialog {
     public LoginDialog() {
-        setModal(true);
-        getContentPane().add(new JLabel("Some text"));
-        pack();
-        setVisible(true);
+    }
+
+    @Override
+    public void showDialog(MainWindow window) {
+        JDialog dialog = new JDialog(window, "Login", true);
+        dialog.getContentPane().add(new JLabel("Hello, world"));
+        dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        dialog.pack();
+        dialog.setLocationRelativeTo(window);
+        dialog.setVisible(true);
     }
 }

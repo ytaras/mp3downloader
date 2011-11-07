@@ -18,12 +18,9 @@ import java.awt.event.WindowEvent;
 @Singleton
 public class MainWindow extends JFrame {
 
-    private final LoginDialog loginDialog;
-
     @Inject
     public MainWindow(JMenuBar menuBar, ProgressGlassPane progressGlassPane,
-                      MainContainer mainContainer, LoginDialog loginDialog) throws HeadlessException {
-        this.loginDialog = loginDialog;
+                      MainContainer mainContainer, ILoginDialog loginDialog) throws HeadlessException {
         final JFrame frame = new JFrame("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
         setContentPane(contentPane);
@@ -41,8 +38,14 @@ public class MainWindow extends JFrame {
             }
         });
         if (SystemTray.isSupported()) {
-            addTray(frame);
+            new Thread() {
+                @Override
+                public void run() {
+                    addTray(frame);
+                }
+            }.start();
         }
+        loginDialog.showDialog(this);
     }
 
     private static void addTray(final JFrame frame) {
