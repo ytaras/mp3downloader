@@ -13,13 +13,13 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
@@ -46,19 +46,8 @@ public class Items {
                 if (itemsTable.getSelectedRow() >= 0) {
                     final Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
                     description.setText("<html>" + product.getDescription() + "</html>");
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                image.setImage(null);
-                                BufferedImage bufferedImage = ImageIO.read(new URL(product.getMainImage()));
-                                image.setImage(bufferedImage);
-                            } catch (IOException e) {
-                                image.setImage(null);
-                            }
-
-                        }
-                    });
+                    image.setImage(null);
+                    new ImageFetcherSwingWorker(product, itemsTable.getSelectedRow()).execute();
                 }
                 for (int row : itemsTable.getSelectedRows()) {
                     if (!itemsTableModel.isDownloadingItemAt(row)) {
@@ -113,5 +102,37 @@ public class Items {
     public void setApplicationModel(ApplicationModel applicationModel) {
         itemsTableModel = applicationModel.getItemsTableModel();
         itemsTable.setModel(itemsTableModel);
+    }
+
+    private class ImageFetcherSwingWorker extends SwingWorker<Image, Void> {
+        private final Product product;
+        private final int itemsTableModel;
+
+        public ImageFetcherSwingWorker(Product product, int selectedRow) {
+            this.product = product;
+            this.itemsTableModel = selectedRow;
+        }
+
+        @Override
+        protected Image doInBackground() throws Exception {
+            return ImageIO.read(new URL(product.getMainImage()));
+        }
+
+        @Override
+        protected void done() {
+            try {
+                if (isSelectionValid(itemsTableModel)) {
+                    image.setImage(get());
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean isSelectionValid(int row) {
+        return itemsTable.getSelectedRow() == row;
     }
 }
