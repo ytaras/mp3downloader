@@ -34,7 +34,7 @@ public class JDialogLoginDialog implements LoginDialog {
         accountsList.setModel(applicationModel);
         JPanel contentPane = accountsList.getContentPane();
         dialog.getContentPane().add(contentPane, BorderLayout.CENTER);
-        dialog.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         dialog.pack();
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(window);

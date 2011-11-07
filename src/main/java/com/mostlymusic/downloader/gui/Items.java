@@ -45,11 +45,12 @@ public class Items {
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 if (itemsTable.getSelectedRow() >= 0) {
                     final Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
-                    description.setText(product.getDescription());
+                    description.setText("<html>" + product.getDescription());
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
                             try {
+                                image.setImage(null);
                                 BufferedImage bufferedImage = ImageIO.read(new URL(product.getMainImage()));
                                 image.setImage(bufferedImage);
                             } catch (IOException e) {
