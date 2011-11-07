@@ -67,22 +67,22 @@
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <horizontalScrollBarPolicy value="31"/>
+                </properties>
                 <border type="none"/>
                 <children>
-                  <component id="4acf2" class="javax.swing.JTextArea" binding="description">
+                  <component id="339be" class="javax.swing.JLabel" binding="description">
                     <constraints/>
                     <properties>
                       <background swing-color="Panel.background"/>
-                      <disabledTextColor swing-color="Label.foreground"/>
-                      <editable value="false"/>
                       <enabled value="false"/>
                       <font swing-font="Label.font"/>
                       <foreground swing-color="Button.foreground"/>
-                      <lineWrap value="true"/>
-                      <selectionColor swing-color="List.foreground"/>
+                      <preferredSize width="1" height="1"/>
                       <text value=""/>
-                      <wrapStyleWord value="false"/>
+                      <verticalAlignment value="1"/>
+                      <verticalTextPosition value="1"/>
                     </properties>
                   </component>
                 </children>

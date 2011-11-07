@@ -32,7 +32,7 @@ public class Items {
     private JTable itemsTable;
     private JButton downloadFileButton;
     private JPanel itemsPane;
-    private JTextArea description;
+    private JLabel description;
     private JImagePane image;
     private JSplitPane splitPane;
     private ItemsTableModel itemsTableModel;
@@ -45,7 +45,7 @@ public class Items {
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 if (itemsTable.getSelectedRow() >= 0) {
                     final Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
-                    description.setText("<html>" + product.getDescription());
+                    description.setText("<html>" + product.getDescription() + "</html>");
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
