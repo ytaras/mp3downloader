@@ -35,7 +35,7 @@ public class Main {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
-                JOptionPane.showMessageDialog(frame, throwable, "Error occured", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, throwable, "Error occurred", JOptionPane.ERROR_MESSAGE);
                 throwable.printStackTrace();
             }
         });
