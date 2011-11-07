@@ -16,10 +16,14 @@ import java.awt.event.WindowEvent;
  *         Time: 1:02 PM
  */
 @Singleton
-public class MainFrame extends JFrame {
+public class MainWindow extends JFrame {
+
+    private final LoginDialog loginDialog;
 
     @Inject
-    public MainFrame(JMenuBar menuBar, ProgressGlassPane progressGlassPane, MainContainer mainContainer) throws HeadlessException {
+    public MainWindow(JMenuBar menuBar, ProgressGlassPane progressGlassPane,
+                      MainContainer mainContainer, LoginDialog loginDialog) throws HeadlessException {
+        this.loginDialog = loginDialog;
         final JFrame frame = new JFrame("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
         setContentPane(contentPane);
@@ -86,4 +90,5 @@ public class MainFrame extends JFrame {
         popupMenu.add(exit);
         return popupMenu;
     }
+
 }

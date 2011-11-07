@@ -19,7 +19,7 @@ public class Main {
             args = new String[]{"http://www.mostlymusic.com/"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
-        MainFrame main = injector.getInstance(MainFrame.class);
+        MainWindow main = injector.getInstance(MainWindow.class);
     }
 
 }
