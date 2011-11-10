@@ -1,7 +1,5 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Injector;
-import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import org.fest.swing.core.EmergencyAbortListener;
 import org.fest.swing.edt.GuiActionRunner;
@@ -9,13 +7,14 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.finder.JFileChooserFinder;
 import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.JFileChooserFixture;
+import org.fest.util.Files;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * @author ytaras
@@ -30,12 +29,14 @@ public class ConfigurationDialogTest {
     @Before
     public void setUp() throws Exception {
         listener = EmergencyAbortListener.registerInToolkit();
-        final Injector injector = MockInjectors.FULL_TEMP_DB;
-        configurationMapper = injector.getInstance(ConfigurationMapper.class);
+        configurationMapper = mock(ConfigurationMapper.class);
+        String tempFolder = Files.newTemporaryFolder().getAbsolutePath();
+        when(configurationMapper.getDownloadPath()).thenReturn(tempFolder);
+        when(configurationMapper.getRefreshRate()).thenReturn(10);
         ConfigurationDialog execute = GuiActionRunner.execute(new GuiQuery<ConfigurationDialog>() {
             @Override
             protected ConfigurationDialog executeInEDT() throws Throwable {
-                return injector.getInstance(ConfigurationDialog.class);
+                return new ConfigurationDialog(configurationMapper, mock(ApplicationModel.class));
             }
         });
         configDialog = new DialogFixture(execute);
@@ -43,16 +44,24 @@ public class ConfigurationDialogTest {
     }
 
     @Test
-    public void shouldShowDialog() throws Exception {
+    public void shouldReadAndWriteConfig() throws Exception {
+        // verify initial values
         configDialog.textBox("downloadLocation").requireText(configurationMapper.getDownloadPath());
+        configDialog.spinner("refreshRate").requireValue(configurationMapper.getRefreshRate());
+        // select directory
         configDialog.button("showChooser").click();
         JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().using(configDialog.robot);
         File newDir = new File(configurationMapper.getDownloadPath()).getParentFile();
         fileChooser.setCurrentDirectory(newDir);
         fileChooser.approve();
+        // select refresh rate
+        configDialog.spinner("refreshRate").enterTextAndCommit("123");
+        // save
         configDialog.button("ok").click();
-        assertThat(configurationMapper.getDownloadPath()).isEqualTo(newDir.getAbsolutePath());
+        verify(configurationMapper).setDownloadPath(newDir.getAbsolutePath());
+        verify(configurationMapper).setRefreshRate(123L);
     }
+
 
     @After
     public void tearDown() throws Exception {
