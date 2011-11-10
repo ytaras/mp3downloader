@@ -11,7 +11,7 @@ import com.google.inject.util.Modules;
  *         Time: 10:51 AM
  */
 public class TestModule {
-    public static Module INSTANCE = Modules.combine(new GuiModule(),
-            new DownloaderModule(""), new LocalStorageModule());
+    public static Module INSTANCE = Modules.override(new GuiModule(),
+            new DownloaderModule(""), new LocalStorageModule()).with(new MocksModule());
     public static Injector INJECTOR = Guice.createInjector(INSTANCE);
 }
