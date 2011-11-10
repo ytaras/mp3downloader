@@ -55,6 +55,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     @Override
     protected Void doInBackground() throws Exception {
         publish(new CheckServerStatusStage(null));
+        // TODO NPE is thrown here
         Long loadedLastOrderId = account.getLastOrderId();
         ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
 
