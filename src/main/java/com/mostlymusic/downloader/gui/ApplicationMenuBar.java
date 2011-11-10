@@ -14,7 +14,8 @@ import java.awt.event.ActionEvent;
  */
 @Singleton
 public class ApplicationMenuBar extends JMenuBar {
-    public ApplicationMenuBar() {
+    @Inject
+    public ApplicationMenuBar(final ConfigurationMapper configurationMapper, final ApplicationModel model) {
         JMenu file = new JMenu("File");
         file.add(new AbstractAction("Configuration") {
             @Override
@@ -30,18 +31,5 @@ public class ApplicationMenuBar extends JMenuBar {
             }
         });
         add(file);
-    }
-
-    private ConfigurationMapper configurationMapper;
-    private ApplicationModel model;
-
-    @Inject
-    public void setConfigurationMapper(ConfigurationMapper configurationMapper) {
-        this.configurationMapper = configurationMapper;
-    }
-
-    @Inject
-    public void setModel(ApplicationModel model) {
-        this.model = model;
     }
 }

@@ -41,7 +41,7 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     @Test
     public void shouldSaveRefreshRate() throws SQLException {
         // given
-        assertThat(configurationMapper.getRefreshRate()).isEqualTo(5 * 60 * 1000);
+        assertThat(configurationMapper.getRefreshRate()).isEqualTo(5);
 
         // when
         configurationMapper.setRefreshRate(987654321);
