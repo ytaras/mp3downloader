@@ -95,4 +95,8 @@ public class ConfigurationDialog extends JDialog {
 // add your code here if necessary
         dispose();
     }
+
+    private void createUIComponents() {
+        refreshRate = new JSpinner(new SpinnerNumberModel(5, 5, 60, 1));
+    }
 }

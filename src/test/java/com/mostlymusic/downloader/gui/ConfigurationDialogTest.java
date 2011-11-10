@@ -55,11 +55,17 @@ public class ConfigurationDialogTest {
         fileChooser.setCurrentDirectory(newDir);
         fileChooser.approve();
         // select refresh rate
-        configDialog.spinner("refreshRate").enterTextAndCommit("123");
+        configDialog.spinner("refreshRate").enterText("44");
         // save
         configDialog.button("ok").click();
         verify(configurationMapper).setDownloadPath(newDir.getAbsolutePath());
-        verify(configurationMapper).setRefreshRate(123L);
+        verify(configurationMapper).setRefreshRate(44);
+    }
+
+    @Test
+    public void shouldNotAllowInvalidValue() {
+        configDialog.spinner("refreshRate").enterText("123");
+        configDialog.spinner("refreshRate").requireValue(configurationMapper.getRefreshRate());
     }
 
 
