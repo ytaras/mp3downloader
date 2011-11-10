@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -19,7 +20,7 @@ import java.awt.event.WindowEvent;
 public class MainWindow extends JFrame {
 
     @Inject
-    public MainWindow(JMenuBar menuBar, ProgressGlassPane progressGlassPane,
+    public MainWindow(ApplicationModel applicationModel, JMenuBar menuBar, ProgressGlassPane progressGlassPane,
                       MainContainer mainContainer, LoginDialog loginDialog) throws HeadlessException {
         final JFrame frame = new JFrame("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
@@ -28,7 +29,6 @@ public class MainWindow extends JFrame {
         setJMenuBar(menuBar);
         setGlassPane(progressGlassPane);
         pack();
-        setVisible(true);
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
@@ -45,6 +45,12 @@ public class MainWindow extends JFrame {
                 }
             }.start();
         }
+        applicationModel.addListener(new ApplicationModelListenerAdapter() {
+            @Override
+            public void loggedIn(Account account) {
+                setVisible(true);
+            }
+        });
         loginDialog.showDialog(this);
     }
 
