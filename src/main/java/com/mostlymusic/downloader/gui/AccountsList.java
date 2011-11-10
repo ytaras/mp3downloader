@@ -5,6 +5,7 @@ import com.mostlymusic.downloader.dto.Account;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 /**
  * @author ytaras
@@ -19,13 +20,19 @@ public class AccountsList {
     private JCheckBox rememberPassword;
 
     public AccountsList() {
-        loginButton.addActionListener(new ActionListener() {
+        AbstractAction loginAction = new AbstractAction("Login") {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
+            public void actionPerformed(ActionEvent e) {
+                this.setEnabled(false);
+                contentPane.setEnabled(false);
                 String password = new String(AccountsList.this.password.getPassword());
                 model.login(usernameComboBox.getSelectedItem().toString(), password, rememberPassword.isSelected());
             }
-        });
+        };
+        loginButton.setAction(loginAction);
+        usernameComboBox.getEditor().addActionListener(loginAction);
+        password.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "login");
+        password.getActionMap().put("login", loginAction);
     }
 
     private ApplicationModel model;
