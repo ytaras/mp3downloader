@@ -91,6 +91,37 @@
           </grid>
         </children>
       </splitpane>
+      <grid id="5a4ff" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="ec449" class="javax.swing.JLabel">
+            <constraints border-constraint="South"/>
+            <properties>
+              <autoscrolls value="false"/>
+              <background swing-color="Label.background"/>
+              <debugGraphicsOptions value="1"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <opaque value="false"/>
+              <preferredSize width="116" height="100"/>
+              <text value="Player placeholder"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="758b6" class="javax.swing.JLabel">
+        <constraints border-constraint="South"/>
+        <properties>
+          <horizontalAlignment value="0"/>
+          <horizontalTextPosition value="0"/>
+          <maximumSize width="123" height="100"/>
+          <minimumSize width="123" height="100"/>
+          <preferredSize width="123" height="55"/>
+          <text value="Banner placeholder"/>
+        </properties>
+      </component>
     </children>
   </grid>
 </form>
