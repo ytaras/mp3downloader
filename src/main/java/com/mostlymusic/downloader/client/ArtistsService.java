@@ -11,7 +11,7 @@ import java.util.List;
  *         Time: 3:13 PM
  */
 public interface ArtistsService {
-    String IDS_PARAM_NAME = "";
+    String IDS_PARAM_NAME = "artist_ids";
 
     List<Artist> getArtists(List<Long> artistIds) throws IOException, RequestException;
 }

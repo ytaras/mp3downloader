@@ -1,10 +1,7 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.ArtistsService;
-import com.mostlymusic.downloader.client.ItemsService;
-import com.mostlymusic.downloader.client.Product;
-import com.mostlymusic.downloader.client.ProductsService;
+import com.mostlymusic.downloader.client.*;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -90,17 +87,15 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             }
         }
 
-        // TODO Enable once this will be fixed
-        /*
         while (false || !artistMapper.findUnknownArtists().isEmpty()) {
             List<Long> unknownArtists = artistMapper.findUnknownArtists();
-            LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
-            publish(new CheckServerStatusStage("Fetching artists from server", productToFetchLog));
+            LogEvent artistsToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
+            publish(new CheckServerStatusStage(artistsToFetchLog));
             List<Artist> products = artistsService.getArtists(unknownArtists);
             for (Artist product : products) {
                 artistMapper.insertArtist(product);
             }
-        } */
+        }
 
         return null;
     }

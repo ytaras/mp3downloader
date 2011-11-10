@@ -101,7 +101,6 @@
             <properties>
               <autoscrolls value="false"/>
               <background swing-color="Label.background"/>
-              <debugGraphicsOptions value="1"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
               <opaque value="false"/>
