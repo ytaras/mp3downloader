@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.gui.worker;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.localdata.ArtistMapper;
 
 /**
  * @author ytaras
@@ -11,15 +12,21 @@ import com.mostlymusic.downloader.dto.Item;
  */
 public class DownloadFileWorkerFactory {
     private Injector injector;
+    private final ArtistMapper artistMapper;
 
     @Inject
-    public DownloadFileWorkerFactory(Injector injector) {
+    public DownloadFileWorkerFactory(Injector injector, ArtistMapper artistMapper) {
         this.injector = injector;
+        this.artistMapper = artistMapper;
     }
 
-    public DownloadFileWorker createWorker(Item itemAt) {
+    public DownloadFileWorker createWorker(Item item) {
         DownloadFileWorker instance = injector.getInstance(DownloadFileWorker.class);
-        instance.setItem(itemAt);
+        instance.setItem(item);
+        if (item.getMainArtistId() != 0) {
+            instance.setArtist(artistMapper.loadArtist(item.getMainArtistId()));
+        }
+
         return instance;
     }
 }

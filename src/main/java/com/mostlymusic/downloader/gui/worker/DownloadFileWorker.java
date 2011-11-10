@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
+import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.ApplicationModel;
@@ -23,6 +24,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private final ConfigurationMapper configuration;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
+    private Artist artist;
 
     @Inject
     public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model) {
@@ -33,7 +35,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        if (null == item) {
+        if (null == item || null == artist) {
             throw new IllegalStateException("Not initialized worker");
         }
         getApplicationModel().getItemsTableModel().downloadStarted(item);
@@ -44,7 +46,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
             // We don't know size of entry, so don't bother calculating
             OutputStream outputFile = null;
             try {
-                outputFile = new BufferedOutputStream(getOutputFile(item));
+                outputFile = new BufferedOutputStream(getOutputFile());
                 IOUtils.copy(track.getKey(), outputFile);
             } finally {
                 IOUtils.closeQuietly(track.getKey());
@@ -54,7 +56,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         } else {
             // Rock-n-roll
             getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
-            copy(track.getKey(), getOutputFile(item), new StreamCopyListener() {
+            copy(track.getKey(), getOutputFile(), new StreamCopyListener() {
                 private long bytesWritten = 0;
 
                 @Override
@@ -75,7 +77,8 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected void doDone(Void aVoid) {
-        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(), getFile(item).getAbsolutePath())));
+        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(),
+                getFile().getAbsolutePath())));
         getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
@@ -90,15 +93,31 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
-    private FileOutputStream getOutputFile(Item item) throws FileNotFoundException {
-        File file = getFile(item);
+    private FileOutputStream getOutputFile() throws FileNotFoundException {
+        File file = getFile();
         return new FileOutputStream(file);
     }
 
-    private File getFile(Item item) {
+    private File getFile() {
         String downloadPath = configuration.getDownloadPath();
-        new File(downloadPath).mkdirs();
-        return new File(downloadPath, item.getFileName());
+        File file = new File(downloadPath);
+        file.mkdirs();
+        String artistPath;
+        if (artist == null || artist.getName() == null || artist.getName().isEmpty()) {
+            artistPath = "UnknownArtist";
+        } else {
+            artistPath = artist.getName();
+        }
+        file = new File(file, artistPath);
+        String productPath;
+        if (item.getProductName() == null || item.getProductName().isEmpty()) {
+            productPath = "UnknownAlbum";
+        } else {
+            productPath = item.getProductName();
+        }
+        file = new File(file, productPath);
+        file.mkdirs();
+        return new File(file, item.getFileName());
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
@@ -131,6 +150,10 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
     }
 
     private interface StreamCopyListener {
