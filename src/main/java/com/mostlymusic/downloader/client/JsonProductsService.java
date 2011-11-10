@@ -26,7 +26,7 @@ public class JsonProductsService extends JsonServiceClient implements ProductsSe
     @Inject
     public JsonProductsService(@ServiceUrl String serviceUrl) {
         if (serviceUrl.isEmpty()) {
-            throw new RuntimeException("service url should not be null");
+            throw new RuntimeException("service url should not be empty");
         }
         this.serviceUrl = serviceUrl + "/download-manager/sync/productsInfo/";
     }

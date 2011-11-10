@@ -1,10 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mostlymusic.downloader.DownloaderModule;
-import com.mostlymusic.downloader.GuiModule;
-import com.mostlymusic.downloader.LocalStorageModule;
+import com.mostlymusic.downloader.TestModule;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import org.fest.swing.core.EmergencyAbortListener;
 import org.fest.swing.edt.GuiActionRunner;
@@ -33,7 +30,7 @@ public class ConfigurationDialogTest {
     @Before
     public void setUp() throws Exception {
         listener = EmergencyAbortListener.registerInToolkit();
-        final Injector injector = Guice.createInjector(new GuiModule(), new DownloaderModule(""), new LocalStorageModule());
+        final Injector injector = TestModule.INJECTOR;
         configurationMapper = injector.getInstance(ConfigurationMapper.class);
         ConfigurationDialog execute = GuiActionRunner.execute(new GuiQuery<ConfigurationDialog>() {
             @Override
