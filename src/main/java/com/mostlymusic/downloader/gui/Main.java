@@ -6,6 +6,9 @@ import com.mostlymusic.downloader.DownloaderModule;
 import com.mostlymusic.downloader.GuiModule;
 import com.mostlymusic.downloader.LocalStorageModule;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
@@ -14,12 +17,27 @@ import java.sql.SQLException;
  *         Time: 7:20 PM
  */
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, IOException {
+        ImageIO.setUseCache(true);
+        ImageIO.setCacheDirectory(createTempDirectory());
         if (args.length == 0) {
             args = new String[]{"http://www.mostlymusic.com/"};
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(), new DownloaderModule(args[0]), new GuiModule());
         injector.getInstance(MainWindow.class);
+    }
+
+    public static File createTempDirectory()
+            throws IOException, IOException {
+        final File temp;
+        temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
+        if (!(temp.delete())) {
+            throw new IOException("Could not delete temp file: " + temp.getAbsolutePath());
+        }
+        if (!(temp.mkdir())) {
+            throw new IOException("Could not create temp directory: " + temp.getAbsolutePath());
+        }
+        return (temp);
     }
 
 }
