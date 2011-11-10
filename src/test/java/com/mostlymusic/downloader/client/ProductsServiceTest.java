@@ -1,8 +1,7 @@
 package com.mostlymusic.downloader.client;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mostlymusic.downloader.DownloaderModule;
+import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
@@ -33,7 +32,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
 
     @Before
     public void setUp() throws Exception {
-        Injector injector = Guice.createInjector(new DownloaderModule(serverUrl));
+        Injector injector = MockInjectors.downloader(serverUrl);
         productsService = injector.getInstance(ProductsService.class);
     }
 

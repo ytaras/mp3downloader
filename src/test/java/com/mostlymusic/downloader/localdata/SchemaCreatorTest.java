@@ -1,7 +1,6 @@
 package com.mostlymusic.downloader.localdata;
 
-import com.google.inject.Guice;
-import com.mostlymusic.downloader.LocalStorageModule;
+import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.dto.Account;
 import org.junit.Test;
 
@@ -23,7 +22,7 @@ public class SchemaCreatorTest extends StoragetTestBase {
     public void setUp() throws Exception {
         File tempFile = File.createTempFile("mostly", "db");
         assertThat(tempFile.delete()).isTrue();
-        injector = Guice.createInjector(new LocalStorageModule(tempFile));
+        injector = MockInjectors.storageTempDb(true);
     }
 
     @Test

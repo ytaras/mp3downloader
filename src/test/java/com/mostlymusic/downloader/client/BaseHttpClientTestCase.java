@@ -1,9 +1,8 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.mostlymusic.downloader.DownloaderModule;
+import com.mostlymusic.downloader.MockInjectors;
 import org.apache.http.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.localserver.LocalTestServer;
@@ -28,11 +27,12 @@ public abstract class BaseHttpClientTestCase {
 
     @Before
     public void startServer() throws Exception {
+        // TODO Separate out as GUICE module
         localTestServer = new LocalTestServer(null, null);
         registerHandler();
         localTestServer.start();
         serverUrl = "http:/" + localTestServer.getServiceAddress();
-        injector = Guice.createInjector(new DownloaderModule(serverUrl));
+        injector = MockInjectors.downloader(serverUrl);
         gson = injector.getInstance(Gson.class);
     }
 

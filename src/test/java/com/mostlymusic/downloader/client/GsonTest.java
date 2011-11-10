@@ -1,8 +1,7 @@
 package com.mostlymusic.downloader.client;
 
 import com.google.gson.Gson;
-import com.google.inject.Guice;
-import com.mostlymusic.downloader.DownloaderModule;
+import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
@@ -24,7 +23,7 @@ public class GsonTest {
 
     @Before
     public void setUp() throws Exception {
-        gson = Guice.createInjector(new DownloaderModule("")).getInstance(Gson.class);
+        gson = MockInjectors.downloader("").getInstance(Gson.class);
     }
 
     @Test

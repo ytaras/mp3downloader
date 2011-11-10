@@ -10,7 +10,7 @@ import java.io.File;
  *         Date: 11/10/11
  *         Time: 10:57 AM
  */
-public class MocksModule extends AbstractModule {
+public class TempDbModule extends AbstractModule {
     @Override
     protected void configure() {
         bindConstant().annotatedWith(DatabaseFilename.class).to(getDatabaseFile());

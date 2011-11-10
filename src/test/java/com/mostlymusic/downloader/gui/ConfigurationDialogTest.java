@@ -1,7 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Injector;
-import com.mostlymusic.downloader.TestModule;
+import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import org.fest.swing.core.EmergencyAbortListener;
 import org.fest.swing.edt.GuiActionRunner;
@@ -30,7 +30,7 @@ public class ConfigurationDialogTest {
     @Before
     public void setUp() throws Exception {
         listener = EmergencyAbortListener.registerInToolkit();
-        final Injector injector = TestModule.INJECTOR;
+        final Injector injector = MockInjectors.FULL_TEMP_DB;
         configurationMapper = injector.getInstance(ConfigurationMapper.class);
         ConfigurationDialog execute = GuiActionRunner.execute(new GuiQuery<ConfigurationDialog>() {
             @Override
