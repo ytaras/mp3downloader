@@ -44,9 +44,9 @@ public class ConfigurationMapperTest extends StoragetTestBase {
         assertThat(configurationMapper.getRefreshRate()).isEqualTo(5);
 
         // when
-        configurationMapper.setRefreshRate(987654321);
+        configurationMapper.setRefreshRate(6);
 
         // then
-        assertThat(configurationMapper.getRefreshRate()).isEqualTo(987654321);
+        assertThat(configurationMapper.getRefreshRate()).isEqualTo(6);
     }
 }
