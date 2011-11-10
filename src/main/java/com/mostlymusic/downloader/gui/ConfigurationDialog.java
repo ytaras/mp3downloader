@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.gui;
 
+import com.google.inject.Inject;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class ConfigurationDialog extends JDialog {
     private final ConfigurationMapper configurationMapper;
     private final ApplicationModel applicationModel;
 
+    @Inject
     public ConfigurationDialog(final ConfigurationMapper configurationMapper, ApplicationModel applicationModel) {
         this.configurationMapper = configurationMapper;
         this.applicationModel = applicationModel;
