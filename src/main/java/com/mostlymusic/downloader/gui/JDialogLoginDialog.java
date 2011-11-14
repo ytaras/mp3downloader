@@ -6,6 +6,8 @@ import com.mostlymusic.downloader.dto.Account;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @author ytaras
@@ -34,7 +36,12 @@ public class JDialogLoginDialog implements LoginDialog {
         accountsList.setModel(applicationModel);
         JPanel contentPane = accountsList.getContentPane();
         dialog.getContentPane().add(contentPane, BorderLayout.CENTER);
-        dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
         dialog.pack();
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(window);
