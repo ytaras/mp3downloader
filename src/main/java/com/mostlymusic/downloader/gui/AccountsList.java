@@ -18,9 +18,10 @@ public class AccountsList {
     private JPasswordField password;
     private JButton loginButton;
     private JCheckBox rememberPassword;
+    private AbstractAction loginAction;
 
     public AccountsList() {
-        AbstractAction loginAction = new AbstractAction("Login") {
+        loginAction = new AbstractAction("Login") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 this.setEnabled(false);
@@ -56,6 +57,7 @@ public class AccountsList {
             public void loginFailed(Account account) {
                 JOptionPane.showMessageDialog(null, "Failed to login, check your username/password",
                         "Login failed", JOptionPane.ERROR_MESSAGE);
+                loginAction.setEnabled(true);
             }
         });
     }
