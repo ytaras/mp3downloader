@@ -22,7 +22,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private ApplicationModel applicationModel;
     private ItemMapper itemMapper;
     private ProductMapper productMapper;
-    private ArtistMapper artistMapper;
+    private final ArtistMapper artistMapper;
     private List<Item> data;
     private Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private Map<Long, Product> products = new HashMap<Long, Product>();
@@ -36,7 +36,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private static final String ISSUED_AT = "Issued at";
     private static final String ARTIST_NAME = "Artist name";
     private static final String PRODUCT_NAME = "Product name";
-    private static final String[] COLUMN_NAMES = new String[]{PRODUCT_NAME, TITLE, STATUS};
+    private static final String[] COLUMN_NAMES = new String[]{ARTIST_NAME, PRODUCT_NAME, TITLE, STATUS};
     private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
 
 
@@ -70,6 +70,9 @@ public class ItemsTableModel extends AbstractTableModel {
             }
             for (Long productId : productIds) {
                 products.put(productId, productMapper.loadProduct(productId));
+            }
+            for (Artist artist : artistMapper.listArtists()) {
+                artists.put(artist.getArtistId(), artist);
             }
         }
     }

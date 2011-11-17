@@ -20,13 +20,11 @@ public class ErrorHandlerListener extends ApplicationModelListenerAdapter {
 
     private Component root;
     private Logger logger;
-    private ApplicationModel model;
 
     @Inject
     public ErrorHandlerListener(ApplicationModel model, @MainLayout MainContainer panel, Logger logger) {
         this.logger = logger;
-        this.model = model;
-        this.model.addListener(this);
+        model.addListener(this);
         root = SwingUtilities.getRoot(panel.getContentPane());
     }
 

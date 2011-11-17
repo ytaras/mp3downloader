@@ -65,6 +65,7 @@ public class Account {
         this.password = password;
     }
 
+    @SuppressWarnings({"RedundantIfStatement"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

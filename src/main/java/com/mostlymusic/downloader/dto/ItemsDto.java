@@ -20,6 +20,7 @@ public class ItemsDto {
         this.items = items;
     }
 
+    @SuppressWarnings({"RedundantIfStatement"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,6 +91,7 @@ public class ItemsDto {
             this.totalRecords = totalRecords;
         }
 
+        @SuppressWarnings({"RedundantIfStatement"})
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;

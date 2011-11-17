@@ -106,9 +106,6 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private File getFile() throws UnsupportedEncodingException {
         String downloadPath = configuration.getDownloadPath();
         File file = new File(downloadPath);
-        if (!file.mkdirs()) {
-            throw new AssertionError();
-        }
         String artistPath;
         if (artist == null || artist.getName() == null || artist.getName().isEmpty()) {
             artistPath = "UnknownArtist";

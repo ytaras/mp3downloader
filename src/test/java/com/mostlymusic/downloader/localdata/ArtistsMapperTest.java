@@ -73,4 +73,20 @@ public class ArtistsMapperTest extends StoragetTestBase {
         assertThat(unknownProducts1).containsOnly(123L);
         assertThat(unknownProducts2).isEmpty();
     }
+
+    @Test
+    public void shouldListArtists() {
+        // given
+        ArtistMapper instance = injector.getInstance(ArtistMapper.class);
+        Artist artist = new Artist();
+        artist.setName("art");
+        artist.setArtistId(32);
+        artistMapper.insertArtist(artist);
+
+        // when
+        List<Artist> artists = instance.listArtists();
+
+        // then
+        assertThat(artists).containsOnly(artist);
+    }
 }

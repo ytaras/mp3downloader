@@ -61,6 +61,7 @@ public class Product {
         this.mainImage = mainImage;
     }
 
+    @SuppressWarnings({"RedundantIfStatement"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -127,6 +128,7 @@ public class Product {
             this.position = position;
         }
 
+        @SuppressWarnings({"RedundantIfStatement"})
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
