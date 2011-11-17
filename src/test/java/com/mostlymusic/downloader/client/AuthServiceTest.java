@@ -100,15 +100,15 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
                 httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
                 httpResponse.setEntity(new StringEntity("name and password should be set"));
             } else if (name.equals("name") && password.equals("pass")) {
-                BasicHeader setCookieHeader = createSetCookieHeader("frontend", name + password);
+                BasicHeader setCookieHeader = createSetCookieHeader(name + password);
                 httpResponse.addHeader(setCookieHeader);
             } else {
                 httpResponse.setStatusCode(HttpStatus.SC_FORBIDDEN);
             }
         }
 
-        private BasicHeader createSetCookieHeader(String name, String value) {
-            BasicClientCookie basicClientCookie = new BasicClientCookie(name, value);
+        private BasicHeader createSetCookieHeader(String value) {
+            BasicClientCookie basicClientCookie = new BasicClientCookie("frontend", value);
             basicClientCookie.setPath("/");
             List<Header> headers = new BrowserCompatSpec().formatCookies(Collections.<Cookie>singletonList(basicClientCookie));
             Header header = headers.get(0);

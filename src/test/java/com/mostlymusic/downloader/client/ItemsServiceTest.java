@@ -158,7 +158,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         return new ItemsMetadataDto(lastOrderId, 555);
     }
 
-    protected ItemsMetadataDto getMockOrdersMetadata() {
+    ItemsMetadataDto getMockOrdersMetadata() {
         return new ItemsMetadataDto(123, 345);
     }
 

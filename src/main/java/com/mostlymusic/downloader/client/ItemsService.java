@@ -4,6 +4,7 @@ import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ public interface ItemsService {
      * @param lastOrderId Last order id that we know about
      * @return Orders list metadata like last order id and count of available orders after supplied last order
      */
-    ItemsMetadataDto getOrdersMetadata(Long lastOrderId) throws IOException, RequestException;
+    ItemsMetadataDto getOrdersMetadata(@Nullable Long lastOrderId) throws IOException, RequestException;
 
 
     /**
@@ -34,7 +35,7 @@ public interface ItemsService {
      * @param pageSize    page size
      * @return list of tracks on this page
      */
-    ItemsDto getTracks(Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException, RequestException;
+    ItemsDto getTracks(@Nullable Long firstOrderId, long lastOrderId, int page, int pageSize) throws IOException, RequestException;
 
     Map.Entry<InputStream, Long> getTrack(Item link) throws IOException, RequestException;
 }

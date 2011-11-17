@@ -70,7 +70,7 @@ public class SchemaCreatorTest extends StoragetTestBase {
     public void shouldRecreateSchemaIfNoVersionTable() throws SQLException {
         // given
         DataSource dataSource = injector.getInstance(DataSource.class);
-        dropTable(dataSource, VersionMapper.TABLE_NAME);
+        dropTable(dataSource);
         AccountMapper accountMapper = injector.getInstance(AccountMapper.class);
         accountMapper.createAccount(new Account("user"));
         assertThat(accountMapper.listLoginNames("")).isNotEmpty();
@@ -82,8 +82,8 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(accountMapper.listLoginNames("")).isEmpty();
     }
 
-    private void dropTable(DataSource dataSource, String tableName) throws SQLException {
-        dataSource.getConnection().prepareStatement("DROP TABLE " + tableName).execute();
+    private void dropTable(DataSource dataSource) throws SQLException {
+        dataSource.getConnection().prepareStatement("DROP TABLE " + VersionMapper.TABLE_NAME).execute();
     }
 
     private boolean tableExists(DataSource dataSource, String tableName) throws SQLException {

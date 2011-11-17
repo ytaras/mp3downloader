@@ -28,7 +28,7 @@ public class Main {
     }
 
     public static File createTempDirectory()
-            throws IOException, IOException {
+            throws IOException {
         final File temp;
         temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
         if (!(temp.delete())) {

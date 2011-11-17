@@ -19,6 +19,7 @@ import java.util.Map;
  *         Time: 11:54 AM
  */
 public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
+    private static final String FILENAME_CHARSET = "UTF-8";
     private Item item;
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
@@ -77,8 +78,12 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected void doDone(Void aVoid) {
-        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(),
-                getFile().getAbsolutePath())));
+        try {
+            getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(),
+                    getFile().getAbsolutePath())));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
@@ -93,20 +98,23 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
-    private FileOutputStream getOutputFile() throws FileNotFoundException {
+    private FileOutputStream getOutputFile() throws FileNotFoundException, UnsupportedEncodingException {
         File file = getFile();
         return new FileOutputStream(file);
     }
 
-    private File getFile() {
+    private File getFile() throws UnsupportedEncodingException {
         String downloadPath = configuration.getDownloadPath();
         File file = new File(downloadPath);
-        file.mkdirs();
+        if (!file.mkdirs()) {
+            throw new AssertionError();
+        }
         String artistPath;
         if (artist == null || artist.getName() == null || artist.getName().isEmpty()) {
             artistPath = "UnknownArtist";
         } else {
             artistPath = artist.getName();
+            artistPath = encodeFileName(artistPath);
         }
         file = new File(file, artistPath);
         String productPath;
@@ -114,10 +122,17 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
             productPath = "UnknownAlbum";
         } else {
             productPath = item.getProductName();
+            productPath = encodeFileName(productPath);
         }
         file = new File(file, productPath);
-        file.mkdirs();
-        return new File(file, item.getFileName());
+        if (!file.mkdirs()) {
+            throw new AssertionError();
+        }
+        return new File(file, encodeFileName(item.getFileName()));
+    }
+
+    private String encodeFileName(String productPath) throws UnsupportedEncodingException {
+        return productPath.replaceAll("[^\\w ]+", "");
     }
 
     public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {

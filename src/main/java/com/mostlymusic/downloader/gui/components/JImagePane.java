@@ -10,7 +10,7 @@ import java.awt.*;
  */
 public class JImagePane extends JPanel {
     private Image image;
-    private JLabel textLabel = new JLabel();
+    private final JLabel textLabel = new JLabel();
     private int preferredWidth;
 
     public JImagePane() {

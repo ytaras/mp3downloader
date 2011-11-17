@@ -18,7 +18,7 @@ public class AccountsList {
     private JPasswordField password;
     private JButton loginButton;
     private JCheckBox rememberPassword;
-    private AbstractAction loginAction;
+    private final AbstractAction loginAction;
 
     public AccountsList() {
         loginAction = new AbstractAction("Login") {
@@ -37,10 +37,6 @@ public class AccountsList {
     }
 
     private ApplicationModel model;
-
-    public ApplicationModel getModel() {
-        return model;
-    }
 
     public void setModel(ApplicationModel model) {
         this.model = model;
