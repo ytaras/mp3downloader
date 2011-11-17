@@ -59,7 +59,10 @@ public class ArtistsMapperTest extends StoragetTestBase {
         // given
         ItemMapper itemMapper = injector.getInstance(ItemMapper.class);
         Item item = new Item();
+        item.setItemId(1);
         item.setMainArtistId(123);
+        itemMapper.insertItem(item, new Account());
+        item.setItemId(2);
         itemMapper.insertItem(item, new Account());
         Artist product = new Artist();
         product.setName("Name");
@@ -70,7 +73,7 @@ public class ArtistsMapperTest extends StoragetTestBase {
         artistMapper.insertArtist(product);
         List<Long> unknownProducts2 = artistMapper.findUnknownArtists();
         // then
-        assertThat(unknownProducts1).containsOnly(123L);
+        assertThat(unknownProducts1).containsOnly(123L).doesNotHaveDuplicates();
         assertThat(unknownProducts2).isEmpty();
     }
 

@@ -123,7 +123,11 @@ public class ItemsTableModel extends AbstractTableModel {
         } else if (ISSUED_AT.equals(columnName)) {
             return item.getCreatedAt();
         } else if (ARTIST_NAME.equals(columnName)) {
-            return getArtist(item.getMainArtistId()).getName();
+            Artist artist = getArtist(item.getMainArtistId());
+            if (null == artist) {
+                return "";
+            }
+            return artist.getName();
         } else if (PRODUCT_NAME.equals(columnName)) {
             return getProduct(item.getProductId()).getName();
         }

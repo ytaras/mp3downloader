@@ -27,7 +27,7 @@ public interface ArtistMapper {
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE artistId = #{id}")
     Artist loadArtist(long id);
 
-    @Select("SELECT l.mainArtistId FROM " + TABLE_NAME + " a RIGHT OUTER JOIN " +
+    @Select("SELECT DISTINCT l.mainArtistId FROM " + TABLE_NAME + " a RIGHT OUTER JOIN " +
             ItemMapper.TABLE_NAME + " l ON l.mainArtistId = a.artistId WHERE a.artistId IS NULL")
     List<Long> findUnknownArtists();
 
