@@ -20,7 +20,6 @@ import java.util.Map;
  *         Time: 11:54 AM
  */
 public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
-    private static final String FILENAME_CHARSET = "UTF-8";
     private Item item;
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
@@ -40,7 +39,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected Void doInBackground() throws Exception {
-        if (null == item || null == artist) {
+        if (null == item) {
             throw new IllegalStateException("Not initialized worker");
         }
         try {
