@@ -26,6 +26,10 @@ public class LocalStorageModule extends MyBatisModule {
         this.dbFile = dbFile;
     }
 
+    public LocalStorageModule(boolean production) {
+        System.setProperty("derby.stream.error.field", "java.lang.System.err");
+    }
+
     @Override
     protected void initialize() {
         bindConstant().annotatedWith(Names.named("mybatis.environment.id")).to("production");
