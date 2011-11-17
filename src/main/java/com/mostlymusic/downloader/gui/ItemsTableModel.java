@@ -36,7 +36,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private static final String ISSUED_AT = "Issued at";
     private static final String ARTIST_NAME = "Artist name";
     private static final String PRODUCT_NAME = "Product name";
-    private static final String[] COLUMN_NAMES = new String[]{ARTIST_NAME, PRODUCT_NAME, TITLE, STATUS};
+    private static final String[] COLUMN_NAMES = new String[]{PRODUCT_NAME, ARTIST_NAME, TITLE, STATUS};
     private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
 
 
