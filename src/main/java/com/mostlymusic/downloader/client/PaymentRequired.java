@@ -7,7 +7,7 @@ import com.mostlymusic.downloader.client.exceptions.RequestException;
  *         Date: 9/22/11
  *         Time: 6:36 PM
  */
-public class PaymentRequired extends RequestException {
+class PaymentRequired extends RequestException {
     public PaymentRequired(String message) {
         super(message);
     }

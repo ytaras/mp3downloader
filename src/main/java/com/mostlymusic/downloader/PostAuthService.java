@@ -20,7 +20,7 @@ import java.util.LinkedList;
  *         Time: 6:26 PM
  */
 public class PostAuthService extends JsonServiceClient implements AuthService {
-    private String serviceUrl;
+    private final String serviceUrl;
 
     @Inject
     public PostAuthService(@ServiceUrl String serviceUrl) {

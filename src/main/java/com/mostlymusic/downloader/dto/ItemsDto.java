@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ItemsDto {
     private List<Item> items = new LinkedList<Item>();
-    private ItemsInfo info = new ItemsInfo();
+    private final ItemsInfo info = new ItemsInfo();
 
     public List<Item> getItems() {
         return items;

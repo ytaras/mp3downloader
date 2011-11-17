@@ -14,9 +14,9 @@ import java.util.concurrent.ExecutionException;
  */
 public abstract class AbstractSwingClientWorker<K, V> extends SwingWorker<K, V> {
 
-    private ApplicationModel applicationModel;
+    private final ApplicationModel applicationModel;
 
-    protected AbstractSwingClientWorker(ApplicationModel applicationModel) {
+    AbstractSwingClientWorker(ApplicationModel applicationModel) {
         this.applicationModel = applicationModel;
     }
 
@@ -33,26 +33,26 @@ public abstract class AbstractSwingClientWorker<K, V> extends SwingWorker<K, V> 
         }
     }
 
-    protected void beforeGet() {
+    void beforeGet() {
 
     }
 
     protected abstract void doDone(K k);
 
 
-    protected void processException(Throwable cause) {
+    void processException(Throwable cause) {
         if (cause instanceof RequestException) {
-            applicationModel.publishLogStatus(new LogEvent(getErrorMessage(cause), cause));
+            applicationModel.publishLogStatus(new LogEvent(getErrorMessage(), cause));
         }
         getApplicationModel().setStatus(null);
         getApplicationModel().fireExceptionEvent(cause);
     }
 
-    protected String getErrorMessage(Throwable cause) {
+    String getErrorMessage() {
         return "Error occurred: ";
     }
 
-    public ApplicationModel getApplicationModel() {
+    ApplicationModel getApplicationModel() {
         return applicationModel;
     }
 }

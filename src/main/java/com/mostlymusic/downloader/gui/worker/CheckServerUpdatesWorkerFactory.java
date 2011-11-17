@@ -33,7 +33,7 @@ public class CheckServerUpdatesWorkerFactory {
         this.configuration = configuration;
     }
 
-    public CheckServerUpdatesWorker getInstance(Account account) {
+    CheckServerUpdatesWorker getInstance(Account account) {
         CheckServerUpdatesWorker instance = injector.getInstance(CheckServerUpdatesWorker.class);
         instance.setAccount(account);
         return instance;

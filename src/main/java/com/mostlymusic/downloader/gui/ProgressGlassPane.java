@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 @Singleton
-public class ProgressGlassPane extends JComponent {
+class ProgressGlassPane extends JComponent {
     private static final int BAR_WIDTH = 200;
     private static final int BAR_HEIGHT = 10;
 
@@ -80,7 +80,7 @@ public class ProgressGlassPane extends JComponent {
         g2.drawString(message, x, y);
     }
 
-    public void setMessage(String message) {
+    void setMessage(String message) {
         this.message = message;
     }
 }

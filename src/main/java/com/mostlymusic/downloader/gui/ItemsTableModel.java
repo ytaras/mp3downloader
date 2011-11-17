@@ -19,15 +19,15 @@ import java.util.*;
  *         Time: 10:41 AM
  */
 public class ItemsTableModel extends AbstractTableModel {
-    private ApplicationModel applicationModel;
-    private ItemMapper itemMapper;
-    private ProductMapper productMapper;
+    private final ApplicationModel applicationModel;
+    private final ItemMapper itemMapper;
+    private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
     private List<Item> data;
-    private Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
-    private Map<Long, Product> products = new HashMap<Long, Product>();
-    private Map<Long, Artist> artists = new HashMap<Long, Artist>();
-    private Map<Long, Long> fileSizes = new HashMap<Long, Long>();
+    private final Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
+    private final Map<Long, Product> products = new HashMap<Long, Product>();
+    private final Map<Long, Artist> artists = new HashMap<Long, Artist>();
+    private final Map<Long, Long> fileSizes = new HashMap<Long, Long>();
     private static final String ITEM_ID = "Item id";
     private static final String TITLE = "Title";
     private static final String STATUS = "Status";

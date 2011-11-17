@@ -20,8 +20,8 @@ public class MainContainer {
     private JList logList;
     private JPanel cardPanel;
 
-    private CardLayout layout;
-    private DefaultListModel logListModel;
+    private final CardLayout layout;
+    private final DefaultListModel logListModel;
 
     @Inject
     public MainContainer(Items items, ApplicationModel model) {

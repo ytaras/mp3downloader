@@ -18,8 +18,8 @@ import java.util.logging.Logger;
  */
 public class ErrorHandlerListener extends ApplicationModelListenerAdapter {
 
-    private Component root;
-    private Logger logger;
+    private final Component root;
+    private final Logger logger;
 
     @Inject
     public ErrorHandlerListener(ApplicationModel model, @MainLayout MainContainer panel, Logger logger) {

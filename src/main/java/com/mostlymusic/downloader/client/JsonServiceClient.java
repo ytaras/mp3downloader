@@ -30,7 +30,7 @@ public class JsonServiceClient {
     private DefaultHttpClient httpClient;
     private Gson gson;
 
-    protected <T> T getResult(HttpUriRequest request, Class<T> aClass) throws IOException, RequestException {
+    <T> T getResult(HttpUriRequest request, Class<T> aClass) throws IOException, RequestException {
         InputStreamReader reader = null;
         try {
             reader = getReader(request);
@@ -50,7 +50,7 @@ public class JsonServiceClient {
         }
     }
 
-    protected InputStreamReader getReader(HttpUriRequest get) throws IOException, RequestException {
+    InputStreamReader getReader(HttpUriRequest get) throws IOException, RequestException {
         HttpResponse response = httpClient.execute(get);
         HttpEntity entity = response.getEntity();
         verifyStatus(response);
@@ -66,7 +66,7 @@ public class JsonServiceClient {
         return encoding;
     }
 
-    public DefaultHttpClient getHttpClient() {
+    protected DefaultHttpClient getHttpClient() {
         return httpClient;
     }
 

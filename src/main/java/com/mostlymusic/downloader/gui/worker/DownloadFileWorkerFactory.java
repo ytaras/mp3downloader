@@ -11,7 +11,7 @@ import com.mostlymusic.downloader.localdata.ArtistMapper;
  *         Time: 4:35 PM
  */
 public class DownloadFileWorkerFactory {
-    private Injector injector;
+    private final Injector injector;
     private final ArtistMapper artistMapper;
 
     @Inject

@@ -27,7 +27,7 @@ public class Main {
         injector.getInstance(MainWindow.class);
     }
 
-    public static File createTempDirectory()
+    private static File createTempDirectory()
             throws IOException {
         final File temp;
         temp = File.createTempFile("temp", Long.toString(System.nanoTime()));

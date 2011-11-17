@@ -19,10 +19,10 @@ import java.io.IOException;
  *         Time: 11:51 AM
  */
 public abstract class BaseHttpClientTestCase {
-    protected LocalTestServer localTestServer;
+    LocalTestServer localTestServer;
 
-    protected String serverUrl;
-    protected Injector injector;
+    String serverUrl;
+    Injector injector;
     private Gson gson;
 
     @Before

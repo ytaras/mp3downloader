@@ -16,7 +16,6 @@ public class JImagePane extends JPanel {
     private int preferredWidth;
 
     public JImagePane() {
-        // add(textLabel);
     }
 
     @Override

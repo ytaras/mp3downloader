@@ -17,7 +17,7 @@ import java.sql.SQLException;
 public class SchemaCreator {
 
 
-    private File defaultDownloadPath;
+    private final File defaultDownloadPath;
 
     @Inject
     public SchemaCreator(DataSource dataSource, AccountMapper accountMapper, ItemMapper itemMapper,

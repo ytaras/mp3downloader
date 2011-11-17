@@ -7,7 +7,7 @@ import com.mostlymusic.downloader.client.exceptions.RequestException;
  *         Date: 9/22/11
  *         Time: 6:35 PM
  */
-public class ExpiredException extends RequestException {
+class ExpiredException extends RequestException {
     public ExpiredException(String message) {
         super(message);
     }

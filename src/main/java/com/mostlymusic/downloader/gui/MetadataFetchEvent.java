@@ -8,7 +8,7 @@ import com.mostlymusic.downloader.dto.ItemsMetadataDto;
  *         Date: 9/21/11
  *         Time: 9:11 AM
  */
-public class MetadataFetchEvent {
+class MetadataFetchEvent {
     private ItemsMetadataDto itemsMetadataDto;
     private Account account;
     private Exception exception;

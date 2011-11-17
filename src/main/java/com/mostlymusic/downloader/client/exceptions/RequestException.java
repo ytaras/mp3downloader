@@ -6,7 +6,7 @@ package com.mostlymusic.downloader.client.exceptions;
  *         Time: 6:28 PM
  */
 public class RequestException extends Exception {
-    public RequestException(String message) {
+    protected RequestException(String message) {
         super(message);
     }
 }

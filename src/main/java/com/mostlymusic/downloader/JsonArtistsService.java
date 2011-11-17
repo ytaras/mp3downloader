@@ -25,7 +25,7 @@ public class JsonArtistsService extends JsonServiceClient implements ArtistsServ
 
     private static final Type ARTISTS_TYPE = new TypeToken<List<Artist>>() {
     }.getType();
-    private String serviceUrl;
+    private final String serviceUrl;
 
     @Inject
     public JsonArtistsService(@ServiceUrl String serviceUrl) {

@@ -124,7 +124,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 }
 
 class CheckServerStatusStage {
-    private LogEvent logEvent;
+    private final LogEvent logEvent;
 
     CheckServerStatusStage(LogEvent logEvent) {
         this.logEvent = logEvent;

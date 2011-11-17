@@ -7,7 +7,7 @@ import com.mostlymusic.downloader.client.exceptions.RequestException;
  *         Date: 9/22/11
  *         Time: 6:37 PM
  */
-public class InternalServerErrrorException extends RequestException {
+class InternalServerErrrorException extends RequestException {
     public InternalServerErrrorException(String message) {
         super(message);
     }

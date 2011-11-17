@@ -27,7 +27,9 @@ public class LocalStorageModule extends MyBatisModule {
     }
 
     public LocalStorageModule(boolean production) {
-        System.setProperty("derby.stream.error.field", "java.lang.System.err");
+        if (production) {
+            System.setProperty("derby.stream.error.field", "java.lang.System.err");
+        }
     }
 
     @Override
@@ -70,7 +72,7 @@ public class LocalStorageModule extends MyBatisModule {
     }
 
     public static class DataSourceProvider implements Provider<DataSource> {
-        private String fileName;
+        private final String fileName;
 
         @Inject
         public DataSourceProvider(@DatabaseFilename String fileName) {

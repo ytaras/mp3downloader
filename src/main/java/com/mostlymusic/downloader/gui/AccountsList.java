@@ -50,7 +50,7 @@ public class AccountsList {
         });
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
-            public void loginFailed(Account account) {
+            public void loginFailed() {
                 JOptionPane.showMessageDialog(null, "Failed to login, check your username/password",
                         "Login failed", JOptionPane.ERROR_MESSAGE);
                 loginAction.setEnabled(true);

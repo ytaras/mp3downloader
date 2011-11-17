@@ -12,7 +12,7 @@ public interface ApplicationModelListener {
 
     void statusSet(String status);
 
-    void loginFailed(Account account);
+    void loginFailed();
 
     void loggedIn(Account account);
 

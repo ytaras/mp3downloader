@@ -78,17 +78,13 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     protected void doDone(Void aVoid) {
-        try {
-            getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(),
-                    getFile().getAbsolutePath())));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(),
+                getFile().getAbsolutePath())));
         getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
     @Override
-    protected String getErrorMessage(Throwable cause) {
+    protected String getErrorMessage() {
         return "Error while downloading '" + item.getLinkTitle() + "': ";
     }
 
@@ -98,12 +94,12 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         getApplicationModel().getItemsTableModel().downloadStopped(item);
     }
 
-    private FileOutputStream getOutputFile() throws FileNotFoundException, UnsupportedEncodingException {
+    private FileOutputStream getOutputFile() throws FileNotFoundException {
         File file = getFile();
         return new FileOutputStream(file);
     }
 
-    private File getFile() throws UnsupportedEncodingException {
+    private File getFile() {
         String downloadPath = configuration.getDownloadPath();
         File file = new File(downloadPath);
         String artistPath;
@@ -128,11 +124,11 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         return new File(file, encodeFileName(item.getFileName()));
     }
 
-    private String encodeFileName(String productPath) throws UnsupportedEncodingException {
+    private String encodeFileName(String productPath) {
         return productPath.replaceAll("[^\\w ]+", "");
     }
 
-    public static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
+    private static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
         BufferedInputStream in = null;
         BufferedOutputStream out = null;
         try {

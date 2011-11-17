@@ -24,9 +24,9 @@ import java.util.Vector;
 @Singleton
 public class DefaultApplicationModel implements ApplicationModel {
 
-    private AuthService authService;
-    private List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
-    private ItemsTableModel itemsTableModel;
+    private final AuthService authService;
+    private final List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
+    private final ItemsTableModel itemsTableModel;
     private Account loggedAccount;
     private static final String LOGGED_IN_FORMAT = "Logged in as '%s'";
 
@@ -113,7 +113,7 @@ public class DefaultApplicationModel implements ApplicationModel {
     @Override
     public void fireLoginFailedEvent(Account account) {
         for (ApplicationModelListener listener : listeners) {
-            listener.loginFailed(account);
+            listener.loginFailed();
         }
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 public class MockInjectors {
     private static Module FULL_TEMP_DB_MODULE = Modules.override(new GuiModule(),
             new DownloaderModule(""), new LocalStorageModule()).with(new TempDbModule());
-    private static Module STORAGE_TEMP_DB_MODULE = Modules.override(new LocalStorageModule())
+    private static final Module STORAGE_TEMP_DB_MODULE = Modules.override(new LocalStorageModule())
             .with(new TempDbModule());
     private static final Injector STORAGE_TEMP_DB = Guice.createInjector(STORAGE_TEMP_DB_MODULE);
 

@@ -12,7 +12,7 @@ import java.awt.*;
  *         Time: 3:09 PM
  */
 public class ItemStatusRenderer extends DefaultTableCellRenderer {
-    private JProgressBar progressBar = new JProgressBar();
+    private final JProgressBar progressBar = new JProgressBar();
 
     @Override
     public Component getTableCellRendererComponent(JTable jTable, Object object, boolean isSelected, boolean hasFocus, int row, int column) {
