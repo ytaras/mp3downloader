@@ -18,9 +18,8 @@ class TempDbModule extends AbstractModule {
 
     private String getDatabaseFile() {
         File file = Files.newTemporaryFolder();
-        if (!file.delete()) {
-            throw new AssertionError();
-        }
+        //noinspection ResultOfMethodCallIgnored
+        file.delete();
         return file.getAbsolutePath();
     }
 }

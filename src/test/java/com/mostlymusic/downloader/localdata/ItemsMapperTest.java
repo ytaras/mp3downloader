@@ -133,6 +133,22 @@ public class ItemsMapperTest extends StoragetTestBase {
         assertThat(itemMapper.contains(mockItem.getItemId())).isTrue();
     }
 
+    @Test
+    public void shouldSetStatus() {
+        // given
+        Account account = new Account();
+        account.setId(1);
+        Item mockItem = getMockItem(account);
+        itemMapper.insertItem(mockItem, account);
+
+        // when
+        itemMapper.setStatus(mockItem.getItemId(), "AAA");
+
+        // then
+        Item loaded = itemMapper.listLinks(account).get(0);
+        assertThat(loaded.getStatus()).isEqualTo("AAA");
+    }
+
     @After
     public void cleanTable() throws SQLException {
         Connection connection = dataSource.getConnection();

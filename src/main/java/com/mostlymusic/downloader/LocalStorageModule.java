@@ -54,11 +54,8 @@ public class LocalStorageModule extends MyBatisModule {
 
     private File getDownloadsDir(String userHome) {
         File downloads = new File(userHome, "Downloads");
-        if (!downloads.exists()) {
-            if (!downloads.mkdirs()) {
-                throw new AssertionError();
-            }
-        }
+        //noinspection ResultOfMethodCallIgnored
+        downloads.mkdirs();
         return downloads;
     }
 

@@ -57,4 +57,7 @@ public interface ItemMapper {
 
     @Select("SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE itemId = #{itemId}")
     boolean contains(long itemId);
+
+    @Update("UPDATE " + TABLE_NAME + " SET status = #{status} WHERE itemId = #{itemId}")
+    void setStatus(@Param("itemId") long itemId, @Param("status") String status);
 }

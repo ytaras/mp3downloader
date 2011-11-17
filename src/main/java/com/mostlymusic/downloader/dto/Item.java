@@ -8,6 +8,9 @@ import java.util.Date;
  *         Time: 5:39 PM
  */
 public class Item {
+    public static final String DOWNLOADED = "downloaded";
+    public static final String ERROR = "error";
+
     private long itemId;
     private long productId;
     private Long parentProductId;
@@ -65,10 +68,6 @@ public class Item {
         this.downloadsUsed = downloadsUsed;
     }
 
-    public long getLinkId() {
-        return linkId;
-    }
-
     public void setLinkId(long linkId) {
         this.linkId = linkId;
     }
@@ -105,24 +104,12 @@ public class Item {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public boolean isDirty() {
-        return dirty;
-    }
-
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
-    }
-
-    public Long getParentProductId() {
-        return parentProductId;
     }
 
     public void setParentProductId(Long parentProductId) {

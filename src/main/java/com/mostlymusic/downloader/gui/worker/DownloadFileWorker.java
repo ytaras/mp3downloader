@@ -7,6 +7,7 @@ import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
+import com.mostlymusic.downloader.localdata.ItemMapper;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -23,15 +24,18 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private Item item;
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
+    private final ItemMapper itemMapper;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
     private Artist artist;
 
     @Inject
-    public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model) {
+    public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model,
+                              ItemMapper itemMapper) {
         super(model);
         this.itemsService = itemsService;
         this.configuration = configuration;
+        this.itemMapper = itemMapper;
     }
 
     @Override
@@ -39,34 +43,39 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         if (null == item || null == artist) {
             throw new IllegalStateException("Not initialized worker");
         }
-        getApplicationModel().getItemsTableModel().downloadStarted(item);
-        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
-        publish(0L);
-        final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
-        if (track.getValue() < 0) {
-            // We don't know size of entry, so don't bother calculating
-            OutputStream outputFile = null;
-            try {
-                outputFile = new BufferedOutputStream(getOutputFile());
-                IOUtils.copy(track.getKey(), outputFile);
-            } finally {
-                IOUtils.closeQuietly(track.getKey());
-                IOUtils.closeQuietly(outputFile);
-            }
-
-        } else {
-            // Rock-n-roll
-            getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
-            copy(track.getKey(), getOutputFile(), new StreamCopyListener() {
-                private long bytesWritten = 0;
-
-                @Override
-                public void bytesWritten(int counter) {
-                    bytesWritten += counter;
-                    publish(bytesWritten);
+        try {
+            getApplicationModel().getItemsTableModel().downloadStarted(item);
+            getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
+            publish(0L);
+            final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
+            if (track.getValue() < 0) {
+                // We don't know size of entry, so don't bother calculating
+                OutputStream outputFile = null;
+                try {
+                    outputFile = new BufferedOutputStream(getOutputFile());
+                    IOUtils.copy(track.getKey(), outputFile);
+                } finally {
+                    IOUtils.closeQuietly(track.getKey());
+                    IOUtils.closeQuietly(outputFile);
                 }
-            });
+
+            } else {
+                // Rock-n-roll
+                getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
+                copy(track.getKey(), getOutputFile(), new StreamCopyListener() {
+                    private long bytesWritten = 0;
+
+                    @Override
+                    public void bytesWritten(int counter) {
+                        bytesWritten += counter;
+                        publish(bytesWritten);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            itemMapper.setStatus(item.getItemId(), Item.ERROR);
         }
+        itemMapper.setStatus(item.getItemId(), Item.DOWNLOADED);
         return null;
     }
 
@@ -118,9 +127,8 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
             productPath = encodeFileName(productPath);
         }
         file = new File(file, productPath);
-        if (!file.mkdirs()) {
-            throw new AssertionError();
-        }
+        //noinspection ResultOfMethodCallIgnored
+        file.mkdirs();
         return new File(file, encodeFileName(item.getFileName()));
     }
 
