@@ -134,7 +134,7 @@ public class DefaultApplicationModel implements ApplicationModel {
     }
 
     @Override
-    public ComboBoxModel getUsernamesModel() {
+    public ComboBoxModel getUserNamesModel() {
         List<String> strings = accountMapper.listLoginNames("");
         return new DefaultComboBoxModel(new Vector<String>(strings));
     }

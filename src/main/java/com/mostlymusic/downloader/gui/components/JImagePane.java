@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.gui.components;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -56,7 +58,7 @@ public class JImagePane extends JPanel {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(@Nullable Image image) {
         this.image = image;
         revalidate();
         repaint();

@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Date;
 
 /**
@@ -18,7 +20,7 @@ public class LogEvent {
         this(message, null);
     }
 
-    public LogEvent(String message, Throwable cause) {
+    public LogEvent(String message, @Nullable Throwable cause) {
         this.message = message;
         this.exception = cause;
         this.date = new Date();

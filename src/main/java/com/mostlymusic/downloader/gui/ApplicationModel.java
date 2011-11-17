@@ -32,7 +32,7 @@ public interface ApplicationModel {
 
     void login(String login, String password, boolean savePassword);
 
-    ComboBoxModel getUsernamesModel();
+    ComboBoxModel getUserNamesModel();
 
     Account getAccount(String selectedItem);
 

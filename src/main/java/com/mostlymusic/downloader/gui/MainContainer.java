@@ -36,6 +36,7 @@ public class MainContainer {
                 layout.show(cardPanel, ITEMS);
             }
 
+            @SuppressWarnings({"ThrowableResultOfMethodCallIgnored"})
             @Override
             public void logEvent(LogEvent event) {
                 Throwable exception = event.getException();

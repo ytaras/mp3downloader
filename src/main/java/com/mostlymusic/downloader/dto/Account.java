@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.dto;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * @author ytaras
  *         Date: 9/19/11
@@ -61,7 +63,7 @@ public class Account {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(@Nullable String password) {
         this.password = password;
     }
 

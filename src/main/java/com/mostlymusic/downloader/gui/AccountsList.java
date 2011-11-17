@@ -40,7 +40,7 @@ public class AccountsList {
 
     public void setModel(ApplicationModel model) {
         this.model = model;
-        usernameComboBox.setModel(model.getUsernamesModel());
+        usernameComboBox.setModel(model.getUserNamesModel());
         updatePasswordField();
         usernameComboBox.addActionListener(new ActionListener() {
             @Override
