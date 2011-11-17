@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import com.mostlymusic.downloader.dto.Account;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -13,7 +14,7 @@ public interface ApplicationModel {
 
     void addListener(ApplicationModelListener mock);
 
-    void setStatus(String status);
+    void setStatus(@Nullable String status);
 
     void fireExceptionEvent(Throwable e);
 

@@ -87,7 +87,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             }
         }
 
-        while (false || !artistMapper.findUnknownArtists().isEmpty()) {
+        while (!artistMapper.findUnknownArtists().isEmpty()) {
             List<Long> unknownArtists = artistMapper.findUnknownArtists();
             LogEvent artistsToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
             publish(new CheckServerStatusStage(artistsToFetchLog));
