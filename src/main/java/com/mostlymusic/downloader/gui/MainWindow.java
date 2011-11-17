@@ -22,7 +22,7 @@ public class MainWindow extends JFrame {
     @Inject
     public MainWindow(ApplicationModel applicationModel, JMenuBar menuBar, ProgressGlassPane progressGlassPane,
                       MainContainer mainContainer, LoginDialog loginDialog) throws HeadlessException {
-        final JFrame frame = new JFrame("MostlyMusic Download Manager");
+        super("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
         setContentPane(contentPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +33,7 @@ public class MainWindow extends JFrame {
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
             public void uncaughtException(Thread thread, Throwable throwable) {
-                JOptionPane.showMessageDialog(frame, throwable, "Error occurred", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainWindow.this, throwable, "Error occurred", JOptionPane.ERROR_MESSAGE);
                 throwable.printStackTrace();
             }
         });
@@ -41,7 +41,7 @@ public class MainWindow extends JFrame {
             new Thread() {
                 @Override
                 public void run() {
-                    addTray(frame);
+                    addTray(MainWindow.this);
                 }
             }.start();
         }
@@ -60,9 +60,14 @@ public class MainWindow extends JFrame {
         ActionListener showWindowAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.setVisible(true);
-                frame.setState(JFrame.MAXIMIZED_BOTH);
-                frame.toFront();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.setVisible(true);
+                        frame.setState(JFrame.MAXIMIZED_BOTH);
+                        frame.toFront();
+                    }
+                });
             }
         };
         PopupMenu popupMenu = getTrayMenu(showWindowAction);
