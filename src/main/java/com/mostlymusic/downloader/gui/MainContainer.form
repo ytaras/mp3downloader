@@ -7,13 +7,13 @@
     <properties/>
     <border type="none"/>
     <children>
-      <splitpane id="6f0ff">
+      <splitpane id="6f0ff" binding="splitPane">
         <constraints border-constraint="Center"/>
         <properties>
           <dividerLocation value="300"/>
           <oneTouchExpandable value="true"/>
           <orientation value="0"/>
-          <resizeWeight value="1.0"/>
+          <resizeWeight value="0.0"/>
         </properties>
         <border type="none"/>
         <children>
@@ -34,7 +34,9 @@
             <children>
               <component id="f246b" class="javax.swing.JList" binding="logList">
                 <constraints/>
-                <properties/>
+                <properties>
+                  <preferredSize width="100" height="100"/>
+                </properties>
               </component>
             </children>
           </scrollpane>
@@ -42,4 +44,7 @@
       </splitpane>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="d48fe"/>
+  </inspectionSuppressions>
 </form>

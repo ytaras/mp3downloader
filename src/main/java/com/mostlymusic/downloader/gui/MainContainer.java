@@ -19,12 +19,14 @@ public class MainContainer {
     private JPanel panel1;
     private JList logList;
     private JPanel cardPanel;
+    private JSplitPane splitPane;
 
     private final CardLayout layout;
     private final DefaultListModel logListModel;
 
     @Inject
     public MainContainer(Items items, ApplicationModel model) {
+        splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
         layout.show(this.cardPanel, ITEMS);

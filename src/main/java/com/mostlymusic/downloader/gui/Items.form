@@ -10,7 +10,7 @@
       <splitpane id="306a0" binding="splitPane">
         <constraints border-constraint="Center"/>
         <properties>
-          <dividerLocation value="200"/>
+          <dividerLocation value="100"/>
           <dividerSize value="10"/>
           <oneTouchExpandable value="true"/>
         </properties>
@@ -34,7 +34,9 @@
               </component>
               <scrollpane id="9391d">
                 <constraints border-constraint="Center"/>
-                <properties/>
+                <properties>
+                  <preferredSize width="900" height="421"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="35c51" class="javax.swing.JTable" binding="itemsTable">
@@ -123,4 +125,8 @@
       </component>
     </children>
   </grid>
+  <inspectionSuppressions>
+    <suppress inspection="NoLabelFor" id="9391d"/>
+    <suppress inspection="NoLabelFor" id="9d9f4"/>
+  </inspectionSuppressions>
 </form>

@@ -64,6 +64,9 @@ public class ArtistsMapperTest extends StoragetTestBase {
         itemMapper.insertItem(item, new Account());
         item.setItemId(2);
         itemMapper.insertItem(item, new Account());
+        item.setItemId(3);
+        item.setMainArtistId(0);
+        itemMapper.insertItem(item, new Account());
         Artist product = new Artist();
         product.setName("Name");
         product.setArtistId(123);
