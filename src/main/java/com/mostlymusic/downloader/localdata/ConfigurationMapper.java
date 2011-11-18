@@ -29,4 +29,8 @@ public interface ConfigurationMapper {
 
     @Select("UPDATE " + TABLE_NAME + " SET refreshRate = #{rate}")
     void setRefreshRate(long rate);
+
+    void setDownloadThreadsNumber(int threadsNumber);
+
+    void setAutoDownload(boolean autoDownload);
 }

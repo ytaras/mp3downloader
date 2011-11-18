@@ -92,7 +92,9 @@
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <name value="downloadsNumber"/>
+            </properties>
           </component>
           <component id="c6013" class="javax.swing.JLabel">
             <constraints>
@@ -103,11 +105,12 @@
               <text value="&amp;Maximum number of concurrent downloads"/>
             </properties>
           </component>
-          <component id="20d6b" class="javax.swing.JCheckBox" binding="startDownloadAutomaticallyIfCheckBox" default-binding="true">
+          <component id="20d6b" class="javax.swing.JCheckBox" binding="autoDownload">
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <name value="autoDownload"/>
               <text value="&amp;Start download automatically if new track is available"/>
             </properties>
           </component>
@@ -142,6 +145,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <inheritsPopupMenu value="true"/>
                   <name value="refreshRate"/>
                 </properties>
               </component>

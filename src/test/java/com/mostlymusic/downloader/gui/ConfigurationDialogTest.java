@@ -54,12 +54,18 @@ public class ConfigurationDialogTest {
         File newDir = new File(configurationMapper.getDownloadPath()).getParentFile();
         fileChooser.setCurrentDirectory(newDir);
         fileChooser.approve();
-        // select refresh rate
+
+
         configDialog.spinner("refreshRate").enterText("44");
+        configDialog.spinner("downloadsNumber").enterText("5");
+        configDialog.checkBox("autoDownload").check();
+
         // save
         configDialog.button("ok").click();
         verify(configurationMapper).setDownloadPath(newDir.getAbsolutePath());
         verify(configurationMapper).setRefreshRate(44);
+        verify(configurationMapper).setDownloadThreadsNumber(5);
+        verify(configurationMapper).setAutoDownload(true);
     }
 
     @Test

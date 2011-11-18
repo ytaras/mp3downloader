@@ -15,7 +15,7 @@ public class ConfigurationDialog extends JDialog {
     private JTextField downloadLocation;
     private JButton button1;
     private JSpinner downloadsNumber;
-    private JCheckBox startDownloadAutomaticallyIfCheckBox;
+    private JCheckBox autoDownload;
     private final ConfigurationMapper configurationMapper;
     private final ApplicationModel applicationModel;
 
@@ -82,15 +82,12 @@ public class ConfigurationDialog extends JDialog {
     }
 
     private void onOK() {
-        Integer value = (Integer) refreshRate.getValue();
-        if (value < 5) {
-            JOptionPane.showMessageDialog(this, "Minimal value for refresh rate is 5 mins");
-        } else {
-            configurationMapper.setRefreshRate(value);
-            configurationMapper.setDownloadPath(downloadLocation.getText());
-            applicationModel.fireConfigurationChanged();
-            dispose();
-        }
+        configurationMapper.setRefreshRate((Integer) refreshRate.getValue());
+        configurationMapper.setDownloadPath(downloadLocation.getText());
+        configurationMapper.setDownloadThreadsNumber((Integer) downloadsNumber.getValue());
+        configurationMapper.setAutoDownload(autoDownload.isSelected());
+        applicationModel.fireConfigurationChanged();
+        dispose();
     }
 
     private void onCancel() {
