@@ -14,6 +14,8 @@ public class ConfigurationDialog extends JDialog {
     private JSpinner refreshRate;
     private JTextField downloadLocation;
     private JButton button1;
+    private JSpinner downloadsNumber;
+    private JCheckBox startDownloadAutomaticallyIfCheckBox;
     private final ConfigurationMapper configurationMapper;
     private final ApplicationModel applicationModel;
 
