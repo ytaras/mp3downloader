@@ -2,10 +2,12 @@ package com.mostlymusic.downloader.localdata;
 
 import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.dto.Account;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import javax.sql.DataSource;
-import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -20,8 +22,20 @@ public class SchemaCreatorTest extends StoragetTestBase {
 
     @Override
     public void setUp() throws Exception {
-        File tempFile = File.createTempFile("mostly", "db");
-        assertThat(tempFile.delete()).isTrue();
+        DataSource dataSource = injector.getInstance(DataSource.class);
+        Connection connection = dataSource.getConnection();
+        try {
+            ResultSet tables = connection.getMetaData().getTables(null, "APP", null, null);
+            while (tables.next()) {
+                dropTable(connection, tables.getString("TABLE_NAME"));
+            }
+        } finally {
+            connection.close();
+        }
+    }
+
+    @BeforeClass
+    public static void createDatabase() throws IOException {
         injector = MockInjectors.storageTempDb(true);
     }
 
@@ -35,12 +49,17 @@ public class SchemaCreatorTest extends StoragetTestBase {
         instance.createTables();
 
         // then
-        assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ConfigurationMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, VersionMapper.TABLE_NAME)).isTrue();
+        Connection connection = dataSource.getConnection();
+        try {
+            assertThat(tableExists(connection, AccountMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ItemMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ProductMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ArtistMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ConfigurationMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, VersionMapper.TABLE_NAME)).isTrue();
+        } finally {
+            connection.close();
+        }
     }
 
     @Test
@@ -54,23 +73,34 @@ public class SchemaCreatorTest extends StoragetTestBase {
 
         // then
         DataSource dataSource = injector.getInstance(DataSource.class);
-        assertThat(tableExists(dataSource, AccountMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ItemMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ProductMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ArtistMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, ConfigurationMapper.TABLE_NAME)).isTrue();
-        assertThat(tableExists(dataSource, VersionMapper.TABLE_NAME)).isTrue();
-        ResultSet resultSet = dataSource.getConnection()
-                .prepareStatement("SELECT COUNT(*) FROM " + ConfigurationMapper.TABLE_NAME).executeQuery();
-        resultSet.next();
-        assertThat(resultSet.getInt(1)).as("count of configuration records").isEqualTo(1);
+        Connection connection = dataSource.getConnection();
+        try {
+            assertThat(tableExists(connection, AccountMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ItemMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ProductMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ArtistMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, ConfigurationMapper.TABLE_NAME)).isTrue();
+            assertThat(tableExists(connection, VersionMapper.TABLE_NAME)).isTrue();
+            ResultSet resultSet = connection.prepareStatement("SELECT COUNT(*) FROM " + ConfigurationMapper.TABLE_NAME)
+                    .executeQuery();
+            resultSet.next();
+            assertThat(resultSet.getInt(1)).as("count of configuration records").isEqualTo(1);
+        } finally {
+            connection.close();
+        }
     }
 
     @Test
     public void shouldRecreateSchemaIfNoVersionTable() throws SQLException {
         // given
         DataSource dataSource = injector.getInstance(DataSource.class);
-        dropTable(dataSource);
+        injector.getInstance(SchemaCreator.class).createTables();
+        Connection connection = dataSource.getConnection();
+        try {
+            dropTable(connection, VersionMapper.TABLE_NAME);
+        } finally {
+            connection.close();
+        }
         AccountMapper accountMapper = injector.getInstance(AccountMapper.class);
         accountMapper.createAccount(new Account("user"));
         assertThat(accountMapper.listLoginNames("")).isNotEmpty();
@@ -82,14 +112,43 @@ public class SchemaCreatorTest extends StoragetTestBase {
         assertThat(accountMapper.listLoginNames("")).isEmpty();
     }
 
-    private void dropTable(DataSource dataSource) throws SQLException {
-        dataSource.getConnection().prepareStatement("DROP TABLE " + VersionMapper.TABLE_NAME).execute();
+    @Test
+    public void shouldMigrateToVersion2() throws SQLException {
+        // given
+        SchemaCreator instance = injector.getInstance(SchemaCreator.class);
+        instance.migrateTo(1);
+        DataSource dataSource = injector.getInstance(DataSource.class);
+        Connection connection = dataSource.getConnection();
+        String autoDownloadColumnNane = "autoDownload".toUpperCase();
+        String threadCount = "threadCount".toUpperCase();
+        try {
+            assertThat(columnExists(connection, AccountMapper.TABLE_NAME, "lastOrderId".toUpperCase())).isTrue();
+            assertThat(columnExists(connection, ConfigurationMapper.TABLE_NAME, autoDownloadColumnNane)).isFalse();
+            assertThat(columnExists(connection, ConfigurationMapper.TABLE_NAME, threadCount)).isFalse();
+
+            // when
+            instance.migrateTo(2);
+
+            // then
+            assertThat(columnExists(connection, ConfigurationMapper.TABLE_NAME, autoDownloadColumnNane)).isTrue();
+            assertThat(columnExists(connection, ConfigurationMapper.TABLE_NAME, threadCount)).isTrue();
+        } finally {
+            connection.close();
+        }
     }
 
-    private boolean tableExists(DataSource dataSource, String tableName) throws SQLException {
-        ResultSet tables = dataSource.getConnection().getMetaData().getTables(null, null, tableName, null);
-        return tables.next();
+    private void dropTable(Connection connection, String tableName) throws SQLException {
+        connection.prepareStatement("DROP TABLE " + tableName).execute();
+    }
 
+    private boolean tableExists(Connection connection, String tableName) throws SQLException {
+        ResultSet tables = connection.getMetaData().getTables(null, null, tableName, null);
+        return tables.next();
+    }
+
+    private boolean columnExists(Connection connection, String tableName, String columnName) throws SQLException {
+        ResultSet tables = connection.getMetaData().getColumns(null, null, tableName, columnName);
+        return tables.next();
     }
 }
 

@@ -16,7 +16,7 @@ import java.sql.SQLException;
  */
 public class SchemaCreator {
 
-
+    public static int CURRENT_APP_VERSION = 2;
     private final File defaultDownloadPath;
 
     @Inject
@@ -44,6 +44,30 @@ public class SchemaCreator {
     private final VersionMapper versionMapper;
 
     public void createTables() throws SQLException {
+        Connection connection = dataSource.getConnection();
+        try {
+            int currentVersion;
+            if (!tableExists(connection, VersionMapper.TABLE_NAME)) {
+                dropTable(connection, AccountMapper.TABLE_NAME);
+                dropTable(connection, ItemMapper.TABLE_NAME);
+                dropTable(connection, ProductMapper.TABLE_NAME);
+                dropTable(connection, ArtistMapper.TABLE_NAME);
+                dropTable(connection, ConfigurationMapper.TABLE_NAME);
+                versionMapper.createSchema();
+                versionMapper.createInitialConfig();
+                currentVersion = 0;
+            } else {
+                currentVersion = versionMapper.loadVersion();
+            }
+            for (int i = currentVersion + 1; i <= CURRENT_APP_VERSION; i++) {
+                migrateTo(i);
+            }
+        } finally {
+            connection.close();
+        }
+    }
+
+    public void migrateTo1() throws SQLException {
         Connection connection = dataSource.getConnection();
         try {
             if (!tableExists(connection, VersionMapper.TABLE_NAME)) {
@@ -85,5 +109,25 @@ public class SchemaCreator {
     private boolean tableExists(Connection connection, String tableName) throws SQLException {
         ResultSet tables = connection.getMetaData().getTables(null, null, tableName, null);
         return tables.next();
+    }
+
+    public void migrateTo(int version) throws SQLException {
+        switch (version) {
+            case 1:
+                migrateTo1();
+                break;
+            case 2:
+                migrateTo2();
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown version " + version);
+        }
+        versionMapper.setVersion(version);
+    }
+
+    private void migrateTo2() {
+        // TODO Find out how to do multiple queries in MyBatis
+        configurationMapper.toVersion2_1();
+        configurationMapper.toVersion2_2();
     }
 }

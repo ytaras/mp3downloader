@@ -33,4 +33,12 @@ public interface ConfigurationMapper {
     void setDownloadThreadsNumber(int threadsNumber);
 
     void setAutoDownload(boolean autoDownload);
+
+    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN autoDownload SMALLINT")
+    void toVersion2_1();
+
+    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN threadCount SMALLINT")
+    void toVersion2_2();
+
+
 }

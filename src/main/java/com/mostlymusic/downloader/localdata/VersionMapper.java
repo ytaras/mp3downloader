@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.localdata;
 
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 /**
@@ -16,4 +17,10 @@ public interface VersionMapper {
 
     @Insert("INSERT INTO " + TABLE_NAME + "(version) VALUES (1)")
     void createInitialConfig();
+
+    @Update("UPDATE " + TABLE_NAME + " SET version = #{version}")
+    void setVersion(int version);
+
+    @Select("SELECT version FROM " + TABLE_NAME)
+    int loadVersion();
 }

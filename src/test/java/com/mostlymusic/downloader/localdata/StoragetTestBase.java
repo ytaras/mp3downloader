@@ -11,7 +11,7 @@ import org.junit.Before;
  */
 public class StoragetTestBase {
 
-    Injector injector;
+    static Injector injector;
 
     @Before
     public void setUp() throws Exception {
