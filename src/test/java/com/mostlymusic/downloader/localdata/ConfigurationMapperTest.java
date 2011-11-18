@@ -22,7 +22,7 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     public void setUp() throws Exception {
         super.setUp();
         injector.getInstance(DataSource.class).getConnection()
-                .prepareStatement("DROP TABLE " + ConfigurationMapper.TABLE_NAME).execute();
+                .prepareStatement("DROP TABLE " + VersionMapper.TABLE_NAME).execute();
         configurationMapper = injector.getInstance(ConfigurationMapper.class);
         injector.getInstance(SchemaCreator.class).createTables();
     }
@@ -48,5 +48,28 @@ public class ConfigurationMapperTest extends StoragetTestBase {
 
         // then
         assertThat(configurationMapper.getRefreshRate()).isEqualTo(6);
+    }
+
+    @Test
+    public void shouldSaveTreadCount() throws Exception {
+        // given
+        assertThat(configurationMapper.getDownloadThreadsNumber()).isEqualTo(5);
+        // when
+        configurationMapper.setDownloadThreadsNumber(6);
+
+        // then
+        assertThat(configurationMapper.getDownloadThreadsNumber()).isEqualTo(6);
+    }
+
+    @Test
+    public void shouldSaveAutoDownload() throws SQLException {
+        // given
+        assertThat(configurationMapper.getAutoDownload()).isFalse();
+
+        // when
+        configurationMapper.setAutoDownload(true);
+
+        // then
+        assertThat(configurationMapper.getAutoDownload()).isTrue();
     }
 }

@@ -30,14 +30,22 @@ public interface ConfigurationMapper {
     @Select("UPDATE " + TABLE_NAME + " SET refreshRate = #{rate}")
     void setRefreshRate(long rate);
 
+    @Update("UPDATE " + TABLE_NAME + " SET threadCount = #{threadsNumber}")
     void setDownloadThreadsNumber(int threadsNumber);
 
+    @Update("UPDATE " + TABLE_NAME + " SET autoDownload = #{autoDownload}")
     void setAutoDownload(boolean autoDownload);
 
-    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN autoDownload SMALLINT")
+    @Select("SELECT threadCount FROM " + TABLE_NAME)
+    int getDownloadThreadsNumber();
+
+    @Select("SELECT autoDownload FROM " + TABLE_NAME)
+    boolean getAutoDownload();
+
+    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN autoDownload SMALLINT DEFAULT 0")
     void toVersion2_1();
 
-    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN threadCount SMALLINT")
+    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN threadCount SMALLINT DEFAULT 5")
     void toVersion2_2();
 
 
