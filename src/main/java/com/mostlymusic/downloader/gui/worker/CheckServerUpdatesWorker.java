@@ -1,7 +1,11 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.*;
+import com.mostlymusic.downloader.client.Artist;
+import com.mostlymusic.downloader.client.ArtistsService;
+import com.mostlymusic.downloader.client.ItemsService;
+import com.mostlymusic.downloader.client.Product;
+import com.mostlymusic.downloader.client.ProductsService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -10,6 +14,7 @@ import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
+import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
 
@@ -32,12 +37,15 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final AccountMapper accountMapper;
     private final ArtistsService artistsService;
     private final ArtistMapper artistMapper;
+    private final ConfigurationMapper configurationMapper;
+    private final DownloadFileWorkerFactory downloadFileWorkerFactory;
 
 
     @Inject
     public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
-                                    ArtistsService artistsService, ArtistMapper artistMapper) {
+                                    ArtistsService artistsService, ArtistMapper artistMapper,
+                                    ConfigurationMapper configurationMapper, DownloadFileWorkerFactory downloadFileWorkerFactory) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.itemMapper = itemMapper;
@@ -46,6 +54,8 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.productsService = productsService;
         this.artistsService = artistsService;
         this.artistMapper = artistMapper;
+        this.configurationMapper = configurationMapper;
+        this.downloadFileWorkerFactory = downloadFileWorkerFactory;
     }
 
 
@@ -97,6 +107,11 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             }
         }
 
+        if (configurationMapper.getAutoDownload()) {
+            for (Item item : itemMapper.findItemsByStatus(account, Item.AVAILABLE)) {
+                downloadFileWorkerFactory.createWorker(item).execute();
+            }
+        }
         return null;
     }
 

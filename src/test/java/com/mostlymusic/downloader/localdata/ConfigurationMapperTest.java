@@ -64,12 +64,12 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     @Test
     public void shouldSaveAutoDownload() throws SQLException {
         // given
-        assertThat(configurationMapper.getAutoDownload()).isFalse();
+        assertThat(configurationMapper.getAutoDownload()).isTrue();
 
         // when
-        configurationMapper.setAutoDownload(true);
+        configurationMapper.setAutoDownload(false);
 
         // then
-        assertThat(configurationMapper.getAutoDownload()).isTrue();
+        assertThat(configurationMapper.getAutoDownload()).isFalse();
     }
 }

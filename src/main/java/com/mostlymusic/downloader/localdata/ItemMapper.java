@@ -60,4 +60,7 @@ public interface ItemMapper {
 
     @Update("UPDATE " + TABLE_NAME + " SET status = #{status} WHERE itemId = #{itemId}")
     void setStatus(@Param("itemId") long itemId, @Param("status") String status);
+
+    @Select("SELECT * FROM " + TABLE_NAME + " WHERE status = #{status} AND accountId = #{account.id}")
+    List<Item> findItemsByStatus(@Param("account") Account account, @Param("status") String status);
 }

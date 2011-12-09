@@ -26,6 +26,7 @@ public class Item {
     private Date createdAt;
     private Date updatedAt;
     private boolean dirty = false;
+    public static final String AVAILABLE = "available";
 
 
     public long getItemId() {

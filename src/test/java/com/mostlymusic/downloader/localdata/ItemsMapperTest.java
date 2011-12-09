@@ -149,6 +149,27 @@ public class ItemsMapperTest extends StoragetTestBase {
         assertThat(loaded.getStatus()).isEqualTo("AAA");
     }
 
+    @Test
+    public void shouldFindByStatus() {
+        // given
+        Account account = new Account();
+        account.setId(1);
+        Item mockItem = getMockItem(account);
+        mockItem.setItemId(5);
+        mockItem.setStatus(Item.ERROR);
+        itemMapper.insertItem(mockItem, account);
+        mockItem.setItemId(6);
+        mockItem.setStatus(Item.DOWNLOADED);
+        itemMapper.insertItem(mockItem, account);
+
+        // when
+        List<Item> itemsByStatus = itemMapper.findItemsByStatus(account, Item.ERROR);
+
+        // then
+        assertThat(itemsByStatus).hasSize(1);
+        assertThat(itemsByStatus.get(0).getStatus()).isEqualTo(Item.ERROR);
+    }
+
     @After
     public void cleanTable() throws SQLException {
         Connection connection = dataSource.getConnection();

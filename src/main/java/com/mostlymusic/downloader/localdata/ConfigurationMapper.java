@@ -42,7 +42,7 @@ public interface ConfigurationMapper {
     @Select("SELECT autoDownload FROM " + TABLE_NAME)
     boolean getAutoDownload();
 
-    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN autoDownload SMALLINT DEFAULT 0")
+    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN autoDownload SMALLINT DEFAULT 1")
     void toVersion2_1();
 
     @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN threadCount SMALLINT DEFAULT 5")
