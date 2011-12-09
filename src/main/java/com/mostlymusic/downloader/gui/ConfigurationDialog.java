@@ -4,7 +4,11 @@ import com.google.inject.Inject;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 public class ConfigurationDialog extends JDialog {
@@ -59,6 +63,8 @@ public class ConfigurationDialog extends JDialog {
             protected Void doInBackground() throws Exception {
                 downloadLocation.setText(configurationMapper.getDownloadPath());
                 refreshRate.setValue(configurationMapper.getRefreshRate());
+                autoDownload.setSelected(configurationMapper.getAutoDownload());
+                downloadsNumber.setValue(configurationMapper.getDownloadThreadsNumber());
                 return null;
             }
         }.execute();
