@@ -1,13 +1,13 @@
 package com.mostlymusic.downloader.gui;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
-import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
-import com.mostlymusic.downloader.manager.AccountManager;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ItemMapperListener;
 
@@ -25,11 +25,10 @@ import java.util.Map;
  *         Date: 9/21/11
  *         Time: 10:41 AM
  */
+@Singleton
 public class ItemsTableModel extends AbstractTableModel {
-    private final ItemMapper itemMapper;
     private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
-    private final AccountManager accountManager;
     private List<Item> data;
     private final Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private final Map<Long, Product> products = new HashMap<Long, Product>();
@@ -45,20 +44,19 @@ public class ItemsTableModel extends AbstractTableModel {
     private static final String PRODUCT_NAME = "Product name";
     private static final String[] COLUMN_NAMES = new String[]{PRODUCT_NAME, ARTIST_NAME, TITLE, STATUS};
     private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
+    private final ItemManager itemManager;
 
-
-    public ItemsTableModel(ItemMapper itemMapper, ItemManager itemManager,
-                           ProductMapper productMapper, ArtistMapper artistMapper, AccountManager accountManager) {
-        this.itemMapper = itemMapper;
+    @Inject
+    public ItemsTableModel(ItemManager itemManager, ProductMapper productMapper, ArtistMapper artistMapper) {
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
-        this.accountManager = accountManager;
         addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent tableModelEvent) {
                 refresh();
             }
         });
+        this.itemManager = itemManager;
         itemManager.addListener(new ItemMapperListener() {
             @Override
             public void addedItem(Item item, Account account) {
@@ -73,25 +71,19 @@ public class ItemsTableModel extends AbstractTableModel {
     }
 
     private void refresh() {
-        Account loggedAccount = accountManager.getCurrentAccount();
-        if (null == loggedAccount) {
-            this.data = Collections.emptyList();
-            this.itemIdToRowMap = Collections.emptyMap();
-        } else {
-            this.data = itemMapper.listLinks(loggedAccount);
-            this.itemIdToRowMap = new HashMap<Long, Integer>();
-            List<Long> productIds = new LinkedList<Long>();
-            for (int row = 0; row < data.size(); row++) {
-                Item item = data.get(row);
-                itemIdToRowMap.put(item.getItemId(), row);
-                productIds.add(item.getProductId());
-            }
-            for (Long productId : productIds) {
-                products.put(productId, productMapper.loadProduct(productId));
-            }
-            for (Artist artist : artistMapper.listArtists()) {
-                artists.put(artist.getArtistId(), artist);
-            }
+        this.data = itemManager.findItem();
+        this.itemIdToRowMap = new HashMap<Long, Integer>();
+        List<Long> productIds = new LinkedList<Long>();
+        for (int row = 0; row < data.size(); row++) {
+            Item item = data.get(row);
+            itemIdToRowMap.put(item.getItemId(), row);
+            productIds.add(item.getProductId());
+        }
+        for (Long productId : productIds) {
+            products.put(productId, productMapper.loadProduct(productId));
+        }
+        for (Artist artist : artistMapper.listArtists()) {
+            artists.put(artist.getArtistId(), artist);
         }
     }
 

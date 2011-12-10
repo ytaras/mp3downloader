@@ -18,7 +18,7 @@ public interface ItemMapper {
     String TABLE_NAME = "LINKS";
 
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE accountId = #{id}")
-    List<Item> listLinks(Account account);
+    List<Item> listItems(Account account);
 
     @Update("CREATE TABLE " + TABLE_NAME + " (itemId BIGINT NOT NULL PRIMARY KEY,\n" +
             "productId BIGINT ,\n" +

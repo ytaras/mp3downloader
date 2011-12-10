@@ -6,6 +6,7 @@ import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,16 @@ public class MapperItemManager implements ItemManager {
     @Override
     public List<Item> findItemByStatus(String status) {
         return mapper.findItemsByStatus(accountManager.getCurrentAccount(), status);
+    }
+
+    @Override
+    public List<Item> findItem() {
+        Account currentAccount = accountManager.getCurrentAccount();
+        if (null == currentAccount) {
+            return Collections.emptyList();
+        } else {
+            return mapper.listItems(currentAccount);
+        }
     }
 
     private void fireItemUpdated(Item item) {

@@ -6,11 +6,7 @@ import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorkerFactory;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.localdata.AccountMapper;
-import com.mostlymusic.downloader.localdata.ArtistMapper;
-import com.mostlymusic.downloader.localdata.ItemMapper;
-import com.mostlymusic.downloader.localdata.ProductMapper;
 import com.mostlymusic.downloader.manager.AccountManager;
-import com.mostlymusic.downloader.manager.ItemManager;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -33,12 +29,11 @@ public class DefaultApplicationModel implements ApplicationModel {
 
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
-                                   final CheckServerUpdatesWorkerFactory workerFactory, ItemMapper itemMapper,
-                                   ProductMapper productMapper, ArtistMapper artistMapper,
-                                   final AccountManager accountManager, ItemManager itemManager) {
+                                   final CheckServerUpdatesWorkerFactory workerFactory,
+                                   final AccountManager accountManager, final ItemsTableModel itemsTableModel) {
         this.accountMapper = accountMapper;
         this.authService = authService;
-        itemsTableModel = new ItemsTableModel(itemMapper, itemManager, productMapper, artistMapper, accountManager);
+        this.itemsTableModel = itemsTableModel;
         addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(final Account account) {

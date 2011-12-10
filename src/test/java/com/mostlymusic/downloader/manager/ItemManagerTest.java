@@ -6,12 +6,14 @@ import com.mostlymusic.downloader.localdata.ItemMapper;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -25,11 +27,12 @@ public class ItemManagerTest {
     private ItemMapperListener listener;
     private Item item;
     private Account account;
+    private AccountManager accountManager;
 
     @Before
     public void setUp() throws Exception {
         mapper = mock(ItemMapper.class);
-        AccountManager accountManager = new MapperAccountManager();
+        accountManager = new MapperAccountManager();
         manager = new MapperItemManager(mapper, accountManager);
         listener = mock(ItemMapperListener.class);
         manager.addListener(listener);
@@ -76,5 +79,30 @@ public class ItemManagerTest {
 
         // then
         assertThat(result).isSameAs(expected);
+    }
+
+    @Test
+    public void shouldReturnNoItemsIfLoggedOut() {
+        // given
+        accountManager.setCurrentAccount(null);
+
+        // when
+        List<Item> items = manager.findItem();
+
+        // then
+        assertThat(items).isEmpty();
+        verifyZeroInteractions(mapper);
+    }
+
+    @Test
+    public void shouldReturnAllItems() {
+        // given
+        when(mapper.listItems(account)).thenReturn(Collections.singletonList(item));
+        // when
+        List<Item> items = manager.findItem();
+
+        // then
+        assertThat(items).containsOnly(item);
+
     }
 }

@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.manager;
 
+import com.mostlymusic.downloader.Nullable;
 import com.mostlymusic.downloader.dto.Account;
 
 /**
@@ -9,7 +10,7 @@ import com.mostlymusic.downloader.dto.Account;
 public interface AccountManager {
     void addListener(AccountManagerListener mock);
 
-    void setCurrentAccount(Account account);
+    void setCurrentAccount(@Nullable Account account);
 
     Account getCurrentAccount();
 }

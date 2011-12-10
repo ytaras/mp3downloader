@@ -14,4 +14,6 @@ public interface ItemManager {
     void saveItem(Item item);
 
     List<Item> findItemByStatus(String status);
+
+    List<Item> findItem();
 }

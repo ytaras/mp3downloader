@@ -36,7 +36,7 @@ public class ItemsMapperTest extends StoragetTestBase {
     public void shouldInitMyBatis() {
         // given
         // when
-        List<Item> items = itemMapper.listLinks(new Account());
+        List<Item> items = itemMapper.listItems(new Account());
 
         // then
         assertThat(items).isNotNull();
@@ -53,7 +53,7 @@ public class ItemsMapperTest extends StoragetTestBase {
         itemMapper.insertItem(item, account);
 
         // then
-        List<Item> items = itemMapper.listLinks(account);
+        List<Item> items = itemMapper.listItems(account);
         assertThat(items).contains(item);
     }
 
@@ -93,7 +93,7 @@ public class ItemsMapperTest extends StoragetTestBase {
         itemMapper.insertItem(getMockItem(account2), account2);
 
         // when
-        List<Item> items = itemMapper.listLinks(account);
+        List<Item> items = itemMapper.listItems(account);
 
         // then
         assertThat(items).containsExactly(mockItem);
@@ -114,7 +114,7 @@ public class ItemsMapperTest extends StoragetTestBase {
         itemMapper.updateItem(mockItem, account);
 
         // then
-        assertThat(itemMapper.listLinks(account)).containsExactly(mockItem);
+        assertThat(itemMapper.listItems(account)).containsExactly(mockItem);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ItemsMapperTest extends StoragetTestBase {
         itemMapper.setStatus(mockItem.getItemId(), "AAA");
 
         // then
-        Item loaded = itemMapper.listLinks(account).get(0);
+        Item loaded = itemMapper.listItems(account).get(0);
         assertThat(loaded.getStatus()).isEqualTo("AAA");
     }
 
