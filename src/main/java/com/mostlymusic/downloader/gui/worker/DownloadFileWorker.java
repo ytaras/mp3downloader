@@ -10,9 +10,18 @@ import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author ytaras
@@ -24,17 +33,19 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
     private final ItemMapper itemMapper;
+    private final Logger logger;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
     private Artist artist;
 
     @Inject
     public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model,
-                              ItemMapper itemMapper) {
+                              ItemMapper itemMapper, Logger logger) {
         super(model);
         this.itemsService = itemsService;
         this.configuration = configuration;
         this.itemMapper = itemMapper;
+        this.logger = logger;
     }
 
     @Override
@@ -72,6 +83,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
                 });
             }
         } catch (Exception e) {
+            logger.log(Level.SEVERE, "Error downloading", e);
             itemMapper.setStatus(item.getItemId(), Item.ERROR);
         }
         itemMapper.setStatus(item.getItemId(), Item.DOWNLOADED);
