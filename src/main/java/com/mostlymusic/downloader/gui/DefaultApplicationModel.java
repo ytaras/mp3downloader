@@ -5,8 +5,8 @@ import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorkerFactory;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
-import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.manager.AccountManager;
+import com.mostlymusic.downloader.manager.AccountMapper;
 
 import javax.inject.Inject;
 import javax.swing.*;

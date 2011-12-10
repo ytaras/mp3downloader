@@ -1,4 +1,4 @@
-package com.mostlymusic.downloader.localdata;
+package com.mostlymusic.downloader.manager;
 
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
@@ -14,7 +14,7 @@ import java.util.List;
  *         Date: 9/20/11
  *         Time: 5:00 PM
  */
-public interface ItemMapper {
+interface ItemMapper {
     String TABLE_NAME = "LINKS";
 
     @Select("SELECT * FROM " + TABLE_NAME + " WHERE accountId = #{id}")

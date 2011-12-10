@@ -1,4 +1,4 @@
-package com.mostlymusic.downloader.localdata;
+package com.mostlymusic.downloader.manager;
 
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.DownloadDirectory;

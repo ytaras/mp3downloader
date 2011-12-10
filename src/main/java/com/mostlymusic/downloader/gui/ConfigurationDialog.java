@@ -1,7 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.localdata.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

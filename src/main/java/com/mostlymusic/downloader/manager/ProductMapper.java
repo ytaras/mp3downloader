@@ -1,4 +1,4 @@
-package com.mostlymusic.downloader.localdata;
+package com.mostlymusic.downloader.manager;
 
 import com.mostlymusic.downloader.client.Product;
 import org.apache.ibatis.annotations.Insert;

@@ -1,6 +1,6 @@
 package com.mostlymusic.downloader.gui;
 
-import com.mostlymusic.downloader.localdata.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import org.fest.swing.core.EmergencyAbortListener;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;

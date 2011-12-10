@@ -6,8 +6,8 @@ import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
-import com.mostlymusic.downloader.localdata.ConfigurationMapper;
-import com.mostlymusic.downloader.localdata.ItemMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.ItemManager;
 import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedInputStream;
@@ -32,7 +32,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private Item item;
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
-    private final ItemMapper itemMapper;
+    private final ItemManager itemManager;
     private final Logger logger;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
@@ -40,11 +40,11 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Inject
     public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model,
-                              ItemMapper itemMapper, Logger logger) {
+                              ItemManager itemManager, Logger logger) {
         super(model);
         this.itemsService = itemsService;
         this.configuration = configuration;
-        this.itemMapper = itemMapper;
+        this.itemManager = itemManager;
         this.logger = logger;
     }
 
@@ -84,9 +84,9 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error downloading", e);
-            itemMapper.setStatus(item.getItemId(), Item.ERROR);
+            itemManager.setStatus(item.getItemId(), Item.ERROR);
         }
-        itemMapper.setStatus(item.getItemId(), Item.DOWNLOADED);
+        itemManager.setStatus(item.getItemId(), Item.DOWNLOADED);
         return null;
     }
 

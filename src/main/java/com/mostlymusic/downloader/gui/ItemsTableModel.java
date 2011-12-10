@@ -6,10 +6,10 @@ import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.localdata.ArtistMapper;
-import com.mostlymusic.downloader.localdata.ProductMapper;
+import com.mostlymusic.downloader.manager.ArtistMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ItemMapperListener;
+import com.mostlymusic.downloader.manager.ProductMapper;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;

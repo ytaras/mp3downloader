@@ -12,12 +12,12 @@ import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
-import com.mostlymusic.downloader.localdata.AccountMapper;
-import com.mostlymusic.downloader.localdata.ArtistMapper;
-import com.mostlymusic.downloader.localdata.ConfigurationMapper;
-import com.mostlymusic.downloader.localdata.ProductMapper;
 import com.mostlymusic.downloader.manager.AccountManager;
+import com.mostlymusic.downloader.manager.AccountMapper;
+import com.mostlymusic.downloader.manager.ArtistMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
+import com.mostlymusic.downloader.manager.ProductMapper;
 
 import java.util.List;
 

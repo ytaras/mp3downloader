@@ -4,8 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
 import com.mostlymusic.downloader.GuiModule;
-import com.mostlymusic.downloader.LocalStorageModule;
 import com.mostlymusic.downloader.ManagerModule;
+import com.mostlymusic.downloader.manager.LocalStorageModule;
 
 import javax.imageio.ImageIO;
 import java.io.File;

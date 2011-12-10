@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.localdata.ItemMapper;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -55,6 +54,11 @@ public class MapperItemManager implements ItemManager {
         } else {
             return mapper.listItems(currentAccount);
         }
+    }
+
+    @Override
+    public void setStatus(long itemId, String status) {
+        mapper.setStatus(itemId, status);
     }
 
     private void fireItemUpdated(Item item) {

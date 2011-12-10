@@ -3,7 +3,7 @@ package com.mostlymusic.downloader.gui.worker;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import com.mostlymusic.downloader.localdata.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

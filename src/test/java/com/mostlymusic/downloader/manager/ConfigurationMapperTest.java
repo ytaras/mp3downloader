@@ -1,4 +1,4 @@
-package com.mostlymusic.downloader.localdata;
+package com.mostlymusic.downloader.manager;
 
 import org.junit.Before;
 import org.junit.Test;

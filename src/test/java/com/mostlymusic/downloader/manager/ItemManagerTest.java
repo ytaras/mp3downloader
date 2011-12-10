@@ -2,7 +2,6 @@ package com.mostlymusic.downloader.manager;
 
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.localdata.ItemMapper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -104,5 +103,14 @@ public class ItemManagerTest {
         // then
         assertThat(items).containsOnly(item);
 
+    }
+
+    @Test
+    public void shouldSetStatus() {
+        // given
+        // when
+        manager.setStatus(5, Item.ERROR);
+        // then
+        verify(mapper).setStatus(5, Item.ERROR);
     }
 }

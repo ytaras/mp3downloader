@@ -3,7 +3,7 @@ package com.mostlymusic.downloader.gui.worker;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.localdata.ArtistMapper;
+import com.mostlymusic.downloader.manager.ArtistMapper;
 
 /**
  * @author ytaras

@@ -1,9 +1,10 @@
-package com.mostlymusic.downloader;
+package com.mostlymusic.downloader.manager;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
-import com.mostlymusic.downloader.localdata.*;
+import com.mostlymusic.downloader.DatabaseFilename;
+import com.mostlymusic.downloader.DownloadDirectory;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.MyBatisModule;
@@ -20,10 +21,6 @@ public class LocalStorageModule extends MyBatisModule {
     private File dbFile;
 
     public LocalStorageModule() {
-    }
-
-    public LocalStorageModule(File dbFile) {
-        this.dbFile = dbFile;
     }
 
     public LocalStorageModule(boolean production) {
@@ -62,10 +59,9 @@ public class LocalStorageModule extends MyBatisModule {
     private String getDatabaseFile() {
         if (null == dbFile) {
             String userHome = System.getProperty("user.home");
-            return new File(userHome, ".mostlymusic.db").getAbsolutePath();
-        } else {
-            return dbFile.getAbsolutePath();
+            dbFile = new File(userHome, ".mostlymusic.db");
         }
+        return dbFile.getAbsolutePath();
     }
 
     public static class DataSourceProvider implements Provider<DataSource> {

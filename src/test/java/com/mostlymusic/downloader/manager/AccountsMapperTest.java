@@ -1,4 +1,4 @@
-package com.mostlymusic.downloader.localdata;
+package com.mostlymusic.downloader.manager;
 
 import com.mostlymusic.downloader.dto.Account;
 import org.junit.After;
