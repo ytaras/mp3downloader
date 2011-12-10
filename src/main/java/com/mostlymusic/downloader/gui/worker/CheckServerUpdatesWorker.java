@@ -15,7 +15,6 @@ import com.mostlymusic.downloader.gui.LogEvent;
 import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
-import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 
@@ -32,7 +31,6 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
     private Account account;
     private final ItemsService itemsService;
-    private final ItemMapper itemMapper;
     private final ProductsService productsService;
     private final ProductMapper productMapper;
     private final AccountMapper accountMapper;
@@ -44,14 +42,13 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
 
     @Inject
-    public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
+    public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel,
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
                                     ConfigurationMapper configurationMapper, DownloadFileWorkerFactory downloadFileWorkerFactory,
                                     ItemManager itemManager) {
         super(applicationModel);
         this.itemsService = itemsService;
-        this.itemMapper = itemMapper;
         this.accountMapper = accountMapper;
         this.productMapper = productMapper;
         this.productsService = productsService;
@@ -108,7 +105,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         }
 
         if (configurationMapper.getAutoDownload()) {
-            for (Item item : itemMapper.findItemsByStatus(account, Item.AVAILABLE)) {
+            for (Item item : itemManager.findItemByStatus(Item.AVAILABLE)) {
                 downloadFileWorkerFactory.createWorker(item).execute();
             }
         }

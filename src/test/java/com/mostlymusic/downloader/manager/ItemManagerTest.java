@@ -6,6 +6,10 @@ import com.mostlymusic.downloader.localdata.ItemMapper;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -59,5 +63,18 @@ public class ItemManagerTest {
         // then
         verify(mapper).updateItem(item, account);
         verify(listener).updatedItem(item);
+    }
+
+    @Test
+    public void shouldFindItemByStatus() {
+        // given
+        List<Item> expected = new LinkedList<Item>();
+        when(mapper.findItemsByStatus(account, Item.AVAILABLE)).thenReturn(expected);
+
+        // when
+        List<Item> result = manager.findItemByStatus(Item.AVAILABLE);
+
+        // then
+        assertThat(result).isSameAs(expected);
     }
 }

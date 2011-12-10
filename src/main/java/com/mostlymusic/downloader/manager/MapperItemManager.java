@@ -38,6 +38,11 @@ public class MapperItemManager implements ItemManager {
         }
     }
 
+    @Override
+    public List<Item> findItemByStatus(String status) {
+        return mapper.findItemsByStatus(accountManager.getCurrentAccount(), status);
+    }
+
     private void fireItemUpdated(Item item) {
         for (ItemMapperListener listener : listeners) {
             listener.updatedItem(item);
