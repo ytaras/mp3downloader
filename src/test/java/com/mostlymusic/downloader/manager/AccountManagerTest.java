@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
- * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.
+ *
  * @author ytaras
  */
 public class AccountManagerTest {

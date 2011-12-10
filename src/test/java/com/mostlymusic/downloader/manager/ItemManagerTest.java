@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
- * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.
+ *
  * @author ytaras
  */
 public class ItemManagerTest {
