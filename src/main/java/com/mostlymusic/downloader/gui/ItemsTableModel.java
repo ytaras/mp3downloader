@@ -7,11 +7,18 @@ import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
+import com.mostlymusic.downloader.manager.AccountManager;
+import com.mostlymusic.downloader.manager.ItemManager;
+import com.mostlymusic.downloader.manager.ItemMapperListener;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ytaras
@@ -19,10 +26,10 @@ import java.util.*;
  *         Time: 10:41 AM
  */
 public class ItemsTableModel extends AbstractTableModel {
-    private final ApplicationModel applicationModel;
     private final ItemMapper itemMapper;
     private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
+    private final AccountManager accountManager;
     private List<Item> data;
     private final Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private final Map<Long, Product> products = new HashMap<Long, Product>();
@@ -40,22 +47,33 @@ public class ItemsTableModel extends AbstractTableModel {
     private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
 
 
-    public ItemsTableModel(ApplicationModel applicationModel, ItemMapper itemMapper,
-                           ProductMapper productMapper, ArtistMapper artistMapper) {
-        this.applicationModel = applicationModel;
+    public ItemsTableModel(ItemMapper itemMapper, ItemManager itemManager,
+                           ProductMapper productMapper, ArtistMapper artistMapper, AccountManager accountManager) {
         this.itemMapper = itemMapper;
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
+        this.accountManager = accountManager;
         addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent tableModelEvent) {
                 refresh();
             }
         });
+        itemManager.addListener(new ItemMapperListener() {
+            @Override
+            public void addedItem(Item item, Account account) {
+                refresh();
+            }
+
+            @Override
+            public void updatedItem(Item item) {
+                refresh();
+            }
+        });
     }
 
     private void refresh() {
-        Account loggedAccount = applicationModel.getLoggedAccount();
+        Account loggedAccount = accountManager.getCurrentAccount();
         if (null == loggedAccount) {
             this.data = Collections.emptyList();
             this.itemIdToRowMap = Collections.emptyMap();

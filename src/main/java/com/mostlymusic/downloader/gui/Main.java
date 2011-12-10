@@ -5,6 +5,7 @@ import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
 import com.mostlymusic.downloader.GuiModule;
 import com.mostlymusic.downloader.LocalStorageModule;
+import com.mostlymusic.downloader.ManagerModule;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -23,7 +24,8 @@ public class Main {
         if (args.length == 0) {
             args = new String[]{"http://www.mostlymusic.com/"};
         }
-        Injector injector = Guice.createInjector(new LocalStorageModule(true), new DownloaderModule(args[0]), new GuiModule());
+        Injector injector = Guice.createInjector(new LocalStorageModule(true), new DownloaderModule(args[0]),
+                new GuiModule(), new ManagerModule());
         injector.getInstance(MainWindow.class);
     }
 

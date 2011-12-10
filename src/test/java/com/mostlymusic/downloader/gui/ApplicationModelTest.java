@@ -15,7 +15,7 @@ public class ApplicationModelTest {
     @Test
     public void shouldInformListenersOnStatusChange() {
         // given
-        ApplicationModel model = new DefaultApplicationModel(null, null, null, null, null, null);
+        ApplicationModel model = new DefaultApplicationModel(null, null, null, null, null, null, null, null);
         ApplicationModelListener mock = mock(ApplicationModelListener.class);
         model.addListener(mock);
 

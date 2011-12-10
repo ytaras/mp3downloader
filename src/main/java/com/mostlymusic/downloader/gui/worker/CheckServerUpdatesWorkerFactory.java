@@ -3,7 +3,6 @@ package com.mostlymusic.downloader.gui.worker;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
-import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 
 import javax.swing.*;
@@ -21,7 +20,6 @@ public class CheckServerUpdatesWorkerFactory {
     private Injector injector;
     private ConfigurationMapper configuration;
     private Timer timer;
-    private Account account;
 
     @Inject
     public void setInjector(Injector injector) {
@@ -33,24 +31,21 @@ public class CheckServerUpdatesWorkerFactory {
         this.configuration = configuration;
     }
 
-    CheckServerUpdatesWorker getInstance(Account account) {
-        CheckServerUpdatesWorker instance = injector.getInstance(CheckServerUpdatesWorker.class);
-        instance.setAccount(account);
-        return instance;
+    CheckServerUpdatesWorker getInstance() {
+        return injector.getInstance(CheckServerUpdatesWorker.class);
     }
 
-    public synchronized void schedule(final Account account) {
+    public synchronized void schedule() {
         if (null == timer) {
             this.timer = new Timer(0, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    getInstance(CheckServerUpdatesWorkerFactory.this.account).execute();
+                    getInstance().execute();
                 }
             });
         } else {
             timer.stop();
         }
-        this.account = account;
         this.timer.setDelay(configuration.getRefreshRate() * 60 * 1000);
         timer.setInitialDelay(0);
         timer.start();

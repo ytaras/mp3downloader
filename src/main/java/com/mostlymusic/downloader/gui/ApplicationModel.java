@@ -20,8 +20,6 @@ public interface ApplicationModel {
 
     ItemsTableModel getItemsTableModel();
 
-    Account getLoggedAccount();
-
     void fireCheckServerDone();
 
     void publishLogStatus(LogEvent event);

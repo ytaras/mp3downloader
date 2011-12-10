@@ -9,6 +9,8 @@ import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
+import com.mostlymusic.downloader.manager.AccountManager;
+import com.mostlymusic.downloader.manager.ItemManager;
 
 import javax.inject.Inject;
 import javax.swing.*;
@@ -27,23 +29,23 @@ public class DefaultApplicationModel implements ApplicationModel {
     private final AuthService authService;
     private final List<ApplicationModelListener> listeners = new LinkedList<ApplicationModelListener>();
     private final ItemsTableModel itemsTableModel;
-    private Account loggedAccount;
     private static final String LOGGED_IN_FORMAT = "Logged in as '%s'";
 
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
                                    final CheckServerUpdatesWorkerFactory workerFactory, ItemMapper itemMapper,
-                                   ProductMapper productMapper, ArtistMapper artistMapper) {
+                                   ProductMapper productMapper, ArtistMapper artistMapper,
+                                   final AccountManager accountManager, ItemManager itemManager) {
         this.accountMapper = accountMapper;
         this.authService = authService;
-        itemsTableModel = new ItemsTableModel(this, itemMapper, productMapper, artistMapper);
+        itemsTableModel = new ItemsTableModel(itemMapper, itemManager, productMapper, artistMapper, accountManager);
         addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(final Account account) {
                 publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
-                loggedAccount = account;
+                accountManager.setCurrentAccount(account);
                 DefaultApplicationModel.this.accountMapper.setLastLoggedIn(account.getUsername());
-                workerFactory.schedule(account);
+                workerFactory.schedule();
             }
 
             @Override
@@ -53,7 +55,7 @@ public class DefaultApplicationModel implements ApplicationModel {
 
             @Override
             public void configurationChanged() {
-                workerFactory.schedule(loggedAccount);
+                workerFactory.schedule();
             }
         });
     }
@@ -63,11 +65,6 @@ public class DefaultApplicationModel implements ApplicationModel {
     @Override
     public ItemsTableModel getItemsTableModel() {
         return itemsTableModel;
-    }
-
-    @Override
-    public Account getLoggedAccount() {
-        return loggedAccount;
     }
 
     @Override

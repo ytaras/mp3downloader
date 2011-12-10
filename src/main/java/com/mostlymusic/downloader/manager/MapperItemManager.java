@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.manager;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.localdata.ItemMapper;
@@ -8,14 +10,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author ytaras
  */
+@Singleton
 public class MapperItemManager implements ItemManager {
     private final ItemMapper mapper;
     private final AccountManager accountManager;
     private List<ItemMapperListener> listeners = new LinkedList<ItemMapperListener>();
 
+    @Inject
     public MapperItemManager(ItemMapper mapper, AccountManager accountManager) {
         this.mapper = mapper;
         this.accountManager = accountManager;

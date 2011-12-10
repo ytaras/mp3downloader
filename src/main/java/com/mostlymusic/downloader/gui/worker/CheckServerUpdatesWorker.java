@@ -16,6 +16,7 @@ import com.mostlymusic.downloader.localdata.AccountMapper;
 import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
+import com.mostlymusic.downloader.manager.AccountManager;
 import com.mostlymusic.downloader.manager.ItemManager;
 
 import java.util.List;
@@ -29,7 +30,6 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
     private static final String METADATA_FETCHED_FORMAT = "Server has %d new items";
     private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
-    private Account account;
     private final ItemsService itemsService;
     private final ProductsService productsService;
     private final ProductMapper productMapper;
@@ -39,6 +39,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final ConfigurationMapper configurationMapper;
     private final DownloadFileWorkerFactory downloadFileWorkerFactory;
     private final ItemManager itemManager;
+    private final AccountManager accountManager;
 
 
     @Inject
@@ -46,7 +47,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
                                     ConfigurationMapper configurationMapper, DownloadFileWorkerFactory downloadFileWorkerFactory,
-                                    ItemManager itemManager) {
+                                    ItemManager itemManager, AccountManager accountManager) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.accountMapper = accountMapper;
@@ -57,13 +58,14 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.configurationMapper = configurationMapper;
         this.downloadFileWorkerFactory = downloadFileWorkerFactory;
         this.itemManager = itemManager;
+        this.accountManager = accountManager;
     }
 
 
     @Override
     protected Void doInBackground() throws Exception {
         publish(new CheckServerStatusStage(null));
-        // TODO NPE is thrown here
+        Account account = accountManager.getCurrentAccount();
         Long loadedLastOrderId = account.getLastOrderId();
         ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
 
@@ -127,11 +129,6 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
     @Override
     protected void doDone(Void aVoid) {
-    }
-
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 }
 

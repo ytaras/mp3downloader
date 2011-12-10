@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.manager;
 
+import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 
 import java.util.LinkedList;
@@ -9,6 +10,7 @@ import java.util.List;
  *
  * @author ytaras
  */
+@Singleton
 public class MapperAccountManager implements AccountManager {
     private List<AccountManagerListener> listeners = new LinkedList<AccountManagerListener>();
     private Account currentAccount;
