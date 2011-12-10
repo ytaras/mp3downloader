@@ -7,7 +7,7 @@ import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
-import com.mostlymusic.downloader.gui.worker.DownloadFileWorkerFactory;
+import com.mostlymusic.downloader.gui.worker.FileDownloader;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -31,14 +31,13 @@ public class Items {
     private JPanel contentPane;
     private JTable itemsTable;
     private JButton downloadFileButton;
-    private JPanel itemsPane;
     private JLabel description;
     private JImagePane image;
     private JSplitPane splitPane;
     private ItemsTableModel itemsTableModel;
 
     @Inject
-    public Items(final DownloadFileWorkerFactory downloadFileWorkerFactory) {
+    public Items(final FileDownloader fileDownloader) {
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -67,7 +66,7 @@ public class Items {
                     }
                     Item item = itemsTableModel.getItemAt(row);
                     DownloadFileWorker downloadFileWorker =
-                            downloadFileWorkerFactory.createWorker(item);
+                            fileDownloader.createWorker(item);
                     downloadFileWorker.addPropertyChangeListener(new PropertyChangeListener() {
                         @Override
                         public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

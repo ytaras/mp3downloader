@@ -37,7 +37,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final ArtistsService artistsService;
     private final ArtistMapper artistMapper;
     private final ConfigurationMapper configurationMapper;
-    private final DownloadFileWorkerFactory downloadFileWorkerFactory;
+    private final FileDownloader fileDownloader;
     private final ItemManager itemManager;
     private final AccountManager accountManager;
 
@@ -46,7 +46,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel,
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
-                                    ConfigurationMapper configurationMapper, DownloadFileWorkerFactory downloadFileWorkerFactory,
+                                    ConfigurationMapper configurationMapper, FileDownloader fileDownloader,
                                     ItemManager itemManager, AccountManager accountManager) {
         super(applicationModel);
         this.itemsService = itemsService;
@@ -56,7 +56,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.artistsService = artistsService;
         this.artistMapper = artistMapper;
         this.configurationMapper = configurationMapper;
-        this.downloadFileWorkerFactory = downloadFileWorkerFactory;
+        this.fileDownloader = fileDownloader;
         this.itemManager = itemManager;
         this.accountManager = accountManager;
     }
@@ -108,7 +108,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
         if (configurationMapper.getAutoDownload()) {
             for (Item item : itemManager.findItemByStatus(Item.AVAILABLE)) {
-                downloadFileWorkerFactory.createWorker(item).execute();
+                fileDownloader.createWorker(item).execute();
             }
         }
         return null;

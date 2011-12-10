@@ -10,12 +10,12 @@ import com.mostlymusic.downloader.manager.ArtistMapper;
  *         Date: 9/22/11
  *         Time: 4:35 PM
  */
-public class DownloadFileWorkerFactory {
+public class FileDownloader {
     private final Injector injector;
     private final ArtistMapper artistMapper;
 
     @Inject
-    public DownloadFileWorkerFactory(Injector injector, ArtistMapper artistMapper) {
+    public FileDownloader(Injector injector, ArtistMapper artistMapper) {
         this.injector = injector;
         this.artistMapper = artistMapper;
     }
