@@ -17,6 +17,7 @@ import com.mostlymusic.downloader.localdata.ArtistMapper;
 import com.mostlymusic.downloader.localdata.ConfigurationMapper;
 import com.mostlymusic.downloader.localdata.ItemMapper;
 import com.mostlymusic.downloader.localdata.ProductMapper;
+import com.mostlymusic.downloader.manager.ItemManager;
 
 import java.util.List;
 
@@ -39,13 +40,15 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final ArtistMapper artistMapper;
     private final ConfigurationMapper configurationMapper;
     private final DownloadFileWorkerFactory downloadFileWorkerFactory;
+    private final ItemManager itemManager;
 
 
     @Inject
     public CheckServerUpdatesWorker(ItemsService itemsService, ApplicationModel applicationModel, ItemMapper itemMapper,
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
-                                    ConfigurationMapper configurationMapper, DownloadFileWorkerFactory downloadFileWorkerFactory) {
+                                    ConfigurationMapper configurationMapper, DownloadFileWorkerFactory downloadFileWorkerFactory,
+                                    ItemManager itemManager) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.itemMapper = itemMapper;
@@ -56,6 +59,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.artistMapper = artistMapper;
         this.configurationMapper = configurationMapper;
         this.downloadFileWorkerFactory = downloadFileWorkerFactory;
+        this.itemManager = itemManager;
     }
 
 
@@ -76,11 +80,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                 publish(new CheckServerStatusStage(itemsFetchedLog));
 
                 for (Item item : tracks.getItems()) {
-                    if (itemMapper.contains(item.getItemId())) {
-                        itemMapper.updateItem(item, account);
-                    } else {
-                        itemMapper.insertItem(item, account);
-                    }
+                    itemManager.saveItem(item, account);
                 }
             }
             account.setLastOrderId(ordersMetadata.getLastItemId());
