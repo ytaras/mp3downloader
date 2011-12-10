@@ -1,6 +1,5 @@
 package com.mostlymusic.downloader.manager;
 
-import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 
 /**
@@ -10,5 +9,5 @@ import com.mostlymusic.downloader.dto.Item;
 public interface ItemManager {
     void addListener(ItemMapperListener itemMapperListener);
 
-    void saveItem(Item item, Account account);
+    void saveItem(Item item);
 }

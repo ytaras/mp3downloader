@@ -25,13 +25,14 @@ public class ItemManagerTest {
     @Before
     public void setUp() throws Exception {
         mapper = mock(ItemMapper.class);
-        manager = new MapperItemManager(mapper);
+        AccountManager accountManager = new MapperAccountManager();
+        manager = new MapperItemManager(mapper, accountManager);
         listener = mock(ItemMapperListener.class);
         manager.addListener(listener);
         item = new Item();
         item.setItemId(12342);
         account = new Account();
-
+        accountManager.setCurrentAccount(account);
     }
 
     @Test
@@ -40,7 +41,7 @@ public class ItemManagerTest {
         when(mapper.contains(item.getItemId())).thenReturn(false);
 
         // when
-        manager.saveItem(item, account);
+        manager.saveItem(item);
 
         // then
         verify(mapper).insertItem(item, account);
@@ -53,10 +54,10 @@ public class ItemManagerTest {
         when(mapper.contains(item.getItemId())).thenReturn(true);
 
         // when
-        manager.saveItem(item, account);
+        manager.saveItem(item);
 
         // then
         verify(mapper).updateItem(item, account);
-        verify(listener).updatedItem(item, account);
+        verify(listener).updatedItem(item);
     }
 }

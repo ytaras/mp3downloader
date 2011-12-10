@@ -13,10 +13,12 @@ import java.util.List;
  */
 public class MapperItemManager implements ItemManager {
     private final ItemMapper mapper;
+    private final AccountManager accountManager;
     private List<ItemMapperListener> listeners = new LinkedList<ItemMapperListener>();
 
-    public MapperItemManager(ItemMapper mapper) {
+    public MapperItemManager(ItemMapper mapper, AccountManager accountManager) {
         this.mapper = mapper;
+        this.accountManager = accountManager;
     }
 
     @Override
@@ -25,19 +27,20 @@ public class MapperItemManager implements ItemManager {
     }
 
     @Override
-    public void saveItem(Item item, Account account) {
+    public void saveItem(Item item) {
+        Account account = accountManager.getCurrentAccount();
         if (mapper.contains(item.getItemId())) {
             mapper.updateItem(item, account);
-            fireItemUpdated(item, account);
+            fireItemUpdated(item);
         } else {
             mapper.insertItem(item, account);
             fireItemAdded(item, account);
         }
     }
 
-    private void fireItemUpdated(Item item, Account account) {
+    private void fireItemUpdated(Item item) {
         for (ItemMapperListener listener : listeners) {
-            listener.updatedItem(item, account);
+            listener.updatedItem(item);
         }
     }
 

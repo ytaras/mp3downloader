@@ -80,7 +80,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                 publish(new CheckServerStatusStage(itemsFetchedLog));
 
                 for (Item item : tracks.getItems()) {
-                    itemManager.saveItem(item, account);
+                    itemManager.saveItem(item);
                 }
             }
             account.setLastOrderId(ordersMetadata.getLastItemId());

@@ -1,14 +1,15 @@
 package com.mostlymusic.downloader.manager;
 
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.dto.Item;
 
 /**
  * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.
  * @author ytaras
  */
-public interface ItemMapperListener {
-    void addedItem(Item item, Account account);
+public interface AccountManager {
+    void addListener(AccountManagerListener mock);
 
-    void updatedItem(Item item);
+    void setCurrentAccount(Account account);
+
+    Account getCurrentAccount();
 }
