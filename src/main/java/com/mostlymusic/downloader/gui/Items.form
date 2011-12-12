@@ -16,7 +16,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="27dc6" binding="itemsPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+          <grid id="27dc6" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints>
               <splitpane position="right"/>
             </constraints>

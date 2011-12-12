@@ -29,4 +29,8 @@ public class FileDownloader {
 
         return instance;
     }
+
+    public void scheduleDownload(Item item) {
+        createWorker(item).execute();
+    }
 }

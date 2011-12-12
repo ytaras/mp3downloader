@@ -14,6 +14,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 /**
  * @author ytaras
@@ -49,5 +50,21 @@ public class FileDownloaderTest {
         assertThat(worker).isSameAs(downloadFileWorkerMock);
         verify(worker).setItem(item);
         verifyNoMoreInteractions(worker);
+    }
+
+    @Test
+    public void shouldScheduleDownload() {
+        // given
+        when(downloadFileWorkerMock.execute()).thenReturn(Void);
+        Item item = new Item();
+
+        // when
+        fileDownloader.scheduleDownload(item);
+
+        // then
+        verify(downloadFileWorkerMock).setItem(item);
+        verify(downloadFileWorkerMock).execute();
+        verifyNoMoreInteractions(downloadFileWorkerMock);
+
     }
 }
