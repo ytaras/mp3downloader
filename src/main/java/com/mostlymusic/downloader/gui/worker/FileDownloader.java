@@ -20,8 +20,8 @@ public class FileDownloader {
         this.artistMapper = artistMapper;
     }
 
-    public DownloadFileWorker createWorker(Item item) {
-        DownloadFileWorker instance = injector.getInstance(DownloadFileWorker.class);
+    public IDownloadFileWorker createWorker(Item item) {
+        IDownloadFileWorker instance = injector.getInstance(IDownloadFileWorker.class);
         instance.setItem(item);
         if (item.getMainArtistId() != 0) {
             instance.setArtist(artistMapper.loadArtist(item.getMainArtistId()));

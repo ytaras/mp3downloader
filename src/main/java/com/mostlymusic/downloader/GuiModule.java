@@ -1,7 +1,16 @@
 package com.mostlymusic.downloader;
 
 import com.google.inject.AbstractModule;
-import com.mostlymusic.downloader.gui.*;
+import com.mostlymusic.downloader.gui.ApplicationMenuBar;
+import com.mostlymusic.downloader.gui.ApplicationModel;
+import com.mostlymusic.downloader.gui.DefaultApplicationModel;
+import com.mostlymusic.downloader.gui.JDialogLoginDialog;
+import com.mostlymusic.downloader.gui.LoginDialog;
+import com.mostlymusic.downloader.gui.MainContainer;
+import com.mostlymusic.downloader.gui.MainLayout;
+import com.mostlymusic.downloader.gui.MainWindow;
+import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
+import com.mostlymusic.downloader.gui.worker.IDownloadFileWorker;
 
 import javax.swing.*;
 
@@ -19,6 +28,7 @@ public class GuiModule extends AbstractModule {
         bind(JMenuBar.class).to(ApplicationMenuBar.class);
         bind(MainWindow.class);
         bind(LoginDialog.class).to(JDialogLoginDialog.class);
+        bind(IDownloadFileWorker.class).to(DownloadFileWorker.class);
     }
 
 }

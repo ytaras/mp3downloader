@@ -1,11 +1,9 @@
-package com.mostlymusic.downloader.gui;
+package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
-import com.mostlymusic.downloader.gui.worker.FileDownloader;
 import com.mostlymusic.downloader.manager.ArtistMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,24 +12,23 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 /**
  * @author ytaras
  */
 public class FileDownloaderTest {
 
-    private DownloadFileWorker downloadFileWorkerMock;
+    private IDownloadFileWorker downloadFileWorkerMock;
     private Injector injector;
     private FileDownloader fileDownloader;
 
     @Before
     public void setUp() throws Exception {
-        downloadFileWorkerMock = mock(DownloadFileWorker.class);
+        downloadFileWorkerMock = mock(IDownloadFileWorker.class);
         injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-                bind(DownloadFileWorker.class).toInstance(downloadFileWorkerMock);
+                bind(IDownloadFileWorker.class).toInstance(downloadFileWorkerMock);
                 bind(ArtistMapper.class).toInstance(mock(ArtistMapper.class));
                 bind(FileDownloader.class);
             }
@@ -44,7 +41,7 @@ public class FileDownloaderTest {
         // given
         Item item = new Item();
         // when
-        DownloadFileWorker worker = fileDownloader.createWorker(item);
+        IDownloadFileWorker worker = fileDownloader.createWorker(item);
 
         // then
         assertThat(worker).isSameAs(downloadFileWorkerMock);
@@ -53,9 +50,8 @@ public class FileDownloaderTest {
     }
 
     @Test
-    public void shouldScheduleDownload() {
+    public void shouldScheduleDownload() throws Exception {
         // given
-        when(downloadFileWorkerMock.execute()).thenReturn(Void);
         Item item = new Item();
 
         // when
@@ -65,6 +61,5 @@ public class FileDownloaderTest {
         verify(downloadFileWorkerMock).setItem(item);
         verify(downloadFileWorkerMock).execute();
         verifyNoMoreInteractions(downloadFileWorkerMock);
-
     }
 }

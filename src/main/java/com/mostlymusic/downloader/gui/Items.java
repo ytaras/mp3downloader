@@ -6,8 +6,8 @@ import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
-import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
+import com.mostlymusic.downloader.gui.worker.IDownloadFileWorker;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -65,7 +65,7 @@ public class Items {
                         continue;
                     }
                     Item item = itemsTableModel.getItemAt(row);
-                    DownloadFileWorker downloadFileWorker =
+                    IDownloadFileWorker downloadFileWorker =
                             fileDownloader.createWorker(item);
                     downloadFileWorker.addPropertyChangeListener(new PropertyChangeListener() {
                         @Override
