@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  *         Date: 9/22/11
  *         Time: 11:54 AM
  */
-public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> implements IDownloadFileWorker {
+public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
     private Item item;
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
@@ -175,12 +175,10 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> im
         }
     }
 
-    @Override
     public void setItem(Item item) {
         this.item = item;
     }
 
-    @Override
     public void setArtist(Artist artist) {
         this.artist = artist;
     }

@@ -83,7 +83,12 @@ public class ConfigurationDialogTest {
     @Test
     public void shouldNotAllowInvalidValue() {
         configDialog.spinner("refreshRate").enterText("123");
+        configDialog.spinner("downloadsNumber").enterText("11");
+        configDialog.spinner("refreshRate").enterText("123");
+        configDialog.click();
         configDialog.spinner("refreshRate").requireValue(configurationMapper.getRefreshRate());
+        configDialog.spinner("downloadsNumber").requireValue(configurationMapper.getDownloadThreadsNumber());
+
     }
 
 

@@ -103,5 +103,6 @@ public class ConfigurationDialog extends JDialog {
 
     private void createUIComponents() {
         refreshRate = new JSpinner(new SpinnerNumberModel(5, 5, 60, 1));
+        downloadsNumber = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
     }
 }

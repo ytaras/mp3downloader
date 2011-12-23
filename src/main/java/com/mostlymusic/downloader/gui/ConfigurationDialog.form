@@ -88,7 +88,7 @@
               <text value="&amp;Root folder for downloaded files"/>
             </properties>
           </component>
-          <component id="69636" class="javax.swing.JSpinner" binding="downloadsNumber">
+          <component id="69636" class="javax.swing.JSpinner" binding="downloadsNumber" custom-create="true">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>

@@ -108,7 +108,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
         if (configurationMapper.getAutoDownload()) {
             for (Item item : itemManager.findItemByStatus(Item.AVAILABLE)) {
-                fileDownloader.createWorker(item).execute();
+                fileDownloader.scheduleDownload(item);
             }
         }
         return null;
