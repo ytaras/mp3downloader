@@ -71,6 +71,7 @@
                 </constraints>
                 <properties>
                   <horizontalScrollBarPolicy value="31"/>
+                  <verticalScrollBarPolicy value="22"/>
                 </properties>
                 <border type="none"/>
                 <children>
@@ -108,6 +109,7 @@
               <opaque value="false"/>
               <preferredSize width="116" height="100"/>
               <text value="Player placeholder"/>
+              <visible value="false"/>
             </properties>
           </component>
         </children>
@@ -121,6 +123,7 @@
           <minimumSize width="123" height="100"/>
           <preferredSize width="123" height="55"/>
           <text value="Banner placeholder"/>
+          <visible value="false"/>
         </properties>
       </component>
     </children>
