@@ -1,6 +1,8 @@
 package com.mostlymusic.downloader.gui;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 import javax.swing.*;
@@ -11,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
+@Singleton
 public class ConfigurationDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -27,6 +30,20 @@ public class ConfigurationDialog extends JDialog {
     public ConfigurationDialog(final ConfigurationMapper configurationMapper, ApplicationModel applicationModel) {
         this.configurationMapper = configurationMapper;
         this.applicationModel = applicationModel;
+        applicationModel.addListener(new ApplicationModelListenerAdapter() {
+            @Override
+            public void loggedIn(Account account) {
+                if (account.isCreated()) {
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            setVisible(true);
+                        }
+                    });
+
+                }
+            }
+        });
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);

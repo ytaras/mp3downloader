@@ -3,6 +3,7 @@ package com.mostlymusic.downloader;
 import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.gui.ApplicationMenuBar;
 import com.mostlymusic.downloader.gui.ApplicationModel;
+import com.mostlymusic.downloader.gui.ConfigurationDialog;
 import com.mostlymusic.downloader.gui.DefaultApplicationModel;
 import com.mostlymusic.downloader.gui.JDialogLoginDialog;
 import com.mostlymusic.downloader.gui.LoginDialog;
@@ -26,6 +27,7 @@ public class GuiModule extends AbstractModule {
         bind(JMenuBar.class).to(ApplicationMenuBar.class);
         bind(MainWindow.class);
         bind(LoginDialog.class).to(JDialogLoginDialog.class);
+        bind(ConfigurationDialog.class).asEagerSingleton();
     }
 
 }

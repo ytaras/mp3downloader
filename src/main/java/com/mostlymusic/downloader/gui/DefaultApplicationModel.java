@@ -40,7 +40,9 @@ public class DefaultApplicationModel implements ApplicationModel {
                 publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
                 accountManager.setCurrentAccount(account);
                 DefaultApplicationModel.this.accountMapper.setLastLoggedIn(account.getUsername());
-                workerFactory.schedule();
+                if (!account.isCreated()) {
+                    workerFactory.schedule();
+                }
             }
 
             @Override
@@ -115,6 +117,7 @@ public class DefaultApplicationModel implements ApplicationModel {
         if (null == account) {
             accountMapper.createAccount(new Account(login));
             account = accountMapper.findByLoginName(login);
+            account.setCreated(true);
         }
         if (savePassword) {
             account.setPassword(password);

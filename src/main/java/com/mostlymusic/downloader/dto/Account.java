@@ -13,6 +13,7 @@ public class Account {
     private Long lastOrderId;
     private boolean lastLoggedIn;
     private String password;
+    private boolean created = false;
 
     public Account() {
     }
@@ -67,14 +68,23 @@ public class Account {
         this.password = password;
     }
 
-    @SuppressWarnings({"RedundantIfStatement"})
+    public boolean isCreated() {
+        return created;
+    }
+
+    public void setCreated(boolean created) {
+        this.created = created;
+    }
+
     @Override
+    @SuppressWarnings({"RedundantIfStatement"})
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Account account = (Account) o;
 
+        if (created != account.created) return false;
         if (id != account.id) return false;
         if (lastLoggedIn != account.lastLoggedIn) return false;
         if (lastOrderId != null ? !lastOrderId.equals(account.lastOrderId) : account.lastOrderId != null) return false;
@@ -91,16 +101,21 @@ public class Account {
         result = 31 * result + (lastOrderId != null ? lastOrderId.hashCode() : 0);
         result = 31 * result + (lastLoggedIn ? 1 : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (created ? 1 : 0);
         return result;
     }
 
+
     @Override
     public String toString() {
-        return "Account{" +
-                "username='" + username + '\'' +
-                ", id=" + id +
-                ", lastOrderId=" + lastOrderId +
-                ", lastLoggedIn=" + lastLoggedIn +
-                '}';
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Account");
+        sb.append("{username='").append(username).append('\'');
+        sb.append(", id=").append(id);
+        sb.append(", lastOrderId=").append(lastOrderId);
+        sb.append(", lastLoggedIn=").append(lastLoggedIn);
+        sb.append(", created=").append(created);
+        sb.append('}');
+        return sb.toString();
     }
 }
