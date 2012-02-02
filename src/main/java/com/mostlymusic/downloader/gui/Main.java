@@ -9,9 +9,11 @@ import com.mostlymusic.downloader.manager.LocalStorageModule;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.ParseException;
 
 /**
  * @author ytaras
@@ -20,6 +22,7 @@ import java.sql.SQLException;
  */
 public class Main {
     public static void main(String[] args) throws SQLException, IOException, UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(createLookAndFeel());
         ImageIO.setUseCache(true);
         ImageIO.setCacheDirectory(createTempDirectory());
         if (args.length == 0) {
@@ -27,7 +30,6 @@ public class Main {
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(true), new DownloaderModule(args[0]),
                 new GuiModule(), new ManagerModule());
-        UIManager.setLookAndFeel(injector.getInstance(LookAndFeel.class));
         injector.getInstance(MainWindow.class);
     }
 
@@ -43,5 +45,16 @@ public class Main {
         }
         return (temp);
     }
+
+    private static LookAndFeel createLookAndFeel() {
+        SynthLookAndFeel synthLookAndFeel = new SynthLookAndFeel();
+        try {
+            synthLookAndFeel.load(GuiModule.class.getResourceAsStream("/laf.xml"), GuiModule.class);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return synthLookAndFeel;
+    }
+
 
 }

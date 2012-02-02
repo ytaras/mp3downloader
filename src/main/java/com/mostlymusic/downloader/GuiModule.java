@@ -12,8 +12,6 @@ import com.mostlymusic.downloader.gui.MainLayout;
 import com.mostlymusic.downloader.gui.MainWindow;
 
 import javax.swing.*;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import java.text.ParseException;
 
 /**
  * @author ytaras
@@ -30,17 +28,5 @@ public class GuiModule extends AbstractModule {
         bind(MainWindow.class);
         bind(LoginDialog.class).to(JDialogLoginDialog.class);
         bind(ConfigurationDialog.class).asEagerSingleton();
-        bind(LookAndFeel.class).toInstance(createLookAndFeel());
     }
-
-    private LookAndFeel createLookAndFeel() {
-        SynthLookAndFeel synthLookAndFeel = new SynthLookAndFeel();
-        try {
-            synthLookAndFeel.load(GuiModule.class.getResourceAsStream("/laf.xml"), GuiModule.class);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        return synthLookAndFeel;
-    }
-
 }
