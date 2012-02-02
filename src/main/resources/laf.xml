@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <synth>
     <style id="backingStyle">
-        <opaque value="true"/>
         <font name="Dialog" size="14"/>
         <state>
             <color value="#192a21" type="BACKGROUND"/>
@@ -9,4 +8,16 @@
         </state>
     </style>
     <bind style="backingStyle" type="region" key=".*"/>
+    <style id="textfield">
+        <opaque value="TRUE"/>
+        <insets top="4" left="6" bottom="4" right="6"/>
+        <state>
+            <font name="Verdana" size="14"/>
+            <color value="#ffffff" type="BACKGROUND"/>
+            <color value="#000000" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind style="textfield" type="region" key="TextField"/>
+    <bind style="textfield" type="region" key="PasswordField"/>
+
 </synth>
