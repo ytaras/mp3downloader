@@ -8,6 +8,7 @@ import com.mostlymusic.downloader.ManagerModule;
 import com.mostlymusic.downloader.manager.LocalStorageModule;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
  *         Time: 7:20 PM
  */
 public class Main {
-    public static void main(String[] args) throws SQLException, IOException {
+    public static void main(String[] args) throws SQLException, IOException, UnsupportedLookAndFeelException {
         ImageIO.setUseCache(true);
         ImageIO.setCacheDirectory(createTempDirectory());
         if (args.length == 0) {
@@ -26,6 +27,7 @@ public class Main {
         }
         Injector injector = Guice.createInjector(new LocalStorageModule(true), new DownloaderModule(args[0]),
                 new GuiModule(), new ManagerModule());
+        UIManager.setLookAndFeel(injector.getInstance(LookAndFeel.class));
         injector.getInstance(MainWindow.class);
     }
 
