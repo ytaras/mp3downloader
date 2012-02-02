@@ -20,4 +20,12 @@
     <bind style="textfield" type="region" key="TextField"/>
     <bind style="textfield" type="region" key="PasswordField"/>
 
+    <object id="buttonGradient" class="com.mostlymusic.downloader.gui.laf.ButtonBackgroundPainter"/>
+    <style id="button">
+        <painter method="buttonBackground" idref="buttonGradient"/>
+        <state>
+            <color value="#ffffff" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind style="button" key="button" type="region"/>
 </synth>
