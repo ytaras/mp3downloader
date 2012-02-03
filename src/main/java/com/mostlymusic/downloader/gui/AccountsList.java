@@ -80,7 +80,7 @@ public class AccountsList {
     }
 
     private void createUIComponents() throws IOException {
-        BufferedImage headerImage = ImageIO.read(AccountsList.class.getResourceAsStream("/login_header.jpg"));
+        BufferedImage headerImage = ImageIO.read(AccountsList.class.getResourceAsStream("/headers/login_window.jpg"));
         containerPane = new BackgroundPanel(headerImage, BackgroundPanel.Style.ACTUAL, 0, 0);
     }
 }

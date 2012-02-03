@@ -71,7 +71,7 @@ public class MainContainer {
         final int imageSize = 31;
         final Color color = Color.decode("#273f32");
 
-        container = new BackgroundPanel("/app_header.jpg", BackgroundPanel.Style.ACTUAL) {
+        container = new BackgroundPanel("/headers/main_window.jpg", BackgroundPanel.Style.ACTUAL) {
 
             @Override
             protected void beforeDrawImage(Graphics g) {
