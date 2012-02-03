@@ -68,6 +68,16 @@ public class MainContainer {
     }
 
     private void createUIComponents() throws IOException {
-        container = new BackgroundPanel("/app_header.jpg", BackgroundPanel.Style.ACTUAL);
+        final int imageSize = 31;
+        final Color color = Color.decode("#273f32");
+
+        container = new BackgroundPanel("/app_header.jpg", BackgroundPanel.Style.ACTUAL) {
+
+            @Override
+            protected void beforeDrawImage(Graphics g) {
+                g.setColor(color);
+                g.fillRect(0, 0, this.getWidth(), imageSize);
+            }
+        };
     }
 }

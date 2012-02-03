@@ -15,6 +15,7 @@ import java.io.IOException;
  *  non-opaque so that the custom painting can show through.
  */
 public class BackgroundPanel extends JPanel {
+
     public BackgroundPanel(String image, Style style) throws IOException {
         this(ImageIO.read(BackgroundPanel.class.getResourceAsStream(image)), style, 0, 0);
     }
@@ -127,8 +128,9 @@ public class BackgroundPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        //  Invoke the painter for the background
+        beforeDrawImage(g);
         //  Draw the image
-
         if (image == null) return;
 
         switch (style) {
@@ -147,6 +149,9 @@ public class BackgroundPanel extends JPanel {
             default:
                 drawScaled(g);
         }
+    }
+
+    protected void beforeDrawImage(Graphics g) {
     }
 
     /*
@@ -186,4 +191,5 @@ public class BackgroundPanel extends JPanel {
         float y = (height - image.getHeight(null)) * alignmentY;
         g.drawImage(image, (int) x + insets.left, (int) y + insets.top, this);
     }
+
 }
