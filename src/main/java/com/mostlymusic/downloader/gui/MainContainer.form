@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mostlymusic.downloader.gui.MainContainer">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="27dc6" binding="container" custom-create="true" layout-manager="GridBagLayout">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
@@ -8,12 +8,15 @@
     <border type="none"/>
     <children>
       <splitpane id="6f0ff" binding="splitPane">
-        <constraints border-constraint="Center"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag top="77" left="0" bottom="0" right="0" weightx="1.0" weighty="1.0" ipadx="1" ipady="1"/>
+        </constraints>
         <properties>
-          <dividerLocation value="300"/>
+          <dividerLocation value="223"/>
           <oneTouchExpandable value="true"/>
           <orientation value="0"/>
-          <resizeWeight value="0.0"/>
+          <resizeWeight value="1.0"/>
         </properties>
         <border type="none"/>
         <children>
