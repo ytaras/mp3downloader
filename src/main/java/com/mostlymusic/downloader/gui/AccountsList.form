@@ -8,8 +8,8 @@
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="27dc6" default-binding="true" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="20" vgap="20">
-        <margin top="20" left="20" bottom="20" right="20"/>
+      <grid id="27dc6" binding="containerPane" custom-create="true" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="20" vgap="20">
+        <margin top="95" left="20" bottom="20" right="20"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
