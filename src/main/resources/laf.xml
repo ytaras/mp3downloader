@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <synth>
+    <!-- Default -->
     <style id="backingStyle">
         <font name="Dialog" size="14"/>
         <state>
@@ -7,6 +8,7 @@
             <color value="#cccccc" type="FOREGROUND"/>
         </state>
     </style>
+    <!-- Combo box -->
     <bind style="backingStyle" type="region" key=".*"/>
     <style id="textfield">
         <opaque value="TRUE"/>
@@ -20,6 +22,7 @@
         </state>
     </style>
     <bind style="textfield" type="region" key="TextField"/>
+    <!-- Password -->
     <style id="passwordfield">
         <opaque value="TRUE"/>
         <insets top="4" left="6" bottom="4" right="6"/>
@@ -32,7 +35,7 @@
         </state>
     </style>
     <bind style="passwordfield" type="region" key="PasswordField"/>
-
+    <!-- Login button -->
     <object id="buttonGradient" class="com.mostlymusic.downloader.gui.laf.ButtonBackgroundPainter"/>
     <style id="button">
         <painter method="buttonBackground" idref="buttonGradient"/>
@@ -41,6 +44,7 @@
         </state>
     </style>
     <bind style="button" key="button" type="region"/>
+    <!-- Items table -->
     <style id="table">
         <state value="ENABLED">
             <color value="#79ac00" type="TEXT_FOREGROUND"/>
