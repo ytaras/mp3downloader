@@ -28,4 +28,17 @@
         </state>
     </style>
     <bind style="button" key="button" type="region"/>
+    <style id="table">
+        <state value="ENABLED">
+            <color value="#79ac00" type="TEXT_FOREGROUND"/>
+            <color value="#79ac00" type="FOREGROUND"/>
+            <color value="#142019" type="TEXT_BACKGROUND"/>
+        </state>
+        <state value="ENABLED and SELECTED">
+            <color value="#142019" type="TEXT_FOREGROUND"/>
+            <color value="#142019" type="FOREGROUND"/>
+            <color value="#79ac00" type="TEXT_BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="table" key="table" type="region"/>
 </synth>
