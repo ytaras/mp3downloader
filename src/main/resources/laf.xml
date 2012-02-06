@@ -36,14 +36,15 @@
     </style>
     <bind style="passwordfield" type="region" key="PasswordField"/>
     <!-- Login button -->
-    <object id="buttonGradient" class="com.mostlymusic.downloader.gui.laf.ButtonBackgroundPainter"/>
-    <style id="button">
-        <painter method="buttonBackground" idref="buttonGradient"/>
+    <style id="loginButton">
+        <imagePainter method="buttonBackground" path="/controls/login_button.jpg" sourceInsets="8 12 8 18"/>
+        <font name="Dialog" size="14" style="BOLD"/>
+        <insets top="5" left="8" bottom="4" right="15"/>
         <state>
             <color value="#ffffff" type="TEXT_FOREGROUND"/>
         </state>
     </style>
-    <bind style="button" key="button" type="region"/>
+    <bind style="loginButton" key="loginButton" type="name"/>
     <!-- Items table -->
     <style id="table">
         <state value="ENABLED">
