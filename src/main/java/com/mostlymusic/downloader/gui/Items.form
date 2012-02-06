@@ -29,6 +29,7 @@
                 <constraints border-constraint="South"/>
                 <properties>
                   <enabled value="false"/>
+                  <name value="downloadButton"/>
                   <text value="&amp;Download"/>
                 </properties>
               </component>
