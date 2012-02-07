@@ -8,8 +8,8 @@
             <color value="#cccccc" type="FOREGROUND"/>
         </state>
     </style>
-    <!-- Combo box -->
     <bind style="backingStyle" type="region" key=".*"/>
+    <!-- Combo box -->
     <style id="textfield">
         <opaque value="TRUE"/>
         <insets top="4" left="6" bottom="4" right="6"/>
@@ -74,4 +74,14 @@
         </state>
     </style>
     <bind style="table" key="table" type="region"/>
+    <!-- Checkbox -->
+    <style id="checkbox">
+        <imageIcon id="check_off" path="/controls/checkbox_unselected.jpg"/>
+        <imageIcon id="check_on" path="/controls/checkbox_selected.jpg"/>
+        <property key="CheckBox.icon" value="check_off"/>
+        <state value="SELECTED">
+            <property key="CheckBox.icon" value="check_on"/>
+        </state>
+    </style>
+    <bind style="checkbox" type="region" key="Checkbox"/>
 </synth>
