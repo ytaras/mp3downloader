@@ -55,6 +55,11 @@
         </state>
     </style>
     <bind style="loginButton" key="loginButton" type="name"/>
+    <!-- Combobox arrow button -->
+    <style id="arrowButton">
+        <imagePainter method="arrowButtonBackground" path="/controls/combobox_arrow_button.jpg" sourceInsets="8 8 8 8"/>
+    </style>
+    <bind style="arrowButton" key="ComboBox.arrowButton" type="name"/>
     <!-- Items table -->
     <style id="table">
         <state value="ENABLED">
