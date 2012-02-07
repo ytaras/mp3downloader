@@ -9,30 +9,30 @@
         </state>
     </style>
     <bind style="backingStyle" type="region" key=".*"/>
+    <!-- All text fields -->
+    <style id="text">
+        <font name="Verdana" size="14"/>
+        <state>
+            <color value="#333333" type="BACKGROUND"/>
+            <color value="BLACK" type="FOREGROUND"/>
+        </state>
+        <state value="SELECTED">
+            <color value="#192a21" type="TEXT_BACKGROUND"/>
+            <color value="#cccccc" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind style="text" type="region" key="TextField"/>
+    <bind style="text" type="region" key="PasswordField"/>
     <!-- Combo box -->
     <style id="textfield">
-        <opaque value="TRUE"/>
-        <insets top="4" left="6" bottom="4" right="6"/>
-        <state>
-            <font name="Verdana" size="14"/>
-            <color value="#ffffff" type="BACKGROUND"/>
-            <color value="#000000" type="TEXT_FOREGROUND"/>
-            <imagePainter method="textFieldBackground" path="/controls/text_field.jpg" sourceInsets="4 15 4 15"/>
-            <insets top="4" left="15" bottom="4" right="15"/>
-        </state>
+        <imagePainter method="textFieldBackground" path="/controls/text_field.jpg" sourceInsets="4 15 4 15"/>
+        <insets top="4" left="15" bottom="4" right="15"/>
     </style>
     <bind style="textfield" type="region" key="TextField"/>
     <!-- Password -->
     <style id="passwordfield">
-        <opaque value="TRUE"/>
-        <insets top="4" left="6" bottom="4" right="6"/>
-        <state>
-            <font name="Verdana" size="14"/>
-            <color value="#ffffff" type="BACKGROUND"/>
-            <color value="#000000" type="TEXT_FOREGROUND"/>
-            <imagePainter method="passwordFieldBackground" path="/controls/password_field.jpg" sourceInsets="4 15 4 4"/>
-            <insets top="4" left="15" bottom="4" right="4"/>
-        </state>
+        <insets top="4" left="15" bottom="4" right="4"/>
+        <imagePainter method="passwordFieldBackground" path="/controls/password_field.jpg" sourceInsets="4 15 4 4"/>
     </style>
     <bind style="passwordfield" type="region" key="PasswordField"/>
     <!-- Download button -->
