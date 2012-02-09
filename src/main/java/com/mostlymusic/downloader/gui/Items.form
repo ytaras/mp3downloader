@@ -16,7 +16,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="27dc6" layout-manager="BorderLayout" hgap="0" vgap="0">
+          <grid id="27dc6" layout-manager="GridBagLayout">
             <constraints>
               <splitpane position="right"/>
             </constraints>
@@ -25,16 +25,11 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
-                <constraints border-constraint="South"/>
-                <properties>
-                  <enabled value="false"/>
-                  <name value="downloadButton"/>
-                  <text value="&amp;Download"/>
-                </properties>
-              </component>
               <scrollpane id="9391d">
-                <constraints border-constraint="Center"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
                 <properties>
                   <preferredSize width="900" height="421"/>
                 </properties>
@@ -46,6 +41,18 @@
                   </component>
                 </children>
               </scrollpane>
+              <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <enabled value="false"/>
+                  <horizontalAlignment value="0"/>
+                  <name value="downloadButton"/>
+                  <text value="&amp;Download"/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="6bfbb" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
