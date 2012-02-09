@@ -73,7 +73,15 @@
             <color value="#79ac00" type="TEXT_BACKGROUND"/>
         </state>
     </style>
-    <bind style="table" key="table" type="region"/>
+    <bind style="table" key="Table" type="region"/>
+    <style id="table_header">
+        <font name="Dialog" size="14" style="BOLD"/>
+        <state>
+            <color value="WHITE" type="TEXT_FOREGROUND"/>
+            <color value="#273f32" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="table_header" key="TableHeader" type="region"/>
     <!-- Checkbox -->
     <style id="checkbox">
         <imageIcon id="check_off" path="/controls/checkbox_unselected.jpg"/>
