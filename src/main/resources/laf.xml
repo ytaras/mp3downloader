@@ -36,15 +36,15 @@
     </style>
     <bind style="passwordfield" type="region" key="PasswordField"/>
     <!-- Download button -->
-    <style id="button">
+    <style id="download_button">
         <imagePainter method="buttonBackground" path="/controls/download_button.jpg" sourceInsets="4 6 4 6"/>
         <font name="Dialog" size="14" style="BOLD"/>
-        <insets top="5" left="8" bottom="4" right="15"/>
+        <insets top="7" left="15" bottom="7" right="15"/>
         <state>
             <color value="#000000" type="TEXT_FOREGROUND"/>
         </state>
     </style>
-    <bind style="button" key="button" type="region"/>
+    <bind style="download_button" key="downloadButton" type="name"/>
     <!-- Login button -->
     <style id="loginButton">
         <imagePainter method="buttonBackground" path="/controls/login_button.jpg" sourceInsets="8 12 8 18"/>

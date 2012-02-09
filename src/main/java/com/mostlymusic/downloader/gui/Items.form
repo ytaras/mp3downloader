@@ -50,7 +50,7 @@
                   <enabled value="false"/>
                   <horizontalAlignment value="0"/>
                   <name value="downloadButton"/>
-                  <text value="&amp;Download"/>
+                  <text value="&amp;DOWNLOAD FILES"/>
                 </properties>
               </component>
             </children>
