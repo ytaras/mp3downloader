@@ -82,7 +82,13 @@
             <color value="#273f32" type="BACKGROUND"/>
         </state>
     </style>
+    <style id="table_header_background">
+        <imagePainter method="labelBackground"
+                      path="/controls/table_header_border.png"
+                      sourceInsets="2 2 2 4" paintCenter="false"/>
+    </style>
     <bind style="table_header" key="TableHeader.renderer" type="name"/>
+    <bind style="table_header_background" key="TableHeader.renderer" type="name"/>
     <bind style="table_header" key="TableHeader" type="region"/>
     <!-- Checkbox -->
     <style id="checkbox">
