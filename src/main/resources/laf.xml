@@ -61,19 +61,26 @@
     </style>
     <bind style="arrowButton" key="ComboBox.arrowButton" type="name"/>
     <!-- Items table -->
+    <color id="table_grid_color" value="#192a21"/>
     <style id="table">
+        <property key="Table.gridColor" type="idref" value="table_grid_color"/>
+        <font name="Arial" size="14" style="BOLD"/>
+        <insets bottom="12" top="12" left="19" right="19"/>
         <state value="ENABLED">
             <color value="#79ac00" type="TEXT_FOREGROUND"/>
             <color value="#79ac00" type="FOREGROUND"/>
             <color value="#142019" type="TEXT_BACKGROUND"/>
+            <color value="#142019" type="BACKGROUND"/>
         </state>
         <state value="ENABLED and SELECTED">
-            <color value="#142019" type="TEXT_FOREGROUND"/>
-            <color value="#142019" type="FOREGROUND"/>
-            <color value="#79ac00" type="TEXT_BACKGROUND"/>
+            <color value="GREEN" type="TEXT_FOREGROUND"/>
+            <color value="RED" type="FOREGROUND"/>
+            <color value="YELLOW" type="TEXT_BACKGROUND"/>
+            <color value="WHITE" type="BACKGROUND"/>
         </state>
     </style>
     <bind style="table" key="Table" type="region"/>
+    <bind style="table" key="Table.cellRenderer" type="name"/>
     <style id="table_header">
         <font name="Arial" size="14" style="BOLD"/>
         <insets left="20" right="51" bottom="12" top="33"/>

@@ -37,7 +37,9 @@
                 <children>
                   <component id="35c51" class="javax.swing.JTable" binding="itemsTable">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <intercellSpacing width="19" height="12"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>

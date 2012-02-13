@@ -38,6 +38,7 @@ public class Items {
     @Inject
     public Items(final FileDownloader fileDownloader) {
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
+        itemsTable.setRowHeight(30);
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
