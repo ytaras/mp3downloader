@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.gui.components.AlignedCellRenderer;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
@@ -37,8 +38,14 @@ public class Items {
 
     @Inject
     public Items(final FileDownloader fileDownloader) {
+        itemsTable.setDefaultRenderer(Object.class, new AlignedCellRenderer());
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.setRowHeight(30);
+        // FIXME Hardcode
+        itemsTable.setForeground(Color.decode("#79ac00"));
+        itemsTable.setBackground(Color.decode("#142019"));
+        itemsTable.setSelectionForeground(itemsTable.getBackground());
+        itemsTable.setSelectionBackground(itemsTable.getForeground());
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
