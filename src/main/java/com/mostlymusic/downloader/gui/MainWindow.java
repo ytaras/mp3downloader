@@ -49,6 +49,7 @@ public class MainWindow extends JFrame {
             @Override
             public void loggedIn(Account account) {
                 setVisible(true);
+                setExtendedState(MAXIMIZED_BOTH);
             }
         });
         loginDialog.showDialog(this);
