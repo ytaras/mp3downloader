@@ -95,5 +95,13 @@
         </state>
     </style>
     <bind style="checkbox" type="region" key="Checkbox"/>
+    <!-- Progress bar -->
+    <style id="progress">
+        <imagePainter method="progressBarForeground"
+                      path="/controls/progress_bar_foreground.png"
+                      sourceInsets="2 2 2 4" paintCenter="true"/>
+    </style>
+    <bind style="progress" type="region" key="ProgressBar"/>
+
 </synth>
 
