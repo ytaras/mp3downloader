@@ -44,8 +44,7 @@ public class Items {
         // FIXME Hardcode
         itemsTable.setForeground(Color.decode("#79ac00"));
         itemsTable.setBackground(Color.decode("#142019"));
-        itemsTable.setSelectionForeground(itemsTable.getBackground());
-        itemsTable.setSelectionBackground(itemsTable.getForeground());
+        itemsTable.setSelectionBackground(Color.decode("#273f32"));
         itemsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
