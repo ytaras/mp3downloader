@@ -1,8 +1,14 @@
 <?xml version="1.0" ?>
 <synth>
+    <!-- Fonts -->
+    <object id="default_font" class="com.mostlymusic.downloader.gui.laf.FontResource"
+            method="createFont">
+        <string>Regular</string>
+        <int>14</int>
+    </object>
     <!-- Default -->
     <style id="backingStyle">
-        <font name="Dialog" size="14"/>
+        <font idref="default_font"/>
         <state>
             <color value="#192a21" type="BACKGROUND"/>
             <color value="#cccccc" type="FOREGROUND"/>
