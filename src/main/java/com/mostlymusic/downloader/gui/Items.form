@@ -56,8 +56,8 @@
               </component>
             </children>
           </grid>
-          <grid id="6bfbb" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="6bfbb" binding="rightPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <splitpane position="left"/>
             </constraints>
@@ -72,13 +72,16 @@
                 </constraints>
                 <properties>
                   <noImageText value="No image"/>
+                  <visible value="false"/>
                 </properties>
               </component>
-              <scrollpane id="c2276">
+              <scrollpane id="c2276" binding="descriptionScrollPane">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <visible value="false"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <grid id="f6b6" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -97,6 +100,7 @@
                           <text value=""/>
                           <verticalAlignment value="1"/>
                           <verticalTextPosition value="1"/>
+                          <visible value="true"/>
                         </properties>
                       </component>
                     </children>

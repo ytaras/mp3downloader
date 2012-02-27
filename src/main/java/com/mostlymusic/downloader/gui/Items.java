@@ -7,6 +7,7 @@ import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.AlignedCellRenderer;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
+import com.mostlymusic.downloader.gui.components.TwoColorPanel;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
 
 import javax.imageio.ImageIO;
@@ -34,6 +35,8 @@ public class Items {
     private JLabel description;
     private JImagePane image;
     private JSplitPane splitPane;
+    private JPanel rightPanel;
+    private JScrollPane descriptionScrollPane;
     private ItemsTableModel itemsTableModel;
 
     @Inject
@@ -51,8 +54,12 @@ public class Items {
                 if (itemsTable.getSelectedRow() >= 0) {
                     final Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
                     description.setText("<html>" + product.getDescription() + "</html>");
+                    descriptionScrollPane.setVisible(true);
                     image.setImage(null);
                     new ImageFetcherSwingWorker(product, itemsTable.getSelectedRow()).execute();
+                } else {
+                    image.setVisible(false);
+                    descriptionScrollPane.setVisible(false);
                 }
                 for (int row : itemsTable.getSelectedRows()) {
                     if (!itemsTableModel.isDownloadingItemAt(row)) {
@@ -106,6 +113,13 @@ public class Items {
         itemsTable.setModel(itemsTableModel);
     }
 
+    private void createUIComponents() {
+        TwoColorPanel twoColorPanel = new TwoColorPanel();
+        twoColorPanel.setUpperColor(Color.decode("#273f32"));
+        twoColorPanel.setFirstBandHeight(60);
+        rightPanel = twoColorPanel;
+    }
+
     private class ImageFetcherSwingWorker extends SwingWorker<Image, Void> {
         private final Product product;
         private final int itemsTableModel;
@@ -125,6 +139,7 @@ public class Items {
             try {
                 if (isSelectionValid(itemsTableModel)) {
                     image.setImage(get());
+                    image.setVisible(true);
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
