@@ -14,20 +14,14 @@ public class TwoColorPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
         g.setColor(upperColor);
         g.fillRect(0, 0, getWidth(), Math.min(firstBandHeight, getHeight()));
     }
 
-    public int getFirstBandHeight() {
-        return firstBandHeight;
-    }
-
     public void setFirstBandHeight(int firstBandHeight) {
         this.firstBandHeight = firstBandHeight;
-    }
-
-    public Color getUpperColor() {
-        return upperColor;
     }
 
     public void setUpperColor(Color upperColor) {

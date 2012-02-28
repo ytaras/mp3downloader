@@ -108,6 +108,13 @@
                       sourceInsets="2 2 2 4" paintCenter="true"/>
     </style>
     <bind style="progress" type="region" key="ProgressBar"/>
-
+    <!-- Description label -->
+    <style id="description">
+        <state>
+            <opaque value="true"/>
+            <color value="BLACK" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="description" type="name" key="description"/>
 </synth>
 

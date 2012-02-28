@@ -62,6 +62,7 @@
               <splitpane position="left"/>
             </constraints>
             <properties>
+              <background awt-color="black"/>
               <minimumSize width="200" height="200"/>
             </properties>
             <border type="none"/>
@@ -95,7 +96,9 @@
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                         </constraints>
                         <properties>
+                          <background color="-16777216"/>
                           <enabled value="false"/>
+                          <name value="description"/>
                           <preferredSize width="1" height="1"/>
                           <text value=""/>
                           <verticalAlignment value="1"/>
