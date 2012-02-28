@@ -119,5 +119,20 @@
         </state>
     </style>
     <bind style="description" type="name" key="description"/>
+    <!-- Scroll bar -->
+    <style id="scrollbar_thumb">
+        <state>
+            <opaque value="true"/>
+            <color value="#79ac00" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="scrollbar_thumb" type="region" key="ScrollBarThumb"/>
+    <style id="scrollbar_track">
+        <state>
+            <opaque value="true"/>
+            <color value="#273f32" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="scrollbar_track" type="region" key="ScrollBarTrack"/>
 </synth>
 
