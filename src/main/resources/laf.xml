@@ -134,5 +134,14 @@
         </state>
     </style>
     <bind style="scrollbar_track" type="region" key="ScrollBarTrack"/>
+    <!-- Split pane -->
+    <style id="splitpane_divider">
+        <property key="SplitPane.centerOneTouchButtons" value="true" type="boolean"/>
+        <state>
+            <opaque value="true"/>
+            <color value="#273f32" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="splitpane_divider" type="region" key="SplitPaneDivider"/>
 </synth>
 
