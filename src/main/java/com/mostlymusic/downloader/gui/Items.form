@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mostlymusic.downloader.gui.Items">
-  <grid id="22b10" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="22b10" binding="contentPane" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="577" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
       <splitpane id="306a0" binding="splitPane">
-        <constraints border-constraint="Center"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
         <properties>
-          <dividerLocation value="300"/>
+          <dividerLocation value="363"/>
           <dividerSize value="10"/>
           <oneTouchExpandable value="true"/>
           <resizeWeight value="1.0"/>
@@ -42,18 +45,6 @@
                   </component>
                 </children>
               </scrollpane>
-              <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <enabled value="false"/>
-                  <horizontalAlignment value="0"/>
-                  <name value="downloadButton"/>
-                  <text value="&amp;DOWNLOAD FILES"/>
-                </properties>
-              </component>
             </children>
           </grid>
           <grid id="6bfbb" binding="rightPanel" custom-create="true" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -115,7 +106,9 @@
         </children>
       </splitpane>
       <grid id="5a4ff" layout-manager="BorderLayout" hgap="0" vgap="0">
-        <constraints border-constraint="North"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
         <properties/>
         <border type="none"/>
         <children>
@@ -135,7 +128,9 @@
         </children>
       </grid>
       <component id="758b6" class="javax.swing.JLabel">
-        <constraints border-constraint="South"/>
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
         <properties>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
@@ -146,6 +141,30 @@
           <visible value="false"/>
         </properties>
       </component>
+      <grid id="73266" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="400" bottom="0" right="0"/>
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-13421569"/>
+          <name value="downloadButtonBackground"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="860f1" class="javax.swing.JButton" binding="downloadFileButton">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="8" fill="2" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <horizontalAlignment value="0"/>
+              <name value="downloadButton"/>
+              <text value="&amp;DOWNLOAD FILES"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
     </children>
   </grid>
   <inspectionSuppressions>
