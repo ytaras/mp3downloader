@@ -1,5 +1,18 @@
 package com.mostlymusic.downloader.gui;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Product;
@@ -9,18 +22,6 @@ import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
 import com.mostlymusic.downloader.gui.components.TwoColorPanel;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
@@ -101,6 +102,8 @@ public class Items {
             }
         });
         image.setPreferredWidth(splitPane.getDividerLocation());
+
+        contentPane.setBorder(new LineBorder(Color.decode("#79ac00"), 1));
     }
 
     public JPanel getContentPane() {
