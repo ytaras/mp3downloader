@@ -72,9 +72,6 @@
         <imagePainter method="arrowButtonBackground" path="/controls/combobox_arrow_button.jpg" sourceInsets="8 8 8 8"/>
     </style>
     <bind style="arrowButton" key="ComboBox.arrowButton" type="name"/>
-    <bind style="arrowButton" key="SplitPaneDivider.leftOneTouchButton" type="name"/>
-    <bind style="arrowButton" key="SplitPaneDivider.rightOneTouchButton" type="name"/>
-    <bind style="arrowButton" key="ScrollBar.button" type="name"/>
     <!-- Items table -->
     <color id="table_grid_color" value="#192a21"/>
     <style id="table">
