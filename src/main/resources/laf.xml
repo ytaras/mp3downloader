@@ -123,6 +123,10 @@
     </style>
     <bind style="description" type="name" key="description"/>
     <!-- Scroll bar -->
+    <style id="scrollbar_arrow">
+        <imagePainter method="arrowButtonBackground" path="/controls/scrollbar_arrow.png" sourceInsets="0 0 0 0"/>
+    </style>
+    <bind key="ScrollBar.button" type="name" style="scrollbar_arrow"/>
     <style id="scrollbar_thumb">
         <state>
             <opaque value="true"/>
