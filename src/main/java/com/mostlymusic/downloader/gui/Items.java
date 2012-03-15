@@ -17,9 +17,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.gui.components.AlignedCellRenderer;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
+import com.mostlymusic.downloader.gui.components.MultiLineTableCellRenderer;
 import com.mostlymusic.downloader.gui.components.TwoColorPanel;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
 
@@ -42,7 +42,7 @@ public class Items {
 
     @Inject
     public Items(final FileDownloader fileDownloader) {
-        itemsTable.setDefaultRenderer(Object.class, new AlignedCellRenderer());
+        itemsTable.setDefaultRenderer(Object.class, new MultiLineTableCellRenderer());
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.setRowHeight(30);
         // FIXME Hardcode
