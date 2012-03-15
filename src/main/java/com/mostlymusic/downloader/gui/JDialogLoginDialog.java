@@ -1,13 +1,13 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.mostlymusic.downloader.dto.Account;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.*;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
 
 /**
  * @author ytaras

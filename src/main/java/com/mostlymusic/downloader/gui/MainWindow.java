@@ -1,15 +1,15 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Singleton;
-import com.mostlymusic.downloader.dto.Account;
-
-import javax.inject.Inject;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.inject.Inject;
+import javax.swing.*;
+
+import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
 
 /**
  * @author ytaras
@@ -27,7 +27,10 @@ public class MainWindow extends JFrame {
         setContentPane(contentPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(menuBar);
+        menuBar.setVisible(false);
         setGlassPane(progressGlassPane);
+        setUndecorated(true);
+        setMinimumSize(new Dimension(600, 400));
         pack();
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -49,7 +52,8 @@ public class MainWindow extends JFrame {
             @Override
             public void loggedIn(Account account) {
                 setVisible(true);
-                setExtendedState(MAXIMIZED_BOTH);
+                setState(NORMAL);
+                setExtendedState(MAXIMIZED_BOTH | MAXIMIZED_HORIZ | MAXIMIZED_VERT);
             }
         });
         loginDialog.showDialog(this);
