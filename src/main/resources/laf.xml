@@ -124,7 +124,18 @@
     <bind style="description" type="name" key="description"/>
     <!-- Scroll bar -->
     <style id="scrollbar_arrow">
-        <imagePainter method="arrowButtonBackground" path="/controls/scrollbar_arrow.png" sourceInsets="0 0 0 0"/>
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/scrollbar-up.png"
+                      center="true" direction="north"/>
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/scrollbar-down.png"
+                      center="true" direction="south"/>
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/scrollbar-left.png"
+                      center="true" direction="west"/>
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/scrollbar-right.png"
+                      center="true" direction="east"/>
     </style>
     <bind key="ScrollBar.button" type="name" style="scrollbar_arrow"/>
     <style id="scrollbar_thumb">
