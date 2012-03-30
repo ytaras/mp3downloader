@@ -7,9 +7,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.inject.Inject;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.gui.components.ComponentResizer;
 
 /**
  * @author ytaras
@@ -30,6 +32,10 @@ public class MainWindow extends JFrame {
         menuBar.setVisible(false);
         setGlassPane(progressGlassPane);
         setUndecorated(true);
+        ComponentResizer componentResizer = new ComponentResizer();
+        componentResizer.setSnapSize(new Dimension(10, 10));
+        componentResizer.registerComponent(this);
+        getRootPane().setBorder(new LineBorder(getBackground(), 2));
         setMinimumSize(new Dimension(600, 400));
         setPreferredSize(new Dimension(800, 600));
         pack();
