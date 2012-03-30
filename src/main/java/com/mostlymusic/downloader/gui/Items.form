@@ -16,7 +16,7 @@
           <dividerLocation value="359"/>
           <dividerSize value="10"/>
           <oneTouchExpandable value="true"/>
-          <resizeWeight value="1.0"/>
+          <resizeWeight value="0.2"/>
         </properties>
         <border type="none"/>
         <children>
