@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader.gui.components;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 
 /*
  *  Support custom painting on a panel in the form of
@@ -18,6 +18,10 @@ public class BackgroundPanel extends JPanel {
 
     public BackgroundPanel(String image, Style style) throws IOException {
         this(ImageIO.read(BackgroundPanel.class.getResourceAsStream(image)), style, 0, 0);
+    }
+
+    public Image getImage() {
+        return image;
     }
 
     public enum Style {

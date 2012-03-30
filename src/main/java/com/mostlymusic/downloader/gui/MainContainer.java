@@ -1,13 +1,15 @@
 package com.mostlymusic.downloader.gui;
 
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import javax.swing.*;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.BackgroundPanel;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
 
 /**
  * @author ytaras
@@ -79,5 +81,19 @@ public class MainContainer {
                 g.fillRect(0, 0, this.getWidth(), imageSize);
             }
         };
+        container.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                if (mouseEvent.getClickCount() >= 2 &&
+                        mouseEvent.getPoint().getY() <= ((BackgroundPanel) container).getImage().getHeight(null)) {
+                    JFrame frame = (JFrame) SwingUtilities.getRoot(container);
+                    if ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) == 0) {
+                        frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+                    } else {
+                        frame.setExtendedState(frame.getExtendedState() & ~Frame.MAXIMIZED_BOTH);
+                    }
+                }
+            }
+        });
     }
 }
