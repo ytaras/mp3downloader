@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.BackgroundPanel;
+import com.mostlymusic.downloader.gui.components.MoveMouseListener;
 
 /**
  * @author ytaras
@@ -95,5 +96,8 @@ public class MainContainer {
                 }
             }
         });
+        MoveMouseListener moveMouseListener = new MoveMouseListener(container);
+        container.addMouseListener(moveMouseListener);
+        container.addMouseMotionListener(moveMouseListener);
     }
 }
