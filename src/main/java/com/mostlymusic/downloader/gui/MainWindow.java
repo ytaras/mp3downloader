@@ -31,6 +31,7 @@ public class MainWindow extends JFrame {
         setGlassPane(progressGlassPane);
         setUndecorated(true);
         setMinimumSize(new Dimension(600, 400));
+        setPreferredSize(new Dimension(800, 600));
         pack();
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
