@@ -53,7 +53,6 @@ public class MainWindow extends JFrame {
             public void loggedIn(Account account) {
                 setVisible(true);
                 setState(NORMAL);
-                setExtendedState(MAXIMIZED_BOTH | MAXIMIZED_HORIZ | MAXIMIZED_VERT);
             }
         });
         loginDialog.showDialog(this);
@@ -68,14 +67,14 @@ public class MainWindow extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        frame.setExtendedState(frame.getExtendedState() & ~Frame.ICONIFIED);
                         frame.setVisible(true);
-                        frame.setState(JFrame.MAXIMIZED_BOTH);
                         frame.toFront();
                     }
                 });
             }
         };
-        PopupMenu popupMenu = getTrayMenu(showWindowAction);
+        PopupMenu popupMenu = getTrayMenu(showWindowAction, frame);
 
         TrayIcon trayIcon = new TrayIcon(image, "MostlyMusic Download Manager", popupMenu);
 
@@ -94,11 +93,24 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private static PopupMenu getTrayMenu(ActionListener showWindowAction) {
+    private static PopupMenu getTrayMenu(ActionListener showWindowAction, final Frame frame) {
         PopupMenu popupMenu = new PopupMenu();
-        MenuItem restore = new MenuItem("Restore");
+        final MenuItem restore = new MenuItem("Restore");
         restore.addActionListener(showWindowAction);
         popupMenu.add(restore);
+        final MenuItem hide = new MenuItem("Hide");
+        hide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED);
+                    }
+                });
+            }
+        });
+        popupMenu.add(hide);
         MenuItem exit = new MenuItem("Exit");
         exit.addActionListener(new ActionListener() {
             @Override
