@@ -30,7 +30,7 @@ public class MainContainer {
     private final DefaultListModel logListModel;
 
     @Inject
-    public MainContainer(Items items, ApplicationModel model) {
+    public MainContainer(Items items, final ApplicationModel model) {
         splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
@@ -51,12 +51,16 @@ public class MainContainer {
                     if (exception.getMessage() == null || exception.getMessage().isEmpty()) {
                         logListModel.add(0, event.toString() + " " + exception.getClass().getSimpleName());
                     } else {
-                        logListModel.add(0, exception.getMessage());
-                        logListModel.add(0, event);
+                        logListModel.add(0, event + " " + exception.getMessage());
                     }
                 } else {
                     logListModel.add(0, event);
                 }
+            }
+
+            @Override
+            public void exceptionOccurred(Throwable e) {
+                model.publishLogStatus(new LogEvent("Uncaught exception:", e));
             }
         });
         model.publishLogStatus(new LogEvent("Started application"));
