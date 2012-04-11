@@ -1,21 +1,22 @@
 package com.mostlymusic.downloader.gui.worker;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.gui.ApplicationModel;
-import com.mostlymusic.downloader.gui.ApplicationModelListenerAdapter;
-import com.mostlymusic.downloader.manager.ArtistMapper;
-import com.mostlymusic.downloader.manager.ConfigurationMapper;
-import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+import javax.swing.*;
+
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.mostlymusic.downloader.client.Artist;
+import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.gui.ApplicationModel;
+import com.mostlymusic.downloader.gui.ApplicationModelListenerAdapter;
+import com.mostlymusic.downloader.manager.ArtistMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ytaras
@@ -47,10 +48,12 @@ public class FileDownloader {
 
     private DownloadFileWorker createWorker(Item item) {
         DownloadFileWorker instance = injector.getInstance(DownloadFileWorker.class);
-        instance.setItem(item);
+        Artist artist = null;
         if (item.getMainArtistId() != 0) {
-            instance.setArtist(artistMapper.loadArtist(item.getMainArtistId()));
+            artist = artistMapper.loadArtist(item.getMainArtistId());
         }
+        instance.setDownloadData(item, artist);
+
 
         return instance;
     }

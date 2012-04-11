@@ -19,13 +19,12 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class FileDownloaderTest {
 
     private DownloadFileWorker downloadFileWorkerMock;
-    private Injector injector;
     private FileDownloader fileDownloader;
 
     @Before
     public void setUp() throws Exception {
         downloadFileWorkerMock = mock(DownloadFileWorker.class);
-        injector = Guice.createInjector(new AbstractModule() {
+        Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
                 bind(DownloadFileWorker.class).toInstance(downloadFileWorkerMock);
@@ -45,7 +44,7 @@ public class FileDownloaderTest {
         fileDownloader.scheduleDownload(item);
 
         // then
-        verify(downloadFileWorkerMock).setItem(item);
+        verify(downloadFileWorkerMock).setDownloadData(item, null);
         verifyNoMoreInteractions(downloadFileWorkerMock);
     }
 
@@ -59,7 +58,7 @@ public class FileDownloaderTest {
         fileDownloader.scheduleDownload(item, null);
 
         // then
-        verify(downloadFileWorkerMock).setItem(item);
+        verify(downloadFileWorkerMock).setDownloadData(item, null);
         verify(downloadFileWorkerMock).execute();
         verifyNoMoreInteractions(downloadFileWorkerMock);
     }

@@ -1,15 +1,5 @@
 package com.mostlymusic.downloader.gui.worker;
 
-import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.Artist;
-import com.mostlymusic.downloader.client.ItemsService;
-import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.gui.ApplicationModel;
-import com.mostlymusic.downloader.gui.LogEvent;
-import com.mostlymusic.downloader.manager.ConfigurationMapper;
-import com.mostlymusic.downloader.manager.ItemManager;
-import org.apache.commons.io.IOUtils;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -20,8 +10,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.google.inject.Inject;
+import com.mostlymusic.downloader.client.Artist;
+import com.mostlymusic.downloader.client.ItemsService;
+import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.gui.ApplicationModel;
+import com.mostlymusic.downloader.gui.LogEvent;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.ItemManager;
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ytaras
@@ -29,14 +33,18 @@ import java.util.logging.Logger;
  *         Time: 11:54 AM
  */
 public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
-    private Item item;
     private final ItemsService itemsService;
     private final ConfigurationMapper configuration;
     private final ItemManager itemManager;
     private final Logger logger;
     private static final String FILE_DOWNLOADED_FORMAT = "Track '%s' downloaded to '%s'";
     private static final String FILE_DOWNLOAD_STARTED_FORMAT = "Track '%s' download started";
+
+    private Item item;
     private Artist artist;
+
+    private ReadWriteLock configLock = new ReentrantReadWriteLock();
+    private boolean initialized;
 
     @Inject
     public DownloadFileWorker(ItemsService itemsService, ConfigurationMapper configuration, ApplicationModel model,
@@ -50,14 +58,14 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
     @Override
     public Void doInBackground() throws Exception {
-        if (null == item) {
+        if (null == getItem()) {
             throw new IllegalStateException("Not initialized worker");
         }
         try {
-            getApplicationModel().getItemsTableModel().downloadStarted(item);
-            getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, item.getLinkTitle())));
+            getApplicationModel().getItemsTableModel().downloadStarted(getItem());
+            getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOAD_STARTED_FORMAT, getItem().getLinkTitle())));
             publish(0L);
-            final Map.Entry<InputStream, Long> track = itemsService.getTrack(item);
+            final Map.Entry<InputStream, Long> track = itemsService.getTrack(getItem());
             if (track.getValue() < 0) {
                 // We don't know size of entry, so don't bother calculating
                 OutputStream outputFile = null;
@@ -71,7 +79,7 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
 
             } else {
                 // Rock-n-roll
-                getApplicationModel().getItemsTableModel().setFileSize(item, track.getValue());
+                getApplicationModel().getItemsTableModel().setFileSize(getItem(), track.getValue());
                 copy(track.getKey(), getOutputFile(), new StreamCopyListener() {
                     private long bytesWritten = 0;
 
@@ -84,34 +92,34 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Error downloading", e);
-            itemManager.setStatus(item.getItemId(), Item.ERROR);
+            itemManager.setStatus(getItem().getItemId(), Item.ERROR);
         }
-        itemManager.setStatus(item.getItemId(), Item.DOWNLOADED);
+        itemManager.setStatus(getItem().getItemId(), Item.DOWNLOADED);
         return null;
     }
 
     @Override
     protected void process(List<Long> integers) {
         Long integer = integers.get(integers.size() - 1);
-        getApplicationModel().getItemsTableModel().setDownloadProgress(item, integer);
+        getApplicationModel().getItemsTableModel().setDownloadProgress(getItem(), integer);
     }
 
     @Override
     protected void doDone(Void aVoid) {
-        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, item.getLinkTitle(),
+        getApplicationModel().publishLogStatus(new LogEvent(String.format(FILE_DOWNLOADED_FORMAT, getItem().getLinkTitle(),
                 getFile().getAbsolutePath())));
-        getApplicationModel().getItemsTableModel().downloadStopped(item);
+        getApplicationModel().getItemsTableModel().downloadStopped(getItem());
     }
 
     @Override
     protected String getErrorMessage() {
-        return "Error while downloading '" + item.getLinkTitle() + "': ";
+        return "Error while downloading '" + getItem().getLinkTitle() + "': ";
     }
 
     @Override
     protected void processException(Throwable cause) {
         super.processException(cause);
-        getApplicationModel().getItemsTableModel().downloadStopped(item);
+        getApplicationModel().getItemsTableModel().downloadStopped(getItem());
     }
 
     private FileOutputStream getOutputFile() throws FileNotFoundException {
@@ -123,28 +131,28 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         String downloadPath = configuration.getDownloadPath();
         File file = new File(downloadPath);
         String artistPath;
-        if (artist == null || artist.getName() == null || artist.getName().isEmpty()) {
+        if (getArtist() == null || getArtist().getName() == null || getArtist().getName().isEmpty()) {
             artistPath = "UnknownArtist";
         } else {
-            artistPath = artist.getName();
+            artistPath = getArtist().getName();
             artistPath = encodeFileName(artistPath);
         }
         file = new File(file, artistPath);
         String productPath;
-        if (item.getProductName() == null || item.getProductName().isEmpty()) {
+        if (getItem().getProductName() == null || getItem().getProductName().isEmpty()) {
             productPath = "UnknownAlbum";
         } else {
-            productPath = item.getProductName();
+            productPath = getItem().getProductName();
             productPath = encodeFileName(productPath);
         }
         file = new File(file, productPath);
         //noinspection ResultOfMethodCallIgnored
         file.mkdirs();
-        return new File(file, encodeFileName(item.getFileName()));
+        return new File(file, encodeFileName(getItem().getFileName()));
     }
 
     private String encodeFileName(String productPath) {
-        return productPath.replaceAll("[^\\w ]+", "");
+        return productPath.replaceAll("[^\\w\\. ]+", "");
     }
 
     private static void copy(InputStream from, OutputStream to, StreamCopyListener listener) throws IOException {
@@ -175,13 +183,41 @@ public class DownloadFileWorker extends AbstractSwingClientWorker<Void, Long> {
         }
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setDownloadData(Item item, @Nullable Artist artist) {
+        Lock lock = configLock.writeLock();
+        lock.lock();
+        try {
+            if (this.initialized) {
+                throw new IllegalStateException("trying to init already initialized file worker");
+            }
+            this.item = item;
+            this.artist = artist;
+            this.initialized = true;
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    private Item getItem() {
+        Lock lock = configLock.readLock();
+        lock.lock();
+        try {
+            return item;
+        } finally {
+            lock.unlock();
+        }
     }
+
+    private Artist getArtist() {
+        Lock lock = configLock.readLock();
+        lock.lock();
+        try {
+            return artist;
+        } finally {
+            lock.unlock();
+        }
+    }
+
 
     private interface StreamCopyListener {
         public void bytesWritten(int counter);
