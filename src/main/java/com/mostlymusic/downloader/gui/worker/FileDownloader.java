@@ -14,6 +14,7 @@ import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.ApplicationModelListenerAdapter;
+import com.mostlymusic.downloader.gui.ItemsTableModel;
 import com.mostlymusic.downloader.manager.ArtistMapper;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import org.jetbrains.annotations.Nullable;
@@ -27,16 +28,19 @@ public class FileDownloader {
     private final Injector injector;
     private final ArtistMapper artistMapper;
     private final Logger logger;
+    private final ItemsTableModel itemsTableModel;
     private AtomicInteger workingThreads = new AtomicInteger(0);
     private Queue<DownloadFileWorker> waitingQueue = new ConcurrentLinkedQueue<DownloadFileWorker>();
     private int downloadThreadsNumber;
 
     @Inject
+    // TODO Move all checks if file is downloading or scheduled to here - this will be the registry
     public FileDownloader(Injector injector, ArtistMapper artistMapper, Logger logger,
-                          final ConfigurationMapper mapper, ApplicationModel model) {
+                          final ConfigurationMapper mapper, ApplicationModel model, ItemsTableModel itemsTableModel) {
         this.injector = injector;
         this.artistMapper = artistMapper;
         this.logger = logger;
+        this.itemsTableModel = itemsTableModel;
         downloadThreadsNumber = mapper.getDownloadThreadsNumber();
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
@@ -59,6 +63,10 @@ public class FileDownloader {
     }
 
     public void scheduleDownload(Item item, @Nullable PropertyChangeListener listener) {
+        if (itemsTableModel.isScheduled(item) || itemsTableModel.isDownloading(item)) {
+            return;
+        }
+        itemsTableModel.setScheduled(item);
         DownloadFileWorker worker = createWorker(item);
         if (listener != null) {
             worker.addPropertyChangeListener(listener);

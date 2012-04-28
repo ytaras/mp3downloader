@@ -234,6 +234,14 @@ public class ItemsTableModel extends AbstractTableModel {
         return scheduledForDownload.contains(getItemAt(row).getItemId());
     }
 
+    public boolean isScheduled(Item item) {
+        return scheduledForDownload.contains(item.getItemId());
+    }
+
+    public boolean isDownloading(Item item) {
+        return downloadProgress.containsKey(item.getItemId());
+    }
+
 
     public class ItemStatus {
         private final int row;

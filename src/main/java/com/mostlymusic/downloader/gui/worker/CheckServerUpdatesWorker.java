@@ -15,6 +15,7 @@ import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ProductMapper;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -67,10 +68,12 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         Long loadedLastOrderId = account.getLastOrderId();
         ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
 
+        Config config = configService.getConfig();
+
         if (0 != ordersMetadata.getTotalItems()) {
             LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
             publish(new CheckServerStatusStage(metadataFetchedLog));
-            int pageSize = 10;
+            int pageSize = config.getMaxPageSize();
             for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
                 ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
                 LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size()));
@@ -84,7 +87,6 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             accountMapper.updateAccount(account);
         }
 
-        Config config = configService.getConfig();
 
         // TODO Those two cycles duplicate their logic
         while (!productMapper.findUnknownProducts().isEmpty()) {
