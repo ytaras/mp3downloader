@@ -21,6 +21,8 @@ import com.mostlymusic.downloader.gui.components.MoveMouseListener;
 public class MainContainer {
     public static final String ITEMS = "ITEMS";
     public static final String CONFIG = "CONFIG";
+    public static final ImageIcon COLLAPSE_ICON = new ImageIcon(MainContainer.class.getResource("/controls/collapse_config.png"));
+    public static final ImageIcon EXPAND_ICON = new ImageIcon(MainContainer.class.getResource("/controls/expand_config.png"));
 
     private JPanel container;
     private JList logList;
@@ -31,6 +33,8 @@ public class MainContainer {
     @SuppressWarnings("UnusedDeclaration")
     private JButton closeButton;
     private JButton configButton;
+
+
 
     private final CardLayout layout;
     private final DefaultListModel logListModel;
@@ -88,9 +92,10 @@ public class MainContainer {
             public void actionPerformed(ActionEvent e) {
                 if(selectedPanel.equals(ITEMS)) {
                     showPanel(CONFIG);
+                    configButton.setIcon(COLLAPSE_ICON);
                 } else {
-                    configurationDialog.saveToDB();
                     showPanel(ITEMS);
+                    configButton.setIcon(EXPAND_ICON);
                 }
             }
         });
@@ -199,3 +204,4 @@ public class MainContainer {
         reloadMaximizedStatus();
     }
 }
+
