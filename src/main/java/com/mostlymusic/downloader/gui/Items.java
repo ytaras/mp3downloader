@@ -156,7 +156,7 @@ public class Items {
 
         @Override
         protected Image doInBackground() throws Exception {
-            if (product.getMainImage() != null) {
+            if (product.getMainImage() != null && product.getMainImage() != null && !product.getMainImage().isEmpty()) {
                 return ImageIO.read(new URL(product.getMainImage()));
             }
             return null;
