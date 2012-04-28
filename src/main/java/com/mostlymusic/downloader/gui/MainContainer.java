@@ -1,8 +1,7 @@
 package com.mostlymusic.downloader.gui;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
 
@@ -25,12 +24,31 @@ public class MainContainer {
     private JList logList;
     private JPanel cardPanel;
     private JSplitPane splitPane;
+    private JButton closeButton;
+    private JButton maximizeButton;
+    private JButton configButton;
+    private JButton minimizeButton;
 
     private final CardLayout layout;
     private final DefaultListModel logListModel;
+    private final ActionListener closeAction = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.exit(1);
+        }
+    };
+    private final AbstractAction minimizeAction = new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getFrame().setState(Frame.ICONIFIED);
+        }
+    };
+    private final AbstractAction configAction;
+    private final MaximizeRestoreAction maximizeAction;
+
 
     @Inject
-    public MainContainer(Items items, final ApplicationModel model) {
+    public MainContainer(Items items, final ApplicationModel model, final ConfigurationDialog configurationDialog) {
         splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
@@ -64,6 +82,19 @@ public class MainContainer {
             }
         });
         model.publishLogStatus(new LogEvent("Started application"));
+        closeButton.addActionListener(closeAction);
+        minimizeButton.addActionListener(minimizeAction);
+        configAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Correct placement
+                configurationDialog.setVisible(true);
+            }
+        };
+        configButton.addActionListener(configAction);
+        maximizeAction = new MaximizeRestoreAction();
+        maximizeButton.addActionListener(maximizeAction);
+        maximizeButton.setIcon(maximizeAction.getIcon());
     }
 
     public Container getContentPane() {
@@ -91,11 +122,11 @@ public class MainContainer {
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() >= 2 &&
                         mouseEvent.getPoint().getY() <= ((BackgroundPanel) container).getImage().getHeight(null)) {
-                    JFrame frame = (JFrame) SwingUtilities.getRoot(container);
+                    JFrame frame = getFrame();
                     if ((frame.getExtendedState() & Frame.MAXIMIZED_BOTH) == 0) {
-                        frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+                        maximizeFrame(frame);
                     } else {
-                        frame.setExtendedState(frame.getExtendedState() & ~Frame.MAXIMIZED_BOTH);
+                        minimizeFrame(frame);
                     }
                 }
             }
@@ -103,5 +134,58 @@ public class MainContainer {
         MoveMouseListener moveMouseListener = new MoveMouseListener(container);
         container.addMouseListener(moveMouseListener);
         container.addMouseMotionListener(moveMouseListener);
+    }
+
+    private JFrame getFrame() {
+        return (JFrame) SwingUtilities.getRoot(container);
+    }
+
+    // TODO Figure out why window listener doesn't work here
+    public void reloadMaximizedStatus() {
+        maximizeAction.setMaximized((getFrame().getExtendedState() & Frame.MAXIMIZED_BOTH) != 0);
+    }
+
+    private class MaximizeRestoreAction extends AbstractAction {
+        private boolean maximized;
+        private final ImageIcon maximizeIcon;
+        private final ImageIcon restoreIcon;
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFrame frame = getFrame();
+            if (!maximized) {
+                maximizeFrame(frame);
+            } else {
+                minimizeFrame(frame);
+            }
+            maximizeButton.setIcon(getIcon());
+        }
+
+        public void setMaximized(boolean maximized) {
+            this.maximized = maximized;
+        }
+
+        public MaximizeRestoreAction() {
+            maximizeIcon = new ImageIcon(getClass().getResource("/controls/maximize_button.png"));
+            restoreIcon = new ImageIcon(getClass().getResource("/controls/restore_button.png"));
+        }
+
+        public Icon getIcon() {
+            if (maximized) {
+                return restoreIcon;
+            } else {
+                return maximizeIcon;
+            }
+        }
+    }
+
+    private void minimizeFrame(JFrame frame) {
+        frame.setExtendedState(frame.getExtendedState() & ~Frame.MAXIMIZED_BOTH);
+        reloadMaximizedStatus();
+    }
+
+    private void maximizeFrame(JFrame frame) {
+        frame.setExtendedState(frame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+        reloadMaximizedStatus();
     }
 }
