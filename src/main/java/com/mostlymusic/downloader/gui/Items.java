@@ -10,8 +10,10 @@ import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicPanelUI;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -109,7 +111,8 @@ public class Items {
         });
         image.setPreferredWidth(splitPane.getDividerLocation());
 
-        contentPane.setBorder(new LineBorder(Color.decode("#79ac00"), 1));
+        MatteBorder border = BorderFactory.createMatteBorder(0, 2, 2, 2, Color.decode("#79ac00"));
+        contentPane.setBorder(border);
     }
 
     public JPanel getContentPane() {

@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicPanelUI;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -37,6 +38,8 @@ public class MainContainer {
     private JButton configButton;
     @SuppressWarnings("UnusedDeclaration")
     private JPanel buttonBackground;
+    private JPanel rightBorder;
+    private JPanel leftBorder;
 
 
     private final CardLayout layout;
@@ -100,6 +103,11 @@ public class MainContainer {
                 }
             }
         });
+        rightBorder.setUI(new BasicPanelUI());
+        rightBorder.setBackground(Color.decode("#79ac00"));
+        leftBorder.setUI(new BasicPanelUI());
+        leftBorder.setBackground(Color.decode("#79ac00"));
+
     }
 
     void showPanel(String panel) {
