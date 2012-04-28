@@ -173,10 +173,18 @@
         <int>2</int>
         <int>255</int>
     </object>
+    <object id="TitledBorder_Line_Color" class="java.awt.Color">
+        <int>255</int>
+        <int>255</int>
+        <int>255</int>
+        <int>255</int>
+    </object>
     <object id="LineBorder" class="javax.swing.border.LineBorder">
         <object idref="TitledBorder_Color"/>
     </object>
     <defaultsProperty key="TitledBorder.border" type="idref" value="LineBorder"/>
+    <defaultsProperty key="TitledBorder.titleColor" type="idref" value="TitledBorder_Line_Color"/>
+    <defaultsProperty key="TitledBorder.font" type="idref" value="TitledBorder_Line_Font"/>
 
     <!-- Spinner -->
     <style id="spinner_up">
@@ -188,7 +196,8 @@
                       center="true" direction="south"/>
     </style>
     <style id="spinner">
-        <imagePainter method="formattedTextFieldBackground" path="/controls/spinner_background.png" sourceInsets="1 1 1 1"/>
+        <imagePainter method="formattedTextFieldBackground" path="/controls/spinner_background.png"
+                      sourceInsets="1 1 1 1"/>
         <state>
             <color value="BLACK" type="TEXT_FOREGROUND"/>
         </state>
@@ -198,5 +207,15 @@
 
     <bind key="Spinner.formattedTextField" type="name" style="spinner"/>
 
+    <!-- Config dialog -->
+    <style id="config_label">
+        <state>
+            <color value="WHITE" type="TEXT_FOREGROUND"/>
+            <color value="WHITE" type="FOREGROUND"/>
+        </state>
+    </style>
+    <bind key="config_label_max" style="config_label" type="name"/>
+    <bind key="config_label_root" style="config_label" type="name"/>
+    <bind key="config_label_rate" style="config_label" type="name"/>
+    <bind key="autoDownload" style="config_label" type="name"/>
 </synth>
-
