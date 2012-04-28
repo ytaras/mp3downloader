@@ -5,9 +5,13 @@ import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.BackgroundPanel;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
+import com.sun.java.swing.plaf.windows.WindowsSpinnerUI;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicEditorPaneUI;
 import javax.swing.plaf.basic.BasicPanelUI;
+import javax.swing.plaf.basic.BasicSpinnerUI;
+import javax.swing.plaf.basic.BasicTextFieldUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +36,7 @@ public class ConfigurationDialog extends JDialog {
     public ConfigurationDialog(final ConfigurationMapper configurationMapper, ApplicationModel applicationModel) {
         this.configurationMapper = configurationMapper;
         this.applicationModel = applicationModel;
+        setUI();
         applicationModel.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(Account account) {
@@ -94,7 +99,16 @@ public class ConfigurationDialog extends JDialog {
         refreshRate = new JSpinner(new SpinnerNumberModel(5, 5, 60, 1));
         downloadsNumber = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
         contentPane = new JPanel();
+    }
+
+    private void setUI() {
         contentPane.setBackground(Color.decode("#619400"));
         contentPane.setUI(new BasicPanelUI());
+        downloadLocation.setUI(new BasicTextFieldUI());
+        downloadLocation.setBackground(Color.WHITE);
+        downloadLocation.setForeground(Color.BLACK);
+        downloadLocation.setSelectedTextColor(Color.WHITE);
+        downloadLocation.setSelectionColor(Color.BLACK);
+        refreshRate.setUI(new WindowsSpinnerUI());
     }
 }

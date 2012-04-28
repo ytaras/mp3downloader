@@ -163,5 +163,17 @@
         </state>
     </style>
     <bind style="splitpane_divider" type="region" key="SplitPaneDivider"/>
+
+    <!-- Titled border -->
+    <object id="TitledBorder_Color" class="java.awt.Color">
+        <int>148</int>
+        <int>197</int>
+        <int>2</int>
+        <int>255</int>
+    </object>
+    <object id="LineBorder" class="javax.swing.border.LineBorder">
+        <object idref="TitledBorder_Color"/>
+    </object>
+    <defaultsProperty key="TitledBorder.border" type="idref" value="LineBorder"/>
 </synth>
 
