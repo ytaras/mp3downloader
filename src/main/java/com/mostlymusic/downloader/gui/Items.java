@@ -47,6 +47,9 @@ public class Items {
     @Inject
     public Items(final FileDownloader fileDownloader) {
         // itemsTable.setDefaultRenderer(Object.class, new MultiLineTableCellRenderer());
+        Dimension imageDim = new Dimension(-1, 240);
+        image.setMaximumSize(imageDim);
+        image.setPreferredSize(imageDim);
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.setRowHeight(30);
         // FIXME Hardcode
@@ -105,13 +108,7 @@ public class Items {
                 }
             }
         });
-        splitPane.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                image.setPreferredWidth(splitPane.getDividerLocation());
-            }
-        });
-        image.setPreferredWidth(splitPane.getDividerLocation());
+        image.setPreferredWidth(240);
 
         MatteBorder border = BorderFactory.createMatteBorder(0, 2, 2, 2, Color.decode("#79ac00"));
         contentPane.setBorder(border);
@@ -188,4 +185,5 @@ public class Items {
         return itemsTable.getSelectedRow() == row;
     }
 }
+
 

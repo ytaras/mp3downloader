@@ -49,7 +49,7 @@ public class JImagePane extends JPanel {
         if (null == image) {
             return super.getPreferredSize();
         } else {
-            return getImageSize(new Dimension(preferredWidth, Integer.MAX_VALUE));
+            return getImageSize(new Dimension(preferredWidth, -1));
         }
     }
 
@@ -59,6 +59,12 @@ public class JImagePane extends JPanel {
 
     public void setImage(@Nullable Image image) {
         this.image = image;
+        if (image == null) {
+            preferredWidth = -1;
+        } else  {
+            // FIXME
+            preferredWidth = 240;
+        }
         revalidate();
         repaint();
     }
