@@ -162,7 +162,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         return new ItemsMetadataDto(123, 345);
     }
 
-    private class OrdersHttpHandler extends JsonHttpHandler {
+    private class OrdersHttpHandler extends JsonHttpHandler<HttpEntityEnclosingRequest> {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
             for (NameValuePair pair : URLEncodedUtils.parse(httpRequest.getEntity())) {
@@ -175,7 +175,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
         }
     }
 
-    private class TracksHttpHandler extends JsonHttpHandler {
+    private class TracksHttpHandler extends JsonHttpHandler<HttpEntityEnclosingRequest> {
 
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws URISyntaxException, IOException {
@@ -209,7 +209,7 @@ public class ItemsServiceTest extends BaseHttpClientTestCase {
     private class FailHttpHandler extends JsonHttpHandler {
 
         @Override
-        protected Object getObject(HttpEntityEnclosingRequest httpRequest) {
+        protected Object getObject(HttpRequest httpRequest) {
             throw new RuntimeException("Invalid request");
         }
     }

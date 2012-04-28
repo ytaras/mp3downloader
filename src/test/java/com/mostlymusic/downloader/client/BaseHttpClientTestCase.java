@@ -43,20 +43,18 @@ public abstract class BaseHttpClientTestCase {
         localTestServer.stop();
     }
 
-    protected abstract class JsonHttpHandler implements HttpRequestHandler {
+    protected abstract class JsonHttpHandler<RequestType extends HttpRequest> implements HttpRequestHandler {
         protected String reason;
 
-        protected abstract Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception;
+        protected abstract Object getObject(RequestType httpRequest) throws Exception;
 
         @Override
         public void handle(HttpRequest httpRequest, HttpResponse httpResponse, HttpContext httpContext)
                 throws HttpException, IOException {
-            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
-                throw new RuntimeException("Should be POST");
-            }
+            verifyMethod((RequestType) httpRequest);
             Object object;
             try {
-                object = getObject((HttpEntityEnclosingRequest) httpRequest);
+                object = getObject((RequestType) httpRequest);
             } catch (Exception e) {
                 httpResponse.setStatusCode(HttpStatus.SC_BAD_REQUEST);
                 httpResponse.setEntity(new StringEntity(e.getMessage()));
@@ -64,6 +62,12 @@ public abstract class BaseHttpClientTestCase {
             }
             String json = gson.toJson(object);
             httpResponse.setEntity(new StringEntity(json, "UTF-8"));
+        }
+
+        protected void verifyMethod(RequestType httpRequest) {
+            if (!httpRequest.getRequestLine().getMethod().equalsIgnoreCase("POST")) {
+                throw new RuntimeException("Should be POST");
+            }
         }
     }
 }

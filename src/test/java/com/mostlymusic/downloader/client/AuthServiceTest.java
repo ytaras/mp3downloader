@@ -29,7 +29,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     @Override
     protected void registerHandler() {
         localTestServer.register("/download-manager/sync/loginPost/", new AuthHttpRequestHandler());
-        localTestServer.register("/download-manager/sync/itemsStatus/", new JsonHttpHandler() {
+        localTestServer.register("/download-manager/sync/itemsStatus/", new JsonHttpHandler<HttpEntityEnclosingRequest>() {
             @Override
             protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
                 Header[] cookies = httpRequest.getHeaders("Cookie");

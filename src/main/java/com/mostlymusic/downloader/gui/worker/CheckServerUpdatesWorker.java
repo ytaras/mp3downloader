@@ -88,6 +88,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
         while (!productMapper.findUnknownProducts().isEmpty()) {
             List<Long> unknownProducts = productMapper.findUnknownProducts();
+
             LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
             publish(new CheckServerStatusStage(productToFetchLog));
             List<Product> products = productsService.getProducts(unknownProducts);
