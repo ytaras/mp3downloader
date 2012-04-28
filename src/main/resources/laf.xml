@@ -240,4 +240,14 @@
     <bind key="config_label_root" style="config_label" type="name"/>
     <bind key="config_label_rate" style="config_label" type="name"/>
     <bind key="autoDownload" style="config_label" type="name"/>
+
+    <!-- Combobox list style -->
+    <style id="list">
+        <state>
+            <color value="WHITE" type="BACKGROUND"/>
+            <color value="BLACK" type="FOREGROUND"/>
+        </state>
+        <insets top="4" left="4" bottom="4" right="4"/>
+    </style>
+    <bind key="List" type="region" style="list"/>
 </synth>
