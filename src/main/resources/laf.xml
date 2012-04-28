@@ -250,5 +250,5 @@
         <insets top="4" left="4" bottom="4" right="4"/>
     </style>
     <defaultsProperty key="ComboBox.rendererUseListColors" type="boolean" value="false"/>
-    <bind key="ComboBox.listRenderer" type="name" style="list"/>
+    <bind key="ComboBox.list" type="name" style="list"/>
 </synth>
