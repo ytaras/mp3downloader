@@ -17,6 +17,7 @@ public class MoveMouseListener implements MouseListener, MouseMotionListener {
 
     Point getScreenLocation(MouseEvent e) {
         Point cursor = e.getPoint();
+        // TODO Fix
         Point target_location = this.target.getLocationOnScreen();
         return new Point((int) (target_location.getX() + cursor.getX()),
                 (int) (target_location.getY() + cursor.getY()));

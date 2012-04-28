@@ -197,6 +197,9 @@
     <style id="spinner">
         <imagePainter method="formattedTextFieldBackground" path="/controls/spinner_background.png"
                       sourceInsets="1 1 1 1"/>
+        <imagePainter method="formattedTextFieldBorder" path="/controls/spinner_background.png"
+                      sourceInsets="1 1 1 1" paintCenter="false"/>
+
         <state>
             <color value="BLACK" type="TEXT_FOREGROUND"/>
         </state>
