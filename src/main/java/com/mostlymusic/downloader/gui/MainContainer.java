@@ -38,7 +38,7 @@ public class MainContainer {
     private String selectedPanel;
 
     @Inject
-    public MainContainer(ConfigurationDialog configurationDialog, Items items, final ApplicationModel model) {
+    public MainContainer(final ConfigurationDialog configurationDialog, Items items, final ApplicationModel model) {
         splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
@@ -89,6 +89,7 @@ public class MainContainer {
                 if(selectedPanel.equals(ITEMS)) {
                     showPanel(CONFIG);
                 } else {
+                    configurationDialog.onOK();
                     showPanel(ITEMS);
                 }
             }
