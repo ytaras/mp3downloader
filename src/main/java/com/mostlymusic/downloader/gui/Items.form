@@ -14,10 +14,10 @@
         </constraints>
         <properties>
           <continuousLayout value="true"/>
-          <dividerLocation value="359"/>
+          <dividerLocation value="250"/>
           <dividerSize value="10"/>
           <oneTouchExpandable value="true"/>
-          <resizeWeight value="0.2"/>
+          <resizeWeight value="0.0"/>
         </properties>
         <border type="none"/>
         <children>
@@ -42,7 +42,10 @@
                 <children>
                   <component id="35c51" class="javax.swing.JTable" binding="itemsTable">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <autoResizeMode value="2"/>
+                      <minimumSize width="750" height="32"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>

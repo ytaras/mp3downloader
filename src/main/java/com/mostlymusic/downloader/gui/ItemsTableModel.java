@@ -68,6 +68,7 @@ public class ItemsTableModel extends AbstractTableModel {
                 refresh();
             }
         });
+
     }
 
     private void refresh() {

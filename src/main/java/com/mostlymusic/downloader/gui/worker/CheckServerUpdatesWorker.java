@@ -67,9 +67,9 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         Long loadedLastOrderId = account.getLastOrderId();
         ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
 
-        LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
-        publish(new CheckServerStatusStage(metadataFetchedLog));
         if (0 != ordersMetadata.getTotalItems()) {
+            LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
+            publish(new CheckServerStatusStage(metadataFetchedLog));
             int pageSize = 10;
             for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
                 ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);

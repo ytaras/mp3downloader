@@ -15,6 +15,8 @@ import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.ComponentResizer;
 
+import static java.lang.Math.floor;
+
 /**
  * @author ytaras
  *         Date: 11/7/11
@@ -38,8 +40,10 @@ public class MainWindow extends JFrame {
         componentResizer.setSnapSize(new Dimension(10, 10));
         componentResizer.registerComponent(this);
         getRootPane().setBorder(new LineBorder(getBackground(), 2));
-        setMinimumSize(new Dimension(600, 400));
-        setPreferredSize(new Dimension(800, 600));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        setMinimumSize(new Dimension(600, (int) Math.min(floor(screenSize.getWidth()), 850)));
+        setPreferredSize(new Dimension(800, (int) Math.min(floor(screenSize.getWidth()), 1000)));
         pack();
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {

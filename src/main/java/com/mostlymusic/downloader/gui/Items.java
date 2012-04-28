@@ -14,6 +14,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicPanelUI;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -44,7 +46,7 @@ public class Items {
 
     @Inject
     public Items(final FileDownloader fileDownloader) {
-        itemsTable.setDefaultRenderer(Object.class, new MultiLineTableCellRenderer());
+        // itemsTable.setDefaultRenderer(Object.class, new MultiLineTableCellRenderer());
         itemsTable.setDefaultRenderer(ItemsTableModel.ItemStatus.class, new ItemStatusRenderer());
         itemsTable.setRowHeight(30);
         // FIXME Hardcode
@@ -123,7 +125,25 @@ public class Items {
     public void setApplicationModel(ApplicationModel applicationModel) {
         itemsTableModel = applicationModel.getItemsTableModel();
         itemsTable.setModel(itemsTableModel);
+        setWidthAsPercentages(itemsTable, 0.2, 0.2, 0.4, 0.2);
+        itemsTable.getColumnModel().getColumn(0).setMinWidth(120);
+        itemsTable.getColumnModel().getColumn(1).setMinWidth(120);
+        itemsTable.getColumnModel().getColumn(2).setMinWidth(220);
+        itemsTable.getColumnModel().getColumn(3).setMaxWidth(120);
+        itemsTable.getColumnModel().getColumn(3).setMinWidth(120);
     }
+
+    private static void setWidthAsPercentages(JTable table,
+                                              double... percentages) {
+        final double factor = 10000;
+
+        TableColumnModel model = table.getColumnModel();
+        for (int columnIndex = 0; columnIndex < percentages.length; columnIndex++) {
+            TableColumn column = model.getColumn(columnIndex);
+            column.setPreferredWidth((int) (percentages[columnIndex] * factor));
+        }
+    }
+
 
     private void createUIComponents() {
         TwoColorPanel twoColorPanel = new TwoColorPanel();
@@ -168,3 +188,4 @@ public class Items {
         return itemsTable.getSelectedRow() == row;
     }
 }
+
