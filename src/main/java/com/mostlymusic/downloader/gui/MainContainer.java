@@ -59,6 +59,9 @@ public class MainContainer {
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(Account account) {
+                if(account.isCreated()) {
+                    configurationDialog.saveToDB();
+                }
                 showPanel(ITEMS);
             }
 
