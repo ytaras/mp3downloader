@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -23,7 +22,6 @@ import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
-import com.mostlymusic.downloader.gui.components.MultiLineTableCellRenderer;
 import com.mostlymusic.downloader.gui.components.TwoColorPanel;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
 
@@ -40,7 +38,7 @@ public class Items {
     private JLabel description;
     private JImagePane image;
     private JSplitPane splitPane;
-    private JPanel rightPanel;
+    private JPanel leftPanel;
     private JScrollPane descriptionScrollPane;
     private ItemsTableModel itemsTableModel;
 
@@ -112,6 +110,7 @@ public class Items {
 
         MatteBorder border = BorderFactory.createMatteBorder(0, 2, 2, 2, Color.decode("#79ac00"));
         contentPane.setBorder(border);
+        leftPanel.setUI(new BasicPanelUI());
     }
 
     public JPanel getContentPane() {
@@ -143,10 +142,7 @@ public class Items {
 
 
     private void createUIComponents() {
-        TwoColorPanel twoColorPanel = new TwoColorPanel();
-        twoColorPanel.setUpperColor(Color.decode("#273f32"));
-        twoColorPanel.setFirstBandHeight(60);
-        rightPanel = twoColorPanel;
+        leftPanel = new JPanel();
     }
 
     private class ImageFetcherSwingWorker extends SwingWorker<Image, Void> {
