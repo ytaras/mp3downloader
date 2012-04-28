@@ -7,6 +7,7 @@ import com.mostlymusic.downloader.gui.components.JSystemFileChooser;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 import javax.swing.*;
+import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicPanelUI;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import java.awt.*;
@@ -34,6 +35,9 @@ public class ConfigurationDialog {
         this.applicationModel = applicationModel;
         setUI();
         setContentPane(contentPane);
+
+        MatteBorder border = BorderFactory.createMatteBorder(0, 2, 2, 2, Color.decode("#79ac00"));
+        contentPane.setBorder(border);
 
         loadFromDB();
         button1.addActionListener(new ActionListener() {
