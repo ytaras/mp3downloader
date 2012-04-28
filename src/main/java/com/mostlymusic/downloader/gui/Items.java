@@ -74,7 +74,8 @@ public class Items {
                     descriptionScrollPane.setVisible(false);
                 }
                 for (int row : itemsTable.getSelectedRows()) {
-                    if (!itemsTableModel.isDownloadingItemAt(row)) {
+                    if (!itemsTableModel.isDownloadingItemAt(row) && !itemsTableModel.isScheduledItemAt(row)) {
+
                         downloadFileButton.setEnabled(true);
                         return;
                     }
@@ -86,10 +87,11 @@ public class Items {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 for (int row : itemsTable.getSelectedRows()) {
-                    if (itemsTableModel.isDownloadingItemAt(row)) {
+                    if (itemsTableModel.isDownloadingItemAt(row) || itemsTableModel.isScheduledItemAt(row)) {
                         continue;
                     }
                     Item item = itemsTableModel.getItemAt(row);
+                    itemsTableModel.setScheduled(item);
                     fileDownloader.scheduleDownload(item, new PropertyChangeListener() {
                         @Override
                         public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

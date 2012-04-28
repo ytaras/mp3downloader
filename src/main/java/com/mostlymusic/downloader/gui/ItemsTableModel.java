@@ -1,10 +1,6 @@
 package com.mostlymusic.downloader.gui;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -30,6 +26,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
     private List<Item> data;
+    private final Set<Long> scheduledForDownload = new HashSet<Long>();
     private final Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private final Map<Long, Product> products = new HashMap<Long, Product>();
     private final Map<Long, Artist> artists = new HashMap<Long, Artist>();
@@ -183,6 +180,7 @@ public class ItemsTableModel extends AbstractTableModel {
     }
 
     public void downloadStarted(Item item) {
+        scheduledForDownload.remove(item.getItemId());
         downloadProgress.put(item.getItemId(), 0L);
         fireStatusCellUpdated(item);
     }
@@ -227,6 +225,15 @@ public class ItemsTableModel extends AbstractTableModel {
         return getProduct(getItemAt(selectedRow).getProductId());
     }
 
+    public void setScheduled(Item scheduled) {
+        scheduledForDownload.add(scheduled.getItemId());
+        fireStatusCellUpdated(scheduled);
+    }
+
+    public boolean isScheduledItemAt(int row) {
+        return scheduledForDownload.contains(getItemAt(row).getItemId());
+    }
+
 
     public class ItemStatus {
         private final int row;
@@ -241,11 +248,18 @@ public class ItemsTableModel extends AbstractTableModel {
 
         @Override
         public String toString() {
+            if (isScheduled()) {
+                return "scheduled";
+            }
             return getStatus();
         }
 
         public boolean isDownloading() {
             return isDownloadingItemAt(row);
+        }
+
+        public boolean isScheduled() {
+            return isScheduledItemAt(row);
         }
 
 
