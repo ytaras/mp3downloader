@@ -53,9 +53,9 @@
         </state>
     </style>
     <style id="config_button">
-        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="4 6 4 6"/>
+        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="6 6 6 6"/>
         <font name="Dialog" size="14" style="BOLD"/>
-        <insets top="7" left="15" bottom="7" right="15"/>
+        <insets top="4" left="8" bottom="4" right="8"/>
         <state>
             <color value="#000000" type="TEXT_FOREGROUND"/>
         </state>

@@ -3,6 +3,7 @@ package com.mostlymusic.downloader.gui;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.gui.components.JSystemFileChooser;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 import javax.swing.*;
@@ -38,14 +39,14 @@ public class ConfigurationDialog {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
+                JSystemFileChooser chooser = new JSystemFileChooser();
                 String downloadLocationText = downloadLocation.getText();
                 if (!(downloadLocationText == null || downloadLocationText.isEmpty())) {
                     chooser.setCurrentDirectory(new File(downloadLocationText));
                 }
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setFileSelectionMode(JSystemFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
-                if (chooser.showOpenDialog(contentPane) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(contentPane) == JSystemFileChooser.APPROVE_OPTION) {
                     downloadLocation.setText(chooser.getSelectedFile().getAbsolutePath());
                 }
 
