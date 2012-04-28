@@ -32,14 +32,11 @@
             <children>
               <component id="f246b" class="javax.swing.JList" binding="logList">
                 <constraints/>
-                <properties>
-                  <preferredSize width="100" height="100"/>
-                </properties>
+                <properties/>
               </component>
             </children>
           </scrollpane>
-          <grid id="11dcc" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
-            <margin top="0" left="0" bottom="0" right="0"/>
+          <grid id="11dcc" layout-manager="GridBagLayout">
             <constraints>
               <splitpane position="left"/>
             </constraints>
@@ -49,6 +46,7 @@
               <grid id="340f7" binding="cardPanel" layout-manager="CardLayout" hgap="0" vgap="0">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="1.0"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -58,9 +56,12 @@
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="0.0"/>
                 </constraints>
                 <properties/>
-                <border type="none"/>
+                <border type="none">
+                  <color color="-16777216"/>
+                </border>
                 <children>
                   <component id="bca97" class="javax.swing.JButton" binding="configButton">
                     <constraints>
@@ -75,7 +76,7 @@
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="6" fill="0" indent="0" use-parent-layout="false">
-                        <preferred-size width="2" height="17"/>
+                        <preferred-size width="2" height="10"/>
                       </grid>
                     </constraints>
                     <properties/>
@@ -86,7 +87,7 @@
                     <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false">
-                        <preferred-size width="2" height="17"/>
+                        <preferred-size width="2" height="10"/>
                       </grid>
                     </constraints>
                     <properties/>
