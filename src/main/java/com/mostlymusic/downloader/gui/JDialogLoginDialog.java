@@ -49,6 +49,7 @@ public class JDialogLoginDialog implements LoginDialog {
         dialog.setUndecorated(true);
         dialog.pack();
         dialog.setResizable(false);
+        dialog.getRootPane().setDefaultButton(accountsList.getLoginButton());
         dialog.setLocationRelativeTo(window);
         dialog.setVisible(true);
     }

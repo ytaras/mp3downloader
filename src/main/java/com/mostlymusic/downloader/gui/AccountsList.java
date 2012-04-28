@@ -25,6 +25,7 @@ public class AccountsList {
     private JCheckBox rememberPassword;
     @SuppressWarnings("UnusedDeclaration")
     private JPanel containerPane;
+    @SuppressWarnings("UnusedDeclaration")
     private JButton closeButton;
     private final AbstractAction loginAction;
 
@@ -85,5 +86,9 @@ public class AccountsList {
         BufferedImage headerImage = ImageIO.read(AccountsList.class.getResourceAsStream("/headers/login_window.jpg"));
         containerPane = new BackgroundPanel(headerImage, BackgroundPanel.Style.ACTUAL, 0, 0);
         closeButton = new CloseButton();
+    }
+
+    public JButton getLoginButton() {
+        return loginButton;
     }
 }

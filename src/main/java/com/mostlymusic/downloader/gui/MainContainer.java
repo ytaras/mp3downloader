@@ -20,6 +20,7 @@ import com.mostlymusic.downloader.gui.components.MoveMouseListener;
 @Singleton
 public class MainContainer {
     private static final String ITEMS = "ITEMS";
+    public static final String CONFIG = "CONFIG";
 
     private JPanel container;
     private JList logList;
@@ -29,24 +30,26 @@ public class MainContainer {
     private JButton minimizeButton;
     @SuppressWarnings("UnusedDeclaration")
     private JButton closeButton;
+    private JButton configButton;
 
     private final CardLayout layout;
     private final DefaultListModel logListModel;
     private final MaximizeRestoreAction maximizeAction;
-
+    private String selectedPanel;
 
     @Inject
-    public MainContainer(Items items, final ApplicationModel model) {
+    public MainContainer(ConfigurationDialog configurationDialog, Items items, final ApplicationModel model) {
         splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
-        layout.show(this.cardPanel, ITEMS);
+        setConfigButton(configurationDialog);
+        showPanel(ITEMS);
         logListModel = new DefaultListModel();
         logList.setModel(logListModel);
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(Account account) {
-                layout.show(cardPanel, ITEMS);
+                showPanel(ITEMS);
             }
 
             @SuppressWarnings({"ThrowableResultOfMethodCallIgnored"})
@@ -80,6 +83,25 @@ public class MainContainer {
         maximizeAction = new MaximizeRestoreAction();
         maximizeButton.addActionListener(maximizeAction);
         maximizeButton.setIcon(maximizeAction.getIcon());
+        configButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(selectedPanel.equals(ITEMS)) {
+                    showPanel(CONFIG);
+                } else {
+                    showPanel(ITEMS);
+                }
+            }
+        });
+    }
+
+    private void showPanel(String panel) {
+        layout.show(this.cardPanel, panel);
+        this.selectedPanel = panel;
+    }
+
+    private void setConfigButton(ConfigurationDialog configurationDialog) {
+        cardPanel.add(configurationDialog.getContentPane(), CONFIG);
     }
 
     public Container getContentPane() {
