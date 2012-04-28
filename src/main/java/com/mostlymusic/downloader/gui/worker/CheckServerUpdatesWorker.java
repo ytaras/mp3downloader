@@ -97,18 +97,24 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             publish(new CheckServerStatusStage(productToFetchLog));
             List<Product> products = productsService.getProducts(unknownProducts);
             for (Product product : products) {
-                productMapper.insertProduct(product);
+                if (productMapper.productExists(product.getProductId())) {
+                    productMapper.updateProduct(product);
+                } else {
+                    productMapper.insertProduct(product);
+                }
                 unknownProducts.remove(product.getProductId());
             }
 
             for (long id : unknownProducts) {
                 // We requested server for those IPs but it didn't return
                 // Put stub here
-                Product unknownProductStub = new Product();
-                unknownProductStub.setProductId(id);
-                unknownProductStub.setName("UNKNOWN");
-                unknownProductStub.setDescription("UNKNOWN");
-                productMapper.insertProduct(unknownProductStub);
+                if (!productMapper.productExists(id)) {
+                    Product unknownProductStub = new Product();
+                    unknownProductStub.setProductId(id);
+                    unknownProductStub.setName("UNKNOWN");
+                    unknownProductStub.setDescription("UNKNOWN");
+                    productMapper.insertProduct(unknownProductStub);
+                }
             }
         }
 
@@ -120,9 +126,13 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             LogEvent artistsToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
             publish(new CheckServerStatusStage(artistsToFetchLog));
             List<Artist> artists = artistsService.getArtists(unknownArtists);
-            for (Artist product : artists) {
-                artistMapper.insertArtist(product);
-                unknownArtists.remove(product.getArtistId());
+            for (Artist artist : artists) {
+                if (artistMapper.artistExists(artist.getArtistId())) {
+                    artistMapper.updateArtist(artist);
+                } else {
+                    artistMapper.insertArtist(artist);
+                }
+                unknownArtists.remove(artist.getArtistId());
             }
 
             for (Long id : unknownArtists) {

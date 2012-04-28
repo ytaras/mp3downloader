@@ -19,7 +19,7 @@ import com.mostlymusic.downloader.gui.components.MoveMouseListener;
  */
 @Singleton
 public class MainContainer {
-    private static final String ITEMS = "ITEMS";
+    public static final String ITEMS = "ITEMS";
     public static final String CONFIG = "CONFIG";
 
     private JPanel container;
@@ -89,20 +89,21 @@ public class MainContainer {
                 if(selectedPanel.equals(ITEMS)) {
                     showPanel(CONFIG);
                 } else {
-                    configurationDialog.onOK();
+                    configurationDialog.saveToDB();
                     showPanel(ITEMS);
                 }
             }
         });
     }
 
-    private void showPanel(String panel) {
+    void showPanel(String panel) {
         layout.show(this.cardPanel, panel);
         this.selectedPanel = panel;
     }
 
     private void setConfigButton(ConfigurationDialog configurationDialog) {
         cardPanel.add(configurationDialog.getContentPane(), CONFIG);
+        configurationDialog.setFrame(this);
     }
 
     public Container getContentPane() {

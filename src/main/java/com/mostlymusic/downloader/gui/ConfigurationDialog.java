@@ -3,26 +3,18 @@ package com.mostlymusic.downloader.gui;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.gui.components.BackgroundPanel;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
-import com.sun.java.swing.plaf.windows.WindowsSpinnerUI;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicEditorPaneUI;
 import javax.swing.plaf.basic.BasicPanelUI;
-import javax.swing.plaf.basic.BasicSpinnerUI;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 
 @Singleton
-public class ConfigurationDialog extends JDialog {
-    // TODO COnvert to panel fully
+public class ConfigurationDialog {
     private JPanel contentPane;
     private JSpinner refreshRate;
     private JTextField downloadLocation;
@@ -33,43 +25,16 @@ public class ConfigurationDialog extends JDialog {
     private JButton OKButton;
     private final ConfigurationMapper configurationMapper;
     private final ApplicationModel applicationModel;
+    private MainContainer frame;
 
     @Inject
     public ConfigurationDialog(final ConfigurationMapper configurationMapper, ApplicationModel applicationModel) {
         this.configurationMapper = configurationMapper;
         this.applicationModel = applicationModel;
         setUI();
-        applicationModel.addListener(new ApplicationModelListenerAdapter() {
-            @Override
-            public void loggedIn(Account account) {
-                if (account.isCreated()) {
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            setVisible(true);
-                        }
-                    });
-
-                }
-            }
-        });
         setContentPane(contentPane);
-        setModal(true);
-// call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        new SwingWorker<Void, Void>() {
-
-            @Override
-            protected Void doInBackground() throws Exception {
-                downloadLocation.setText(configurationMapper.getDownloadPath());
-                refreshRate.setValue(configurationMapper.getRefreshRate());
-                autoDownload.setSelected(configurationMapper.getAutoDownload());
-                downloadsNumber.setValue(configurationMapper.getDownloadThreadsNumber());
-                return null;
-            }
-        }.execute();
-        pack();
+        loadFromDB();
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,21 +45,51 @@ public class ConfigurationDialog extends JDialog {
                 }
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 chooser.setAcceptAllFileFilterUsed(false);
-                if (chooser.showOpenDialog(ConfigurationDialog.this) == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(contentPane) == JFileChooser.APPROVE_OPTION) {
                     downloadLocation.setText(chooser.getSelectedFile().getAbsolutePath());
                 }
 
             }
         });
+        OKButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveToDB();
+                frame.showPanel(MainContainer.ITEMS);
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFromDB();
+                frame.showPanel(MainContainer.ITEMS);
+            }
+        });
     }
 
-    public void onOK() {
-        configurationMapper.setRefreshRate((Integer) refreshRate.getValue());
-        configurationMapper.setDownloadPath(downloadLocation.getText());
-        configurationMapper.setDownloadThreadsNumber((Integer) downloadsNumber.getValue());
-        configurationMapper.setAutoDownload(autoDownload.isSelected());
-        applicationModel.fireConfigurationChanged();
-        dispose();
+    private void loadFromDB() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                downloadLocation.setText(configurationMapper.getDownloadPath());
+                refreshRate.setValue(configurationMapper.getRefreshRate());
+                autoDownload.setSelected(configurationMapper.getAutoDownload());
+                downloadsNumber.setValue(configurationMapper.getDownloadThreadsNumber());
+            }
+        });
+    }
+
+    public void saveToDB() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                configurationMapper.setRefreshRate((Integer) refreshRate.getValue());
+                configurationMapper.setDownloadPath(downloadLocation.getText());
+                configurationMapper.setDownloadThreadsNumber((Integer) downloadsNumber.getValue());
+                configurationMapper.setAutoDownload(autoDownload.isSelected());
+                applicationModel.fireConfigurationChanged();
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -111,5 +106,17 @@ public class ConfigurationDialog extends JDialog {
         downloadLocation.setForeground(Color.BLACK);
         downloadLocation.setSelectedTextColor(Color.WHITE);
         downloadLocation.setSelectionColor(Color.BLACK);
+    }
+
+    public void setFrame(MainContainer frame) {
+        this.frame = frame;
+    }
+
+    public void setContentPane(JPanel contentPane) {
+        this.contentPane = contentPane;
+    }
+
+    public JPanel getContentPane() {
+        return contentPane;
     }
 }

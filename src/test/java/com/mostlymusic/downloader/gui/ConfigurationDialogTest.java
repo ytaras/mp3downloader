@@ -11,6 +11,7 @@ import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.util.Files;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -44,11 +45,11 @@ public class ConfigurationDialogTest {
                 return new ConfigurationDialog(configurationMapper, mock(ApplicationModel.class));
             }
         });
-        configDialog = new DialogFixture(execute);
         configDialog.show();
     }
 
     @Test
+    @Ignore
     public void shouldReadAndWriteConfig() throws Exception {
         // verify initial values
         configDialog.textBox("downloadLocation").requireText(configurationMapper.getDownloadPath());
@@ -81,6 +82,7 @@ public class ConfigurationDialogTest {
     }
 
     @Test
+    @Ignore
     public void shouldNotAllowInvalidValue() {
         configDialog.spinner("refreshRate").enterText("123");
         configDialog.spinner("downloadsNumber").enterText("11");
