@@ -1,8 +1,10 @@
 package com.mostlymusic.downloader.gui.components;
 
+import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
 import sun.swing.FilePane;
 
 import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import java.awt.*;
 
 /**
@@ -15,7 +17,15 @@ public class JSystemFileChooser extends JFileChooser {
     public void updateUI() {
         LookAndFeel old = UIManager.getLookAndFeel();
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            String os = System.getProperty("os.name").toLowerCase();
+            if (os.contains("mac")) {
+                // We are on Mac - we have to show some Swing FileChooser(because AWT can't select dirs)
+                // but systemLookAndFeel for mac has a bug
+                UIManager.setLookAndFeel(new MetalLookAndFeel());
+            } else {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
+
         } catch (Throwable ex) {
             old = null;
         }
@@ -57,5 +67,4 @@ public class JSystemFileChooser extends JFileChooser {
         }
         return null;
     }
-
 }
