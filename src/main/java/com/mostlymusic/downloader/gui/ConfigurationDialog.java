@@ -29,6 +29,8 @@ public class ConfigurationDialog extends JDialog {
     private JButton button1;
     private JSpinner downloadsNumber;
     private JCheckBox autoDownload;
+    private JButton cancelButton;
+    private JButton OKButton;
     private final ConfigurationMapper configurationMapper;
     private final ApplicationModel applicationModel;
 
