@@ -8,6 +8,7 @@ import javax.swing.*;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.gui.components.MoveMouseListener;
 
 /**
  * @author ytaras
@@ -36,15 +37,20 @@ public class JDialogLoginDialog implements LoginDialog {
         accountsList.setModel(applicationModel);
         JPanel contentPane = accountsList.getContentPane();
         dialog.getContentPane().add(contentPane, BorderLayout.CENTER);
+        MoveMouseListener moveMouseListener = new MoveMouseListener(accountsList.getContentPane());
+        accountsList.getContentPane().addMouseListener(moveMouseListener);
+        accountsList.getContentPane().addMouseMotionListener(moveMouseListener);
         dialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 System.exit(0);
             }
         });
+        dialog.setUndecorated(true);
         dialog.pack();
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(window);
         dialog.setVisible(true);
     }
 }
+

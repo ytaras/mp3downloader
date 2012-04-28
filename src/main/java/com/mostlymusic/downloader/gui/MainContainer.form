@@ -56,15 +56,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="ad137" class="javax.swing.JButton" binding="closeButton">
-            <constraints>
-              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <icon value="controls/close_button.png"/>
-              <text value=""/>
-            </properties>
-          </component>
           <component id="7d64d" class="javax.swing.JButton" binding="maximizeButton">
             <constraints>
               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -87,6 +78,12 @@
               <icon value="controls/minimize_button.png"/>
               <text value=""/>
             </properties>
+          </component>
+          <component id="9df44" class="javax.swing.JButton" binding="closeButton" custom-create="true">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties/>
           </component>
         </children>
       </grid>

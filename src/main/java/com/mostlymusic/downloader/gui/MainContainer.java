@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.BackgroundPanel;
+import com.mostlymusic.downloader.gui.components.CloseButton;
 import com.mostlymusic.downloader.gui.components.MoveMouseListener;
 
 /**
@@ -24,30 +25,18 @@ public class MainContainer {
     private JList logList;
     private JPanel cardPanel;
     private JSplitPane splitPane;
-    private JButton closeButton;
     private JButton maximizeButton;
-    private JButton configButton;
     private JButton minimizeButton;
+    @SuppressWarnings("UnusedDeclaration")
+    private JButton closeButton;
 
     private final CardLayout layout;
     private final DefaultListModel logListModel;
-    private final ActionListener closeAction = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.exit(1);
-        }
-    };
-    private final AbstractAction minimizeAction = new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            getFrame().setState(Frame.ICONIFIED);
-        }
-    };
     private final MaximizeRestoreAction maximizeAction;
 
 
     @Inject
-    public MainContainer(Items items, final ApplicationModel model, final ConfigurationDialog configurationDialog) {
+    public MainContainer(Items items, final ApplicationModel model) {
         splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
@@ -81,7 +70,12 @@ public class MainContainer {
             }
         });
         model.publishLogStatus(new LogEvent("Started application"));
-        closeButton.addActionListener(closeAction);
+        AbstractAction minimizeAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getFrame().setState(Frame.ICONIFIED);
+            }
+        };
         minimizeButton.addActionListener(minimizeAction);
         maximizeAction = new MaximizeRestoreAction();
         maximizeButton.addActionListener(maximizeAction);
@@ -125,6 +119,7 @@ public class MainContainer {
         MoveMouseListener moveMouseListener = new MoveMouseListener(container);
         container.addMouseListener(moveMouseListener);
         container.addMouseMotionListener(moveMouseListener);
+        closeButton = new CloseButton();
     }
 
     private JFrame getFrame() {

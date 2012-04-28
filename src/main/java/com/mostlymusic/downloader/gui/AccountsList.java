@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.gui;
 
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.BackgroundPanel;
+import com.mostlymusic.downloader.gui.components.CloseButton;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class AccountsList {
     private JCheckBox rememberPassword;
     @SuppressWarnings("UnusedDeclaration")
     private JPanel containerPane;
+    private JButton closeButton;
     private final AbstractAction loginAction;
 
     public AccountsList() {
@@ -82,5 +84,6 @@ public class AccountsList {
     private void createUIComponents() throws IOException {
         BufferedImage headerImage = ImageIO.read(AccountsList.class.getResourceAsStream("/headers/login_window.jpg"));
         containerPane = new BackgroundPanel(headerImage, BackgroundPanel.Style.ACTUAL, 0, 0);
+        closeButton = new CloseButton();
     }
 }
