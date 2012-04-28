@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <synth>
+    <object id="debug" class="com.mostlymusic.downloader.gui.components.DebugPainter"/>
+
     <!-- Fonts -->
     <object id="default_font" class="com.mostlymusic.downloader.gui.laf.FontResource"
             method="createFont">
@@ -175,5 +177,26 @@
         <object idref="TitledBorder_Color"/>
     </object>
     <defaultsProperty key="TitledBorder.border" type="idref" value="LineBorder"/>
+
+    <!-- Spinner -->
+    <style id="spinner_up">
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/spinner_up.png"
+                      center="true" direction="north"/>
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/spinner_down.png"
+                      center="true" direction="south"/>
+    </style>
+    <style id="spinner">
+        <imagePainter method="formattedTextFieldBackground" path="/controls/spinner_background.png" sourceInsets="1 1 1 1"/>
+        <state>
+            <color value="BLACK" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind key="Spinner.previousButton" type="name" style="spinner_up"/>
+    <bind key="Spinner.nextButton" type="name" style="spinner_up"/>
+
+    <bind key="Spinner.formattedTextField" type="name" style="spinner"/>
+
 </synth>
 

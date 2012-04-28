@@ -109,6 +109,5 @@ public class ConfigurationDialog extends JDialog {
         downloadLocation.setForeground(Color.BLACK);
         downloadLocation.setSelectedTextColor(Color.WHITE);
         downloadLocation.setSelectionColor(Color.BLACK);
-        refreshRate.setUI(new WindowsSpinnerUI());
     }
 }
