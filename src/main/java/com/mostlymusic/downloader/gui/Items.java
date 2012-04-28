@@ -54,10 +54,16 @@ public class Items {
             public void valueChanged(ListSelectionEvent listSelectionEvent) {
                 if (itemsTable.getSelectedRow() >= 0) {
                     final Product product = itemsTableModel.getProductAt(itemsTable.getSelectedRow());
-                    description.setText("<html>" + product.getDescription() + "</html>");
+                    if (product != null) {
+                        description.setText("<html>" + product.getDescription() + "</html>");
+                    } else {
+                        description.setText("");
+                    }
                     descriptionScrollPane.setVisible(true);
                     image.setImage(null);
-                    new ImageFetcherSwingWorker(product, itemsTable.getSelectedRow()).execute();
+                    if (product != null) {
+                        new ImageFetcherSwingWorker(product, itemsTable.getSelectedRow()).execute();
+                    }
                 } else {
                     image.setVisible(false);
                     descriptionScrollPane.setVisible(false);
