@@ -43,7 +43,6 @@ public class MainContainer {
             getFrame().setState(Frame.ICONIFIED);
         }
     };
-    private final AbstractAction configAction;
     private final MaximizeRestoreAction maximizeAction;
 
 
@@ -84,14 +83,6 @@ public class MainContainer {
         model.publishLogStatus(new LogEvent("Started application"));
         closeButton.addActionListener(closeAction);
         minimizeButton.addActionListener(minimizeAction);
-        configAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Correct placement
-                configurationDialog.setVisible(true);
-            }
-        };
-        configButton.addActionListener(configAction);
         maximizeAction = new MaximizeRestoreAction();
         maximizeButton.addActionListener(maximizeAction);
         maximizeButton.setIcon(maximizeAction.getIcon());
