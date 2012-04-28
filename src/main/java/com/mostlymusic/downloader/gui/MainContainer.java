@@ -33,7 +33,8 @@ public class MainContainer {
     @SuppressWarnings("UnusedDeclaration")
     private JButton closeButton;
     private JButton configButton;
-
+    @SuppressWarnings("UnusedDeclaration")
+    private JPanel buttonBackground;
 
 
     private final CardLayout layout;
@@ -149,6 +150,7 @@ public class MainContainer {
         container.addMouseListener(moveMouseListener);
         container.addMouseMotionListener(moveMouseListener);
         closeButton = new CloseButton();
+        buttonBackground = new BackgroundPanel("/controls/button_background.png", BackgroundPanel.Style.SCALED);
     }
 
     private JFrame getFrame() {
