@@ -13,6 +13,7 @@
           <gridbag top="50" left="0" bottom="0" right="0" weightx="1.0" weighty="1.0" ipadx="1" ipady="1"/>
         </constraints>
         <properties>
+          <continuousLayout value="true"/>
           <dividerLocation value="172"/>
           <oneTouchExpandable value="true"/>
           <orientation value="0"/>
