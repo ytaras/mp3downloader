@@ -53,9 +53,17 @@
         </state>
     </style>
     <style id="config_button">
-        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="6 6 6 6"/>
+        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="5 5 5 5"/>
         <font name="Dialog" size="14" style="BOLD"/>
         <insets top="4" left="8" bottom="4" right="8"/>
+        <state>
+            <color value="#000000" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <style id="show_chooser_button">
+        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="5 5 5 5"/>
+        <font name="Dialog" size="14" style="BOLD"/>
+        <insets top="0" left="0" bottom="0" right="0"/>
         <state>
             <color value="#000000" type="TEXT_FOREGROUND"/>
         </state>
@@ -63,6 +71,7 @@
 
     <bind style="download_button" key="downloadButton" type="name"/>
     <bind style="config_button" key="okButton" type="name"/>
+    <bind style="show_chooser_button" key="showChooserButton" type="name"/>
     <bind style="config_button" key="cancelButton" type="name"/>
     <style id="download_button_background">
         <state>
@@ -70,8 +79,6 @@
         </state>
     </style>
     <bind style="download_button_background" key="downloadButtonBackground" type="name"/>
-    <bind style="download_button_background" key="okButton" type="name"/>
-    <bind style="download_button_background" key="cancelButton" type="name"/>
     <!-- Login button -->
     <style id="loginButton">
         <imagePainter method="buttonBackground" path="/controls/login_button.jpg" sourceInsets="8 12 8 18"/>
