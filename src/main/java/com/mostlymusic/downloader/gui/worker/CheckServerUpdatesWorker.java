@@ -1,11 +1,7 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.Artist;
-import com.mostlymusic.downloader.client.ArtistsService;
-import com.mostlymusic.downloader.client.ItemsService;
-import com.mostlymusic.downloader.client.Product;
-import com.mostlymusic.downloader.client.ProductsService;
+import com.mostlymusic.downloader.client.*;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -40,6 +36,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final FileDownloader fileDownloader;
     private final ItemManager itemManager;
     private final AccountManager accountManager;
+    private final ConfigService configService;
 
 
     @Inject
@@ -47,7 +44,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
                                     ConfigurationMapper configurationMapper, FileDownloader fileDownloader,
-                                    ItemManager itemManager, AccountManager accountManager) {
+                                    ItemManager itemManager, AccountManager accountManager, ConfigService configService) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.accountMapper = accountMapper;
@@ -59,6 +56,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.fileDownloader = fileDownloader;
         this.itemManager = itemManager;
         this.accountManager = accountManager;
+        this.configService = configService;
     }
 
 
@@ -86,24 +84,53 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             accountMapper.updateAccount(account);
         }
 
+        Config config = configService.getConfig();
+
+        // TODO Those two cycles duplicate their logic
         while (!productMapper.findUnknownProducts().isEmpty()) {
             List<Long> unknownProducts = productMapper.findUnknownProducts();
+            if (unknownProducts.size() > config.getMaxPageSize()) {
+                unknownProducts = unknownProducts.subList(0, config.getMaxPageSize());
+            }
 
             LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
             publish(new CheckServerStatusStage(productToFetchLog));
             List<Product> products = productsService.getProducts(unknownProducts);
             for (Product product : products) {
                 productMapper.insertProduct(product);
+                unknownProducts.remove(product.getProductId());
+            }
+
+            for (long id : unknownProducts) {
+                // We requested server for those IPs but it didn't return
+                // Put stub here
+                Product unknownProductStub = new Product();
+                unknownProductStub.setProductId(id);
+                unknownProductStub.setName("UNKNOWN");
+                unknownProductStub.setDescription("UNKNOWN");
+                productMapper.insertProduct(unknownProductStub);
             }
         }
 
         while (!artistMapper.findUnknownArtists().isEmpty()) {
             List<Long> unknownArtists = artistMapper.findUnknownArtists();
+            if (unknownArtists.size() > config.getMaxPageSize()) {
+                unknownArtists = unknownArtists.subList(0, config.getMaxPageSize());
+            }
             LogEvent artistsToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
             publish(new CheckServerStatusStage(artistsToFetchLog));
-            List<Artist> products = artistsService.getArtists(unknownArtists);
-            for (Artist product : products) {
+            List<Artist> artists = artistsService.getArtists(unknownArtists);
+            for (Artist product : artists) {
                 artistMapper.insertArtist(product);
+                unknownArtists.remove(product.getArtistId());
+            }
+
+            for (Long id : unknownArtists) {
+                // We requested server for those IPs but it didn't return
+                // Put stub here
+                Artist unknownArtistStub = new Artist();
+                unknownArtistStub.setArtistId(id);
+                artistMapper.insertArtist(unknownArtistStub);
             }
         }
 

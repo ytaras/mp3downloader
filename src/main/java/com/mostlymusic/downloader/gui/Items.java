@@ -140,7 +140,10 @@ public class Items {
 
         @Override
         protected Image doInBackground() throws Exception {
-            return ImageIO.read(new URL(product.getMainImage()));
+            if (product.getMainImage() != null) {
+                return ImageIO.read(new URL(product.getMainImage()));
+            }
+            return null;
         }
 
         @Override
