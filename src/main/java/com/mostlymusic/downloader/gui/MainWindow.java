@@ -70,7 +70,7 @@ public class MainWindow extends JFrame {
 
     private static void addTray(final JFrame frame) {
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/favicon.jpg"));
+        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/windows7_icon3232.png"));
         ActionListener showWindowAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -133,6 +133,8 @@ public class MainWindow extends JFrame {
     }
 
     public static List<Image> getIcons() {
-        return Collections.singletonList(new ImageIcon(MainWindow.class.getResource("/windows7_icon.png")).getImage());
+        return Arrays.asList(new ImageIcon(MainWindow.class.getResource("/windows7_icon.png")).getImage(),
+                new ImageIcon(MainWindow.class.getResource("/windows7_icon1616.png")).getImage(),
+                new ImageIcon(MainWindow.class.getResource("/windows7_icon3232.png")).getImage());
     }
 }
