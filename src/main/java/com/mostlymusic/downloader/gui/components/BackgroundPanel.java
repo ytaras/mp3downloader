@@ -20,6 +20,10 @@ public class BackgroundPanel extends JPanel {
         this(ImageIO.read(BackgroundPanel.class.getResourceAsStream(image)), style, 0, 0);
     }
 
+    public BackgroundPanel(Image image, Style style) {
+        this(image, style, 0, 0);
+    }
+
     public Image getImage() {
         return image;
     }

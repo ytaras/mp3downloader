@@ -23,6 +23,8 @@ public class MainContainer {
     public static final String CONFIG = "CONFIG";
     public static final ImageIcon COLLAPSE_ICON = new ImageIcon(MainContainer.class.getResource("/controls/collapse_config.png"));
     public static final ImageIcon EXPAND_ICON = new ImageIcon(MainContainer.class.getResource("/controls/expand_config.png"));
+    public static final Image COLLAPSED_BG_ICON = new ImageIcon(MainContainer.class.getResource("/controls/button_background_collapsed.png")).getImage();
+    public static final Image EXPANDED_BG_ICON = new ImageIcon(MainContainer.class.getResource("/controls/button_background_expanded.png")).getImage();
 
     private JPanel container;
     private JList logList;
@@ -91,18 +93,23 @@ public class MainContainer {
         configButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(selectedPanel.equals(ITEMS)) {
+                if (selectedPanel.equals(ITEMS)) {
                     showPanel(CONFIG);
-                    configButton.setIcon(COLLAPSE_ICON);
                 } else {
                     showPanel(ITEMS);
-                    configButton.setIcon(EXPAND_ICON);
                 }
             }
         });
     }
 
     void showPanel(String panel) {
+        if (panel.equals(CONFIG)) {
+            configButton.setIcon(COLLAPSE_ICON);
+            ((BackgroundPanel) buttonBackground).setImage(EXPANDED_BG_ICON);
+        } else {
+            configButton.setIcon(EXPAND_ICON);
+            ((BackgroundPanel) buttonBackground).setImage(COLLAPSED_BG_ICON);
+        }
         layout.show(this.cardPanel, panel);
         this.selectedPanel = panel;
     }
@@ -150,7 +157,7 @@ public class MainContainer {
         container.addMouseListener(moveMouseListener);
         container.addMouseMotionListener(moveMouseListener);
         closeButton = new CloseButton();
-        buttonBackground = new BackgroundPanel("/controls/button_background.png", BackgroundPanel.Style.SCALED);
+        buttonBackground = new BackgroundPanel(COLLAPSED_BG_ICON, BackgroundPanel.Style.SCALED);
     }
 
     private JFrame getFrame() {
