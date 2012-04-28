@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.*;
+import java.util.List;
 import javax.inject.Inject;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -63,6 +65,7 @@ public class MainWindow extends JFrame {
             }
         });
         loginDialog.showDialog(this);
+        setIconImages(getIcons());
     }
 
     private static void addTray(final JFrame frame) {
@@ -129,4 +132,7 @@ public class MainWindow extends JFrame {
         return popupMenu;
     }
 
+    public static List<Image> getIcons() {
+        return Collections.singletonList(new ImageIcon(MainWindow.class.getResource("/windows7_icon.png")).getImage());
+    }
 }
