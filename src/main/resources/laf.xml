@@ -184,7 +184,6 @@
     </object>
     <defaultsProperty key="TitledBorder.border" type="idref" value="LineBorder"/>
     <defaultsProperty key="TitledBorder.titleColor" type="idref" value="TitledBorder_Line_Color"/>
-    <defaultsProperty key="TitledBorder.font" type="idref" value="TitledBorder_Line_Font"/>
 
     <!-- Spinner -->
     <style id="spinner_up">
