@@ -3,9 +3,12 @@ package com.mostlymusic.downloader.gui;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.gui.components.BackgroundPanel;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicPanelUI;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -90,5 +93,8 @@ public class ConfigurationDialog extends JDialog {
     private void createUIComponents() {
         refreshRate = new JSpinner(new SpinnerNumberModel(5, 5, 60, 1));
         downloadsNumber = new JSpinner(new SpinnerNumberModel(1, 1, 10, 1));
+        contentPane = new JPanel();
+        contentPane.setBackground(Color.decode("#619400"));
+        contentPane.setUI(new BasicPanelUI());
     }
 }
