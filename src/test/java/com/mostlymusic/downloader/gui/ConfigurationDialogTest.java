@@ -1,5 +1,8 @@
 package com.mostlymusic.downloader.gui;
 
+import java.io.File;
+import javax.swing.*;
+
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import org.fest.swing.core.EmergencyAbortListener;
 import org.fest.swing.edt.GuiActionRunner;
@@ -11,10 +14,7 @@ import org.fest.swing.fixture.JFileChooserFixture;
 import org.fest.util.Files;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.File;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -32,6 +32,7 @@ public class ConfigurationDialogTest {
 
     @Before
     public void setUp() throws Exception {
+        JDialog jDialog = new JDialog();
         listener = EmergencyAbortListener.registerInToolkit();
         configurationMapper = mock(ConfigurationMapper.class);
         String tempFolder = Files.newTemporaryFolder().getAbsolutePath();
@@ -45,11 +46,13 @@ public class ConfigurationDialogTest {
                 return new ConfigurationDialog(configurationMapper, mock(ApplicationModel.class));
             }
         });
+        jDialog.getContentPane().add(execute.getContentPane());
+        configDialog = new DialogFixture(jDialog);
+
         configDialog.show();
     }
 
     @Test
-    @Ignore
     public void shouldReadAndWriteConfig() throws Exception {
         // verify initial values
         configDialog.textBox("downloadLocation").requireText(configurationMapper.getDownloadPath());
@@ -62,7 +65,7 @@ public class ConfigurationDialogTest {
         }
         configDialog.spinner("downloadsNumber").requireValue(configurationMapper.getDownloadThreadsNumber());
         // select directory
-        configDialog.button("showChooser").click();
+        configDialog.button("showChooserButton").click();
         JFileChooserFixture fileChooser = JFileChooserFinder.findFileChooser().using(configDialog.robot);
         File newDir = new File(configurationMapper.getDownloadPath()).getParentFile();
         fileChooser.setCurrentDirectory(newDir);
@@ -74,7 +77,7 @@ public class ConfigurationDialogTest {
         autoDownload.check();
 
         // save
-        configDialog.button("ok").click();
+        configDialog.button("okButton").click();
         verify(configurationMapper).setDownloadPath(newDir.getAbsolutePath());
         verify(configurationMapper).setRefreshRate(44);
         verify(configurationMapper).setDownloadThreadsNumber(5);
@@ -82,7 +85,6 @@ public class ConfigurationDialogTest {
     }
 
     @Test
-    @Ignore
     public void shouldNotAllowInvalidValue() {
         configDialog.spinner("refreshRate").enterText("123");
         configDialog.spinner("downloadsNumber").enterText("11");
