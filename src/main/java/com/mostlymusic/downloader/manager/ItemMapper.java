@@ -1,13 +1,13 @@
 package com.mostlymusic.downloader.manager;
 
+import java.util.List;
+
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-
-import java.util.List;
 
 /**
  * @author ytaras

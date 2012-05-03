@@ -1,8 +1,8 @@
 package com.mostlymusic.downloader.manager;
 
-import com.mostlymusic.downloader.dto.Item;
-
 import java.util.List;
+
+import com.mostlymusic.downloader.dto.Item;
 
 /**
  *

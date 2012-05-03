@@ -1,15 +1,14 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import org.apache.http.client.methods.HttpGet;
-
-import java.io.IOException;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Created with IntelliJ IDEA.

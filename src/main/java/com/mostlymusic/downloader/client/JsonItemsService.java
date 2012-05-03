@@ -1,5 +1,12 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Map;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.ServiceUrl;
@@ -12,13 +19,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.AbstractMap;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * @author ytaras

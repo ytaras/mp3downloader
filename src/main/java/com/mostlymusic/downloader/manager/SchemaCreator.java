@@ -1,13 +1,13 @@
 package com.mostlymusic.downloader.manager;
 
-import com.google.inject.Inject;
-import com.mostlymusic.downloader.DownloadDirectory;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.DataSource;
+
+import com.google.inject.Inject;
+import com.mostlymusic.downloader.DownloadDirectory;
 
 /**
  * @author ytaras

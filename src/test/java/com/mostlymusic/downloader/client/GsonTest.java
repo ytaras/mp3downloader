@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader.client;
 
+import java.util.Date;
+
 import com.google.gson.Gson;
 import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.dto.Item;
@@ -7,8 +9,6 @@ import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Date;
 
 import static org.fest.assertions.Assertions.assertThat;
 

@@ -1,5 +1,9 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+
 import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.client.exceptions.ForbiddenException;
@@ -14,10 +18,6 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 
 /**
  * @author ytaras

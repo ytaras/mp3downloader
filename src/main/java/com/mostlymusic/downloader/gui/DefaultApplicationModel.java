@@ -1,5 +1,11 @@
 package com.mostlymusic.downloader.gui;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+import javax.inject.Inject;
+import javax.swing.*;
+
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.dto.Account;
@@ -7,12 +13,6 @@ import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorkerFactory;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.manager.AccountManager;
 import com.mostlymusic.downloader.manager.AccountMapper;
-
-import javax.inject.Inject;
-import javax.swing.*;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
 
 /**
  * @author ytaras

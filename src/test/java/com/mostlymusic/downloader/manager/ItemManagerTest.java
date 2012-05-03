@@ -1,13 +1,13 @@
 package com.mostlymusic.downloader.manager;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

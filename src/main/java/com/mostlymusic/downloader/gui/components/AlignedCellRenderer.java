@@ -1,8 +1,8 @@
 package com.mostlymusic.downloader.gui.components;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
 
 /**
  * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.

@@ -1,14 +1,14 @@
 package com.mostlymusic.downloader.manager;
 
+import java.sql.Connection;
+import java.util.List;
+import javax.sql.DataSource;
+
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 

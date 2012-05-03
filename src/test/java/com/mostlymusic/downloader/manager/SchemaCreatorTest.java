@@ -1,15 +1,15 @@
 package com.mostlymusic.downloader.manager;
 
-import com.mostlymusic.downloader.MockInjectors;
-import com.mostlymusic.downloader.dto.Account;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.sql.DataSource;
+
+import com.mostlymusic.downloader.MockInjectors;
+import com.mostlymusic.downloader.dto.Account;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 

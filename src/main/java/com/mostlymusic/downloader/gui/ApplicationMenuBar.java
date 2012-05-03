@@ -1,10 +1,10 @@
 package com.mostlymusic.downloader.gui;
 
+import java.awt.event.ActionEvent;
+import javax.swing.*;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
  * @author ytaras

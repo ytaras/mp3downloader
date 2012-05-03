@@ -1,19 +1,18 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.mostlymusic.downloader.dto.Account;
-import com.mostlymusic.downloader.gui.components.JSystemFileChooser;
-import com.mostlymusic.downloader.manager.ConfigurationMapper;
-
-import javax.swing.*;
-import javax.swing.border.MatteBorder;
-import javax.swing.plaf.basic.BasicPanelUI;
-import javax.swing.plaf.basic.BasicTextFieldUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
+import javax.swing.plaf.basic.BasicPanelUI;
+import javax.swing.plaf.basic.BasicTextFieldUI;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.mostlymusic.downloader.gui.components.JSystemFileChooser;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 @Singleton
 public class ConfigurationDialog {

@@ -1,19 +1,19 @@
 package com.mostlymusic.downloader.gui;
 
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.plaf.synth.SynthLookAndFeel;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.DownloaderModule;
 import com.mostlymusic.downloader.GuiModule;
 import com.mostlymusic.downloader.ManagerModule;
 import com.mostlymusic.downloader.manager.LocalStorageModule;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.plaf.synth.SynthLookAndFeel;
-import java.io.File;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.text.ParseException;
 
 /**
  * @author ytaras

@@ -1,11 +1,15 @@
 package com.mostlymusic.downloader.gui;
 
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import javax.swing.*;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
 @Singleton
 class ProgressGlassPane extends JComponent {

@@ -1,15 +1,14 @@
 package com.mostlymusic.downloader.client;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 

@@ -22,7 +22,6 @@ import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
 import com.mostlymusic.downloader.gui.components.JImagePane;
-import com.mostlymusic.downloader.gui.components.TwoColorPanel;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
 
 /**

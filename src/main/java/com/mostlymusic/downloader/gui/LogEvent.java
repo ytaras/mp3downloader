@@ -1,8 +1,8 @@
 package com.mostlymusic.downloader.gui;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Date;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author ytaras

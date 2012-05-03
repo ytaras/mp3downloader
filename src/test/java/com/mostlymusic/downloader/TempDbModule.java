@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader;
 
+import java.io.File;
+
 import com.google.inject.AbstractModule;
 import org.fest.util.Files;
-
-import java.io.File;
 
 /**
  * @author ytaras

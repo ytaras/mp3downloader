@@ -1,7 +1,7 @@
 package com.mostlymusic.downloader.gui.components;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 /**
  * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.

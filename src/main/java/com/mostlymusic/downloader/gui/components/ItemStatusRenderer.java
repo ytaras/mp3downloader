@@ -1,10 +1,10 @@
 package com.mostlymusic.downloader.gui.components;
 
-import com.mostlymusic.downloader.gui.ItemsTableModel;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
+
+import com.mostlymusic.downloader.gui.ItemsTableModel;
 
 /**
  * @author ytaras

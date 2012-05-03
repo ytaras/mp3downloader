@@ -1,11 +1,10 @@
 package com.mostlymusic.downloader.gui.components;
 
-import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel;
-import sun.swing.FilePane;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import java.awt.*;
+
+import sun.swing.FilePane;
 
 /**
  * Created with IntelliJ IDEA.

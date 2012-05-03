@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader.gui.laf;
 
-import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import javax.swing.plaf.FontUIResource;
 
 /**
  * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.

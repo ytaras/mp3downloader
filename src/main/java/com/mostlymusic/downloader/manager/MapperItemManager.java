@@ -1,13 +1,13 @@
 package com.mostlymusic.downloader.manager;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author ytaras

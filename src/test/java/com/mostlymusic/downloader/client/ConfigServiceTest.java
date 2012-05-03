@@ -1,12 +1,10 @@
 package com.mostlymusic.downloader.client;
 
-import com.mostlymusic.downloader.client.exceptions.RequestException;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpRequest;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.io.IOException;
+
+import com.mostlymusic.downloader.client.exceptions.RequestException;
+import org.apache.http.HttpRequest;
+import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
 

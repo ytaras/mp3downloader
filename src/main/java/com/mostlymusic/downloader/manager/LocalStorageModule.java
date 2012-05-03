@@ -1,5 +1,8 @@
 package com.mostlymusic.downloader.manager;
 
+import java.io.File;
+import javax.sql.DataSource;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Names;
@@ -8,9 +11,6 @@ import com.mostlymusic.downloader.DownloadDirectory;
 import org.apache.derby.jdbc.EmbeddedDataSource;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.guice.MyBatisModule;
-
-import javax.sql.DataSource;
-import java.io.File;
 
 /**
  * @author ytaras

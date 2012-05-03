@@ -1,5 +1,11 @@
 package com.mostlymusic.downloader;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
+import javax.inject.Inject;
+
 import com.google.gson.reflect.TypeToken;
 import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.client.ArtistsService;
@@ -9,12 +15,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
-
-import javax.inject.Inject;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author ytaras

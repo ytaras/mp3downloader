@@ -1,8 +1,8 @@
 package com.mostlymusic.downloader.gui.components;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
 /**
  * Created with IntelliJ IDEA.

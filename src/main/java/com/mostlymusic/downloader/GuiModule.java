@@ -1,5 +1,7 @@
 package com.mostlymusic.downloader;
 
+import javax.swing.*;
+
 import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.gui.ApplicationMenuBar;
 import com.mostlymusic.downloader.gui.ApplicationModel;
@@ -10,8 +12,6 @@ import com.mostlymusic.downloader.gui.LoginDialog;
 import com.mostlymusic.downloader.gui.MainContainer;
 import com.mostlymusic.downloader.gui.MainLayout;
 import com.mostlymusic.downloader.gui.MainWindow;
-
-import javax.swing.*;
 
 /**
  * @author ytaras

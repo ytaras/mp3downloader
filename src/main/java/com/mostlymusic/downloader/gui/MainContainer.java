@@ -1,7 +1,10 @@
 package com.mostlymusic.downloader.gui;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicPanelUI;
@@ -59,7 +62,7 @@ public class MainContainer {
         model.addListener(new ApplicationModelListenerAdapter() {
             @Override
             public void loggedIn(Account account) {
-                if(account.isCreated()) {
+                if (account.isCreated()) {
                     configurationDialog.saveToDB();
                 }
                 showPanel(ITEMS);

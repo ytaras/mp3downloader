@@ -1,9 +1,9 @@
 package com.mostlymusic.downloader.gui;
 
+import javax.swing.*;
+
 import com.mostlymusic.downloader.dto.Account;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 /**
  * @author ytaras

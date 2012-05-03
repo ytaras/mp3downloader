@@ -1,12 +1,22 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.util.Map;
+
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.http.*;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
@@ -14,11 +24,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.util.Map;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.fail;

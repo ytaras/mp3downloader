@@ -1,17 +1,20 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+
 import com.google.gson.Gson;
 import com.google.inject.Injector;
 import com.mostlymusic.downloader.MockInjectors;
-import org.apache.http.*;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.localserver.LocalTestServer;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.After;
 import org.junit.Before;
-
-import java.io.IOException;
 
 /**
  * @author ytaras

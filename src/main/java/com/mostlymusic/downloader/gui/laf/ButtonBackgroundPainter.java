@@ -1,8 +1,8 @@
 package com.mostlymusic.downloader.gui.laf;
 
+import java.awt.*;
 import javax.swing.plaf.synth.SynthContext;
 import javax.swing.plaf.synth.SynthPainter;
-import java.awt.*;
 
 /**
  * (C) Copyright 2002-2011 Hewlett-Packard Development Company, L.P.

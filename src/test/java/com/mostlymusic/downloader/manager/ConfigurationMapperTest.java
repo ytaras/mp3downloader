@@ -1,10 +1,10 @@
 package com.mostlymusic.downloader.manager;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
 
 import static org.fest.assertions.Assertions.assertThat;
 

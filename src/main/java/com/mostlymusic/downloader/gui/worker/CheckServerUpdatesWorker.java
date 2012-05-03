@@ -1,7 +1,15 @@
 package com.mostlymusic.downloader.gui.worker;
 
+import java.util.List;
+
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.*;
+import com.mostlymusic.downloader.client.Artist;
+import com.mostlymusic.downloader.client.ArtistsService;
+import com.mostlymusic.downloader.client.Config;
+import com.mostlymusic.downloader.client.ConfigService;
+import com.mostlymusic.downloader.client.ItemsService;
+import com.mostlymusic.downloader.client.Product;
+import com.mostlymusic.downloader.client.ProductsService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -14,9 +22,6 @@ import com.mostlymusic.downloader.manager.ArtistMapper;
 import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ProductMapper;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author ytaras

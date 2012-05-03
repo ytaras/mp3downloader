@@ -1,14 +1,14 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
 import org.jetbrains.annotations.Nullable;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
 
 /**
  * @author ytaras

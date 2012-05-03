@@ -1,11 +1,11 @@
 package com.mostlymusic.downloader.gui.worker;
 
+import java.util.concurrent.ExecutionException;
+import javax.swing.*;
+
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.LogEvent;
-
-import javax.swing.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
