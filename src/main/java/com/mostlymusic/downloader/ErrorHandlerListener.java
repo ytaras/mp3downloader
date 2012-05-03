@@ -1,15 +1,15 @@
 package com.mostlymusic.downloader;
 
+import java.awt.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.*;
+
 import com.google.inject.Inject;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.ApplicationModelListenerAdapter;
 import com.mostlymusic.downloader.gui.MainContainer;
 import com.mostlymusic.downloader.gui.MainLayout;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author ytaras
@@ -30,7 +30,6 @@ public class ErrorHandlerListener extends ApplicationModelListenerAdapter {
 
     @Override
     public void exceptionOccurred(Throwable e) {
-        JOptionPane.showMessageDialog(root, e, "Error occurred", JOptionPane.ERROR_MESSAGE);
         logger.log(Level.SEVERE, "Exception", e);
     }
 }

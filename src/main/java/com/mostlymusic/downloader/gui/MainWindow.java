@@ -1,15 +1,21 @@
 package com.mostlymusic.downloader.gui;
 
-import com.google.inject.Singleton;
-import com.mostlymusic.downloader.dto.Account;
-
-import javax.inject.Inject;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.*;
+import java.util.List;
+import javax.inject.Inject;
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+
+import com.google.inject.Singleton;
+import com.mostlymusic.downloader.dto.Account;
+import com.mostlymusic.downloader.gui.components.ComponentResizer;
+
+import static java.lang.Math.floor;
 
 /**
  * @author ytaras
@@ -27,7 +33,17 @@ public class MainWindow extends JFrame {
         setContentPane(contentPane);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(menuBar);
+        menuBar.setVisible(false);
         setGlassPane(progressGlassPane);
+        setUndecorated(true);
+        ComponentResizer componentResizer = new ComponentResizer();
+        componentResizer.setSnapSize(new Dimension(10, 10));
+        componentResizer.registerComponent(this);
+        getRootPane().setBorder(new LineBorder(getBackground(), 2));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        setMinimumSize(new Dimension(600, (int) Math.min(floor(screenSize.getWidth()), 850)));
+        setPreferredSize(new Dimension(800, (int) Math.min(floor(screenSize.getWidth()), 1000)));
         pack();
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
@@ -49,28 +65,30 @@ public class MainWindow extends JFrame {
             @Override
             public void loggedIn(Account account) {
                 setVisible(true);
+                setState(NORMAL);
             }
         });
         loginDialog.showDialog(this);
+        setIconImages(getIcons());
     }
 
     private static void addTray(final JFrame frame) {
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/favicon.jpg"));
+        Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/windows7_icon3232.png"));
         ActionListener showWindowAction = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        frame.setExtendedState(frame.getExtendedState() & ~Frame.ICONIFIED);
                         frame.setVisible(true);
-                        frame.setState(JFrame.MAXIMIZED_BOTH);
                         frame.toFront();
                     }
                 });
             }
         };
-        PopupMenu popupMenu = getTrayMenu(showWindowAction);
+        PopupMenu popupMenu = getTrayMenu(showWindowAction, frame);
 
         TrayIcon trayIcon = new TrayIcon(image, "MostlyMusic Download Manager", popupMenu);
 
@@ -89,11 +107,24 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private static PopupMenu getTrayMenu(ActionListener showWindowAction) {
+    private static PopupMenu getTrayMenu(ActionListener showWindowAction, final Frame frame) {
         PopupMenu popupMenu = new PopupMenu();
-        MenuItem restore = new MenuItem("Restore");
+        final MenuItem restore = new MenuItem("Restore");
         restore.addActionListener(showWindowAction);
         popupMenu.add(restore);
+        final MenuItem hide = new MenuItem("Hide");
+        hide.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        frame.setExtendedState(frame.getExtendedState() | Frame.ICONIFIED);
+                    }
+                });
+            }
+        });
+        popupMenu.add(hide);
         MenuItem exit = new MenuItem("Exit");
         exit.addActionListener(new ActionListener() {
             @Override
@@ -105,4 +136,9 @@ public class MainWindow extends JFrame {
         return popupMenu;
     }
 
+    public static List<Image> getIcons() {
+        return Arrays.asList(new ImageIcon(MainWindow.class.getResource("/windows7_icon.png")).getImage(),
+                new ImageIcon(MainWindow.class.getResource("/windows7_icon1616.png")).getImage(),
+                new ImageIcon(MainWindow.class.getResource("/windows7_icon3232.png")).getImage());
+    }
 }

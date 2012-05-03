@@ -1,8 +1,18 @@
 package com.mostlymusic.downloader.client;
 
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.ItemsMetadataDto;
-import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.entity.StringEntity;
@@ -13,10 +23,6 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -29,7 +35,7 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
     @Override
     protected void registerHandler() {
         localTestServer.register("/download-manager/sync/loginPost/", new AuthHttpRequestHandler());
-        localTestServer.register("/download-manager/sync/itemsStatus/", new JsonHttpHandler() {
+        localTestServer.register("/download-manager/sync/itemsStatus/", new JsonHttpHandler<HttpEntityEnclosingRequest>() {
             @Override
             protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
                 Header[] cookies = httpRequest.getHeaders("Cookie");
@@ -69,7 +75,6 @@ public class AuthServiceTest extends BaseHttpClientTestCase {
 
     @Test
     @Ignore
-    // TODO Fix test
     public void shouldSendCookie() throws IOException, RequestException {
         // given
         AuthService authService = injector.getInstance(AuthService.class);

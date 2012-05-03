@@ -1,11 +1,7 @@
 package com.mostlymusic.downloader.gui.worker;
 
 import com.google.inject.Inject;
-import com.mostlymusic.downloader.client.Artist;
-import com.mostlymusic.downloader.client.ArtistsService;
-import com.mostlymusic.downloader.client.ItemsService;
-import com.mostlymusic.downloader.client.Product;
-import com.mostlymusic.downloader.client.ProductsService;
+import com.mostlymusic.downloader.client.*;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -19,6 +15,7 @@ import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ProductMapper;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,6 +37,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final FileDownloader fileDownloader;
     private final ItemManager itemManager;
     private final AccountManager accountManager;
+    private final ConfigService configService;
 
 
     @Inject
@@ -47,7 +45,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
                                     ConfigurationMapper configurationMapper, FileDownloader fileDownloader,
-                                    ItemManager itemManager, AccountManager accountManager) {
+                                    ItemManager itemManager, AccountManager accountManager, ConfigService configService) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.accountMapper = accountMapper;
@@ -59,6 +57,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.fileDownloader = fileDownloader;
         this.itemManager = itemManager;
         this.accountManager = accountManager;
+        this.configService = configService;
     }
 
 
@@ -69,10 +68,12 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         Long loadedLastOrderId = account.getLastOrderId();
         ItemsMetadataDto ordersMetadata = itemsService.getOrdersMetadata(loadedLastOrderId);
 
-        LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
-        publish(new CheckServerStatusStage(metadataFetchedLog));
+        Config config = configService.getConfig();
+
         if (0 != ordersMetadata.getTotalItems()) {
-            int pageSize = 10;
+            LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
+            publish(new CheckServerStatusStage(metadataFetchedLog));
+            int pageSize = config.getMaxPageSize();
             for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
                 ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
                 LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size()));
@@ -86,23 +87,62 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             accountMapper.updateAccount(account);
         }
 
+
+        // TODO Those two cycles duplicate their logic
         while (!productMapper.findUnknownProducts().isEmpty()) {
             List<Long> unknownProducts = productMapper.findUnknownProducts();
+            if (unknownProducts.size() > config.getMaxPageSize()) {
+                unknownProducts = unknownProducts.subList(0, config.getMaxPageSize());
+            }
+
             LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
             publish(new CheckServerStatusStage(productToFetchLog));
             List<Product> products = productsService.getProducts(unknownProducts);
             for (Product product : products) {
-                productMapper.insertProduct(product);
+                if (productMapper.productExists(product.getProductId())) {
+                    productMapper.updateProduct(product);
+                } else {
+                    productMapper.insertProduct(product);
+                }
+                unknownProducts.remove(product.getProductId());
+            }
+
+            for (long id : unknownProducts) {
+                // We requested server for those IPs but it didn't return
+                // Put stub here
+                if (!productMapper.productExists(id)) {
+                    Product unknownProductStub = new Product();
+                    unknownProductStub.setProductId(id);
+                    unknownProductStub.setName("UNKNOWN");
+                    unknownProductStub.setDescription("UNKNOWN");
+                    productMapper.insertProduct(unknownProductStub);
+                }
             }
         }
 
         while (!artistMapper.findUnknownArtists().isEmpty()) {
             List<Long> unknownArtists = artistMapper.findUnknownArtists();
+            if (unknownArtists.size() > config.getMaxPageSize()) {
+                unknownArtists = unknownArtists.subList(0, config.getMaxPageSize());
+            }
             LogEvent artistsToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
             publish(new CheckServerStatusStage(artistsToFetchLog));
-            List<Artist> products = artistsService.getArtists(unknownArtists);
-            for (Artist product : products) {
-                artistMapper.insertArtist(product);
+            List<Artist> artists = artistsService.getArtists(unknownArtists);
+            for (Artist artist : artists) {
+                if (artistMapper.artistExists(artist.getArtistId())) {
+                    artistMapper.updateArtist(artist);
+                } else {
+                    artistMapper.insertArtist(artist);
+                }
+                unknownArtists.remove(artist.getArtistId());
+            }
+
+            for (Long id : unknownArtists) {
+                // We requested server for those IPs but it didn't return
+                // Put stub here
+                Artist unknownArtistStub = new Artist();
+                unknownArtistStub.setArtistId(id);
+                artistMapper.insertArtist(unknownArtistStub);
             }
         }
 

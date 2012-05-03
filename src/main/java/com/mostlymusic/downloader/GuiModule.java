@@ -29,5 +29,4 @@ public class GuiModule extends AbstractModule {
         bind(LoginDialog.class).to(JDialogLoginDialog.class);
         bind(ConfigurationDialog.class).asEagerSingleton();
     }
-
 }

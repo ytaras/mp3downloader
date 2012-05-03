@@ -1,6 +1,7 @@
 package com.mostlymusic.downloader.client;
 
 import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Before;
@@ -58,7 +59,7 @@ public class ArtistsServiceTest extends BaseHttpClientTestCase {
     }
 
 
-    private class ArtistsRequestHandler extends JsonHttpHandler {
+    private class ArtistsRequestHandler extends JsonHttpHandler<HttpEntityEnclosingRequest> {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
             List<NameValuePair> parse = URLEncodedUtils.parse(httpRequest.getEntity());

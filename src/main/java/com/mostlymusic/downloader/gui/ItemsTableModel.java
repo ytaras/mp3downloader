@@ -1,5 +1,10 @@
 package com.mostlymusic.downloader.gui;
 
+import java.util.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
+
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Artist;
@@ -11,15 +16,6 @@ import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ItemMapperListener;
 import com.mostlymusic.downloader.manager.ProductMapper;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author ytaras
  *         Date: 9/21/11
@@ -30,6 +26,7 @@ public class ItemsTableModel extends AbstractTableModel {
     private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
     private List<Item> data;
+    private final Set<Long> scheduledForDownload = new HashSet<Long>();
     private final Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private final Map<Long, Product> products = new HashMap<Long, Product>();
     private final Map<Long, Artist> artists = new HashMap<Long, Artist>();
@@ -42,8 +39,8 @@ public class ItemsTableModel extends AbstractTableModel {
     private static final String ISSUED_AT = "Issued at";
     private static final String ARTIST_NAME = "Artist name";
     private static final String PRODUCT_NAME = "Product name";
-    private static final String[] COLUMN_NAMES = new String[]{PRODUCT_NAME, ARTIST_NAME, TITLE, STATUS};
-    private Map<Long, Integer> itemIdToRowMap = Collections.emptyMap();
+    private static final String[] COLUMN_NAMES = new String[]{ARTIST_NAME, PRODUCT_NAME, TITLE, STATUS};
+    private final Map<Long, Integer> itemIdToRowMap = Collections.synchronizedMap(new HashMap<Long, Integer>());
     private final ItemManager itemManager;
 
     @Inject
@@ -68,17 +65,24 @@ public class ItemsTableModel extends AbstractTableModel {
                 refresh();
             }
         });
+
     }
 
     private void refresh() {
         this.data = itemManager.findItem();
-        this.itemIdToRowMap = new HashMap<Long, Integer>();
         List<Long> productIds = new LinkedList<Long>();
+        Map<Long, Integer> newMap = new HashMap<Long, Integer>();
         for (int row = 0; row < data.size(); row++) {
             Item item = data.get(row);
-            itemIdToRowMap.put(item.getItemId(), row);
+            newMap.put(item.getItemId(), row);
             productIds.add(item.getProductId());
         }
+
+        synchronized (itemIdToRowMap) {
+            itemIdToRowMap.clear();
+            itemIdToRowMap.putAll(newMap);
+        }
+
         for (Long productId : productIds) {
             products.put(productId, productMapper.loadProduct(productId));
         }
@@ -139,7 +143,11 @@ public class ItemsTableModel extends AbstractTableModel {
             }
             return artist.getName();
         } else if (PRODUCT_NAME.equals(columnName)) {
-            return getProduct(item.getProductId()).getName();
+            Product product = getProduct(item.getProductId());
+            if (null == product) {
+                return "";
+            }
+            return product.getName();
         }
         throw new RuntimeException("Unknown column - " + columnName);
 
@@ -168,12 +176,20 @@ public class ItemsTableModel extends AbstractTableModel {
 
     public void downloadStopped(Item item) {
         downloadProgress.remove(item.getItemId());
-        fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
+        fireStatusCellUpdated(item);
     }
 
     public void downloadStarted(Item item) {
+        scheduledForDownload.remove(item.getItemId());
         downloadProgress.put(item.getItemId(), 0L);
-        fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
+        fireStatusCellUpdated(item);
+    }
+
+    private void fireStatusCellUpdated(Item item) {
+        Integer itemRow = getItemRow(item);
+        if (itemRow != null) {
+            fireTableCellUpdated(itemRow, getColumn(STATUS));
+        }
     }
 
     private long getDownloadProgress(Item item) {
@@ -184,7 +200,7 @@ public class ItemsTableModel extends AbstractTableModel {
         Long oldValue = downloadProgress.get(item.getItemId());
         if (!progress.equals(oldValue)) {
             downloadProgress.put(item.getItemId(), progress);
-            fireTableCellUpdated(getItemRow(item), getColumn(STATUS));
+            fireStatusCellUpdated(item);
         }
     }
 
@@ -197,7 +213,7 @@ public class ItemsTableModel extends AbstractTableModel {
         return -1;
     }
 
-    private int getItemRow(Item item) {
+    private Integer getItemRow(Item item) {
         return itemIdToRowMap.get(item.getItemId());
     }
 
@@ -207,6 +223,23 @@ public class ItemsTableModel extends AbstractTableModel {
 
     public Product getProductAt(int selectedRow) {
         return getProduct(getItemAt(selectedRow).getProductId());
+    }
+
+    public void setScheduled(Item scheduled) {
+        scheduledForDownload.add(scheduled.getItemId());
+        fireStatusCellUpdated(scheduled);
+    }
+
+    public boolean isScheduledItemAt(int row) {
+        return scheduledForDownload.contains(getItemAt(row).getItemId());
+    }
+
+    public boolean isScheduled(Item item) {
+        return scheduledForDownload.contains(item.getItemId());
+    }
+
+    public boolean isDownloading(Item item) {
+        return downloadProgress.containsKey(item.getItemId());
     }
 
 
@@ -223,11 +256,18 @@ public class ItemsTableModel extends AbstractTableModel {
 
         @Override
         public String toString() {
+            if (isScheduled()) {
+                return "scheduled";
+            }
             return getStatus();
         }
 
         public boolean isDownloading() {
             return isDownloadingItemAt(row);
+        }
+
+        public boolean isScheduled() {
+            return isScheduledItemAt(row);
         }
 
 

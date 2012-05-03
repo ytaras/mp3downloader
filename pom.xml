@@ -72,7 +72,7 @@
 						<inputTemplate>src/jnlp/jnlp_template.xml</inputTemplate>
 					</jnlp>
 					<sign>
-						<keystore>/home/ytaras/projects/mp3downloader/mp3downloader.jks
+						<keystore>c:/ytaras/mp3downloader.jks
 						</keystore>
 						<keypass>mostlymusic</keypass>
 						<storepass>mostlymusic</storepass>

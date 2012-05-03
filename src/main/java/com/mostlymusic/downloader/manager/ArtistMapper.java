@@ -33,4 +33,7 @@ public interface ArtistMapper {
 
     @Select("SELECT * FROM " + TABLE_NAME)
     List<Artist> listArtists();
+
+    @Update("UPDATE " + TABLE_NAME + " SET name = #{name:VARCHAR} WHERE artistId = #{productId:NUMERIC}")
+    void updateArtist(Artist artist);
 }

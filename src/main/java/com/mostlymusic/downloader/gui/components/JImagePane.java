@@ -14,6 +14,8 @@ public class JImagePane extends JPanel {
     private Image image;
     private final JLabel textLabel = new JLabel();
     private int preferredWidth;
+    private int preferredHeight;
+    private Dimension preferredSize;
 
     public JImagePane() {
     }
@@ -21,36 +23,37 @@ public class JImagePane extends JPanel {
     @Override
     protected void paintComponent(Graphics graphics) {
         if (null != image) {
-            Dimension size = getSize();
-            size = getImageSize(size);
-            graphics.drawImage(image, 0, 0, size.width, size.height, null);
+            graphics.drawImage(image, 0, 0, preferredSize.width, preferredSize.height, null);
         } else {
             super.paintComponent(graphics);
         }
     }
 
-    private Dimension getImageSize(Dimension size) {
-        int width = image.getWidth(null);
-        int height = image.getHeight(null);
-        if (size.width >= width && size.height >= height) {
-            return new Dimension(width, height);
+    private void recalculateImageSize() {
+        if (image == null) {
+            preferredSize = new Dimension(-1, -1);
         } else {
-            double widthScale = ((double) width) / size.width;
-            double heightScale = ((double) height) / size.height;
-            double scale = Math.max(widthScale, heightScale);
-            int newWidth = (int) (width / scale);
-            int newHeight = (int) (height / scale);
-            return new Dimension(newWidth, newHeight);
+            int width = image.getWidth(null);
+            int height = image.getHeight(null);
+            double ratio = 1.0 * height / width;
+            preferredHeight = (int) Math.round(ratio * this.preferredWidth);
+            preferredSize = new Dimension(preferredWidth, preferredHeight);
         }
     }
 
     @Override
     public Dimension getPreferredSize() {
-        if (null == image) {
-            return super.getPreferredSize();
-        } else {
-            return getImageSize(new Dimension(preferredWidth, Integer.MAX_VALUE));
-        }
+        return preferredSize;
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return preferredSize;
+    }
+
+    @Override
+    public Dimension getMinimumSize() {
+        return preferredSize;
     }
 
     public Image getImage() {
@@ -59,6 +62,7 @@ public class JImagePane extends JPanel {
 
     public void setImage(@Nullable Image image) {
         this.image = image;
+        recalculateImageSize();
         revalidate();
         repaint();
     }
