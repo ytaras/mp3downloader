@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mostlymusic.downloader.gui.MainContainer">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+  <grid id="27dc6" binding="container" custom-create="true" layout-manager="GridBagLayout">
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
@@ -8,23 +8,19 @@
     <border type="none"/>
     <children>
       <splitpane id="6f0ff" binding="splitPane">
-        <constraints border-constraint="Center"/>
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag top="50" left="0" bottom="0" right="0" weightx="1.0" weighty="1.0" ipadx="1" ipady="1"/>
+        </constraints>
         <properties>
-          <dividerLocation value="300"/>
+          <continuousLayout value="true"/>
+          <dividerLocation value="176"/>
           <oneTouchExpandable value="true"/>
           <orientation value="0"/>
-          <resizeWeight value="0.0"/>
+          <resizeWeight value="1.0"/>
         </properties>
         <border type="none"/>
         <children>
-          <grid id="340f7" binding="cardPanel" layout-manager="CardLayout" hgap="0" vgap="0">
-            <constraints>
-              <splitpane position="left"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children/>
-          </grid>
           <scrollpane id="d48fe">
             <constraints>
               <splitpane position="right"/>
@@ -36,14 +32,125 @@
             <children>
               <component id="f246b" class="javax.swing.JList" binding="logList">
                 <constraints/>
-                <properties>
-                  <preferredSize width="100" height="100"/>
-                </properties>
+                <properties/>
               </component>
             </children>
           </scrollpane>
+          <grid id="11dcc" layout-manager="GridBagLayout">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="340f7" binding="cardPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="1.0"/>
+                </constraints>
+                <properties/>
+                <border type="none"/>
+                <children/>
+              </grid>
+              <grid id="38642" binding="buttonBackground" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="0">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="1.0" weighty="0.0"/>
+                </constraints>
+                <properties/>
+                <border type="none">
+                  <color color="-16777216"/>
+                </border>
+                <children>
+                  <component id="bca97" class="javax.swing.JButton" binding="configButton">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <icon value="controls/expand_config.png"/>
+                      <margin top="0" left="0" bottom="0" right="0"/>
+                    </properties>
+                  </component>
+                  <grid id="f65f4" binding="rightBorder" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="6" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="2" height="10"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="502a4" binding="leftBorder" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="2" height="10"/>
+                      </grid>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <hspacer id="94e6f">
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                        <preferred-size width="20" height="-1"/>
+                      </grid>
+                    </constraints>
+                  </hspacer>
+                </children>
+              </grid>
+            </children>
+          </grid>
         </children>
       </splitpane>
+      <grid id="8d620" layout-manager="GridLayoutManager" row-count="1" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="0">
+        <margin top="6" left="0" bottom="0" right="6"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="7d64d" class="javax.swing.JButton" binding="maximizeButton">
+            <constraints>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="controls/maximize_button.png"/>
+              <margin top="0" left="0" bottom="0" right="0"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="5570a" class="javax.swing.JButton" binding="minimizeButton">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="controls/minimize_button.png"/>
+              <margin top="0" left="0" bottom="0" right="0"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="9df44" class="javax.swing.JButton" binding="closeButton" custom-create="true">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <margin top="0" left="0" bottom="0" right="0"/>
+            </properties>
+          </component>
+          <hspacer id="de7f1">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
     </children>
   </grid>
   <inspectionSuppressions>

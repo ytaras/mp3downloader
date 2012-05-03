@@ -30,7 +30,7 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     @Test
     public void shouldSaveConfigPath() throws Exception {
         // given
-        assertThat(configurationMapper.getDownloadPath()).isEqualTo(System.getProperty("user.home") + "/Downloads");
+        assertThat(configurationMapper.getDownloadPath()).isEqualTo(System.getProperty("user.home") + System.getProperty("file.separator") + "Downloads");
         // when
         configurationMapper.setDownloadPath("A path");
 

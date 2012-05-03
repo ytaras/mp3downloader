@@ -16,12 +16,6 @@ public class ApplicationMenuBar extends JMenuBar {
     @Inject
     public ApplicationMenuBar(final ConfigurationDialog dialog) {
         JMenu file = new JMenu("File");
-        file.add(new AbstractAction("Configuration") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.setVisible(true);
-            }
-        });
         file.addSeparator();
         file.add(new AbstractAction("Exit") {
             @Override

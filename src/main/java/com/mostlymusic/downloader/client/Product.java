@@ -8,7 +8,7 @@ import java.util.List;
  *         Time: 1:47 PM
  */
 public class Product {
-    private int productId;
+    private long productId;
     private String name;
     private String description;
     private String mainImage;
@@ -17,15 +17,15 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId) {
+    public Product(long productId) {
         this.productId = productId;
     }
 
-    public int getProductId() {
+    public long getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(long productId) {
         this.productId = productId;
     }
 
@@ -61,26 +61,25 @@ public class Product {
         this.mainImage = mainImage;
     }
 
-    @SuppressWarnings({"RedundantIfStatement"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Product that = (Product) o;
+        Product product = (Product) o;
 
-        if (productId != that.productId) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (mainImage != null ? !mainImage.equals(that.mainImage) : that.mainImage != null) return false;
-        if (media != null ? !media.equals(that.media) : that.media != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (productId != product.productId) return false;
+        if (description != null ? !description.equals(product.description) : product.description != null) return false;
+        if (mainImage != null ? !mainImage.equals(product.mainImage) : product.mainImage != null) return false;
+        if (media != null ? !media.equals(product.media) : product.media != null) return false;
+        if (name != null ? !name.equals(product.name) : product.name != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = productId;
+        int result = (int) (productId ^ (productId >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (mainImage != null ? mainImage.hashCode() : 0);

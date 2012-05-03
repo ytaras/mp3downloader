@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import com.mostlymusic.downloader.MockInjectors;
 import com.mostlymusic.downloader.client.exceptions.RequestException;
 import org.apache.http.HttpEntityEnclosingRequest;
+import org.apache.http.HttpRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.junit.Before;
@@ -55,7 +56,7 @@ public class ProductsServiceTest extends BaseHttpClientTestCase {
     }
 
 
-    private class ProductsHttpHandler extends JsonHttpHandler {
+    private class ProductsHttpHandler extends JsonHttpHandler<HttpEntityEnclosingRequest> {
         @Override
         protected Object getObject(HttpEntityEnclosingRequest httpRequest) throws Exception {
             List<NameValuePair> parse = URLEncodedUtils.parse(httpRequest.getEntity());

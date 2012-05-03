@@ -40,6 +40,7 @@ public class DefaultApplicationModel implements ApplicationModel {
                 publishLogStatus(new LogEvent(String.format(LOGGED_IN_FORMAT, account.getUsername())));
                 accountManager.setCurrentAccount(account);
                 DefaultApplicationModel.this.accountMapper.setLastLoggedIn(account.getUsername());
+                DefaultApplicationModel.this.accountMapper.updateAccount(account);
                 if (!account.isCreated()) {
                     workerFactory.schedule();
                 }

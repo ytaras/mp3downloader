@@ -1,0 +1,254 @@
+<?xml version="1.0" ?>
+<synth>
+    <object id="debug" class="com.mostlymusic.downloader.gui.components.DebugPainter"/>
+
+    <!-- Fonts -->
+    <object id="default_font" class="com.mostlymusic.downloader.gui.laf.FontResource"
+            method="createFont">
+        <string>Regular</string>
+        <int>14</int>
+    </object>
+    <!-- Default -->
+    <style id="backingStyle">
+        <font idref="default_font"/>
+        <state>
+            <color value="#192a21" type="BACKGROUND"/>
+            <color value="#cccccc" type="FOREGROUND"/>
+        </state>
+    </style>
+    <bind style="backingStyle" type="region" key=".*"/>
+    <!-- All text fields -->
+    <style id="text">
+        <font name="Verdana" size="14"/>
+        <state>
+            <color value="#333333" type="BACKGROUND"/>
+            <color value="BLACK" type="FOREGROUND"/>
+        </state>
+        <state value="SELECTED">
+            <color value="#192a21" type="TEXT_BACKGROUND"/>
+            <color value="#cccccc" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind style="text" type="region" key="TextField"/>
+    <bind style="text" type="region" key="PasswordField"/>
+    <!-- Combo box -->
+    <style id="textfield">
+        <imagePainter method="textFieldBackground" path="/controls/text_field.jpg" sourceInsets="4 15 4 15"/>
+        <insets top="4" left="15" bottom="4" right="15"/>
+    </style>
+    <bind style="textfield" type="region" key="TextField"/>
+    <!-- Password -->
+    <style id="passwordfield">
+        <insets top="4" left="15" bottom="4" right="4"/>
+        <imagePainter method="passwordFieldBackground" path="/controls/password_field.jpg" sourceInsets="4 15 4 4"/>
+    </style>
+    <bind style="passwordfield" type="region" key="PasswordField"/>
+    <!-- Download button -->
+    <style id="download_button">
+        <imagePainter method="buttonBackground" path="/controls/download_button.jpg" sourceInsets="4 6 4 6"/>
+        <font name="Dialog" size="14" style="BOLD"/>
+        <insets top="7" left="15" bottom="7" right="15"/>
+        <state>
+            <color value="#000000" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <style id="config_button">
+        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="5 5 5 5"/>
+        <font name="Dialog" size="14" style="BOLD"/>
+        <insets top="4" left="8" bottom="4" right="8"/>
+        <state>
+            <color value="#000000" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <style id="show_chooser_button">
+        <imagePainter method="buttonBackground" path="/controls/config_button.png" sourceInsets="5 5 5 5"/>
+        <font name="Dialog" size="14" style="BOLD"/>
+        <insets top="0" left="0" bottom="0" right="0"/>
+        <state>
+            <color value="#000000" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+
+    <bind style="download_button" key="downloadButton" type="name"/>
+    <bind style="config_button" key="okButton" type="name"/>
+    <bind style="show_chooser_button" key="showChooserButton" type="name"/>
+    <bind style="config_button" key="cancelButton" type="name"/>
+    <style id="download_button_background">
+        <state>
+            <color value="RED" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="download_button_background" key="downloadButtonBackground" type="name"/>
+    <!-- Login button -->
+    <style id="loginButton">
+        <imagePainter method="buttonBackground" path="/controls/login_button.jpg" sourceInsets="8 12 8 18"/>
+        <font name="Dialog" size="14" style="BOLD"/>
+        <insets top="5" left="8" bottom="4" right="15"/>
+        <state>
+            <color value="#ffffff" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind style="loginButton" key="loginButton" type="name"/>
+    <!-- Combobox arrow button -->
+    <style id="arrowButton">
+        <imagePainter method="arrowButtonBackground" path="/controls/combobox_arrow_button.jpg" sourceInsets="0 0 0 8"/>
+    </style>
+    <bind style="arrowButton" key="ComboBox.arrowButton" type="name"/>
+    <!-- Items table -->
+    <color id="table_grid_color" value="#192a21"/>
+    <style id="table">
+        <property key="Table.gridColor" type="idref" value="table_grid_color"/>
+        <font name="Arial" size="14" style="BOLD"/>
+        <insets bottom="12" top="12" left="19" right="19"/>
+    </style>
+    <bind style="table" key="Table" type="region"/>
+    <bind style="table" key="Table.cellRenderer" type="name"/>
+    <style id="table_header">
+        <font name="Arial" size="14" style="BOLD"/>
+        <insets left="20" right="51" bottom="12" top="33"/>
+        <state value="ENABLED">
+            <color value="WHITE" type="TEXT_FOREGROUND"/>
+            <color value="#273f32" type="BACKGROUND"/>
+        </state>
+    </style>
+    <style id="table_header_background">
+        <imagePainter method="labelBackground"
+                      path="/controls/table_header_border.png"
+                      sourceInsets="2 2 2 4" paintCenter="false"/>
+    </style>
+    <bind style="table_header" key="TableHeader.renderer" type="name"/>
+    <bind style="table_header_background" key="TableHeader.renderer" type="name"/>
+    <bind style="table_header" key="TableHeader" type="region"/>
+    <!-- Checkbox -->
+    <style id="checkbox">
+        <imageIcon id="check_off" path="/controls/checkbox_unselected.jpg"/>
+        <imageIcon id="check_on" path="/controls/checkbox_selected.jpg"/>
+        <property key="CheckBox.icon" value="check_off"/>
+        <state value="SELECTED">
+            <property key="CheckBox.icon" value="check_on"/>
+        </state>
+    </style>
+    <bind style="checkbox" type="region" key="Checkbox"/>
+    <!-- Progress bar -->
+    <style id="progress">
+        <imagePainter method="progressBarForeground"
+                      path="/controls/progress_bar_foreground.png"
+                      sourceInsets="2 2 2 4" paintCenter="true"/>
+    </style>
+    <bind style="progress" type="region" key="ProgressBar"/>
+    <!-- Description label -->
+    <style id="description">
+        <state>
+            <opaque value="true"/>
+            <color value="BLACK" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="description" type="name" key="description"/>
+    <!-- Scroll bar -->
+    <style id="scrollbar_arrow">
+        <state>
+            <imagePainter method="arrowButtonForeground"
+                          path="/controls/scrollbar-up.png"
+                          center="true" direction="north"/>
+            <imagePainter method="arrowButtonForeground"
+                          path="/controls/scrollbar-down.png"
+                          center="true" direction="south"/>
+            <imagePainter method="arrowButtonForeground"
+                          path="/controls/scrollbar-left.png"
+                          center="true" direction="west"/>
+            <imagePainter method="arrowButtonForeground"
+                          path="/controls/scrollbar-right.png"
+                          center="true" direction="east"/>
+        </state>
+    </style>
+    <bind key="ScrollBar.button" type="name" style="scrollbar_arrow"/>
+    <style id="scrollbar_thumb">
+        <state>
+            <opaque value="true"/>
+            <color value="#79ac00" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="scrollbar_thumb" type="region" key="ScrollBarThumb"/>
+    <style id="scrollbar_track">
+        <state>
+            <opaque value="true"/>
+            <color value="#273f32" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="scrollbar_track" type="region" key="ScrollBarTrack"/>
+    <!-- Split pane -->
+    <style id="splitpane_divider">
+        <property key="SplitPane.centerOneTouchButtons" value="true" type="boolean"/>
+        <state>
+            <opaque value="true"/>
+            <color value="#273f32" type="BACKGROUND"/>
+        </state>
+    </style>
+    <bind style="splitpane_divider" type="region" key="SplitPaneDivider"/>
+
+    <!-- Titled border -->
+    <object id="TitledBorder_Color" class="java.awt.Color">
+        <int>148</int>
+        <int>197</int>
+        <int>2</int>
+        <int>255</int>
+    </object>
+    <object id="TitledBorder_Line_Color" class="java.awt.Color">
+        <int>255</int>
+        <int>255</int>
+        <int>255</int>
+        <int>255</int>
+    </object>
+    <object id="LineBorder" class="javax.swing.border.LineBorder">
+        <object idref="TitledBorder_Color"/>
+    </object>
+    <defaultsProperty key="TitledBorder.border" type="idref" value="LineBorder"/>
+    <defaultsProperty key="TitledBorder.titleColor" type="idref" value="TitledBorder_Line_Color"/>
+
+    <!-- Spinner -->
+    <style id="spinner_up">
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/spinner_up.png"
+                      center="true" direction="north"/>
+        <imagePainter method="arrowButtonForeground"
+                      path="/controls/spinner_down.png"
+                      center="true" direction="south"/>
+    </style>
+    <style id="spinner">
+        <imagePainter method="formattedTextFieldBackground" path="/controls/spinner_background.png"
+                      sourceInsets="1 1 1 1"/>
+        <imagePainter method="formattedTextFieldBorder" path="/controls/spinner_background.png"
+                      sourceInsets="1 1 1 1" paintCenter="false"/>
+
+        <state>
+            <color value="BLACK" type="TEXT_FOREGROUND"/>
+        </state>
+    </style>
+    <bind key="Spinner.previousButton" type="name" style="spinner_up"/>
+    <bind key="Spinner.nextButton" type="name" style="spinner_up"/>
+
+    <bind key="Spinner.formattedTextField" type="name" style="spinner"/>
+
+    <!-- Config dialog -->
+    <style id="config_label">
+        <state>
+            <color value="WHITE" type="TEXT_FOREGROUND"/>
+            <color value="WHITE" type="FOREGROUND"/>
+        </state>
+    </style>
+    <bind key="config_label_max" style="config_label" type="name"/>
+    <bind key="config_label_root" style="config_label" type="name"/>
+    <bind key="config_label_rate" style="config_label" type="name"/>
+    <bind key="autoDownload" style="config_label" type="name"/>
+
+    <!-- Combobox list style -->
+    <style id="list">
+        <state>
+            <color value="WHITE" type="BACKGROUND"/>
+            <color value="BLACK" type="FOREGROUND"/>
+        </state>
+        <insets top="4" left="4" bottom="4" right="4"/>
+    </style>
+    <defaultsProperty key="ComboBox.rendererUseListColors" type="boolean" value="false"/>
+    <bind key="ComboBox.list" type="name" style="list"/>
+</synth>
