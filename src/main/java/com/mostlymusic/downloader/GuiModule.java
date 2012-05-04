@@ -6,12 +6,14 @@ import com.google.inject.AbstractModule;
 import com.mostlymusic.downloader.gui.ApplicationMenuBar;
 import com.mostlymusic.downloader.gui.ApplicationModel;
 import com.mostlymusic.downloader.gui.ConfigurationDialog;
+import com.mostlymusic.downloader.gui.ConfigurationManager;
 import com.mostlymusic.downloader.gui.DefaultApplicationModel;
 import com.mostlymusic.downloader.gui.JDialogLoginDialog;
 import com.mostlymusic.downloader.gui.LoginDialog;
 import com.mostlymusic.downloader.gui.MainContainer;
 import com.mostlymusic.downloader.gui.MainLayout;
 import com.mostlymusic.downloader.gui.MainWindow;
+import com.mostlymusic.downloader.gui.MapperConfigurationManager;
 import com.mostlymusic.downloader.gui.worker.DownloadFileSwingWorker;
 import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
 
@@ -31,5 +33,6 @@ public class GuiModule extends AbstractModule {
         bind(LoginDialog.class).to(JDialogLoginDialog.class);
         bind(ConfigurationDialog.class).asEagerSingleton();
         bind(DownloadFileWorker.class).to(DownloadFileSwingWorker.class);
+        bind(ConfigurationManager.class).to(MapperConfigurationManager.class);
     }
 }

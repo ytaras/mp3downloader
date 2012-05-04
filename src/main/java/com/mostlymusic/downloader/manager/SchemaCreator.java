@@ -1,6 +1,5 @@
 package com.mostlymusic.downloader.manager;
 
-import java.awt.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -131,7 +130,6 @@ public class SchemaCreator {
 
     private void migrateTo3() {
         configurationMapper.toVersion3();
-        configurationMapper.setFrameSize(new FrameSize(new Dimension(400, 500)));
     }
 
     private void migrateTo2() {

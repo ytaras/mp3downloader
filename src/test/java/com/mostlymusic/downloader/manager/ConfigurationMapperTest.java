@@ -77,6 +77,6 @@ public class ConfigurationMapperTest extends StoragetTestBase {
     @Test
     public void shouldSaveSize() {
         configurationMapper.setFrameSize(new FrameSize(new Dimension(1, 2)));
-        assertThat(configurationMapper.getFrameSize().getDimension()).isEqualTo(new Dimension(1, 2));
+        assertThat(configurationMapper.getFrameSize().getSize()).isEqualTo(new Dimension(1, 2));
     }
 }
