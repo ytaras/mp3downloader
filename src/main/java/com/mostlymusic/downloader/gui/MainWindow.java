@@ -34,7 +34,6 @@ public class MainWindow extends JFrame {
         super("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
         setContentPane(contentPane);
-        System.out.println("configurationMapper.getFrameSize() = " + configurationMapper.getFrameSize());
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -54,8 +53,8 @@ public class MainWindow extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         setMinimumSize(new Dimension(600, (int) Math.min(floor(screenSize.getWidth()), 850)));
-        setPreferredSize(new Dimension(800, (int) Math.min(floor(screenSize.getWidth()), 1000)));
         pack();
+        setSize(configurationMapper.getFrameSize().getDimension());
 
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
             @Override
