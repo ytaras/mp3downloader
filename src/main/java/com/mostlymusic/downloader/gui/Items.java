@@ -118,11 +118,11 @@ public class Items {
         itemsTableModel = applicationModel.getItemsTableModel();
         itemsTable.setModel(itemsTableModel);
         setWidthAsPercentages(itemsTable, 0.2, 0.2, 0.4, 0.2);
-        itemsTable.getColumnModel().getColumn(0).setMinWidth(120);
-        itemsTable.getColumnModel().getColumn(1).setMinWidth(120);
-        itemsTable.getColumnModel().getColumn(2).setMinWidth(220);
-        itemsTable.getColumnModel().getColumn(3).setMaxWidth(120);
-        itemsTable.getColumnModel().getColumn(3).setMinWidth(120);
+        itemsTable.getColumnModel().getColumn(0).setMinWidth(80);
+        itemsTable.getColumnModel().getColumn(1).setMinWidth(80);
+        itemsTable.getColumnModel().getColumn(2).setMinWidth(120);
+        itemsTable.getColumnModel().getColumn(3).setMaxWidth(80);
+        itemsTable.getColumnModel().getColumn(3).setMinWidth(80);
     }
 
     private static void setWidthAsPercentages(JTable table,
