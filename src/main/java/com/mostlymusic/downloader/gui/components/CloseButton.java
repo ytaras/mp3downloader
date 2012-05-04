@@ -13,14 +13,19 @@ import javax.swing.*;
 public class CloseButton extends JButton {
 
     public CloseButton() {
-        setIcon(new ImageIcon(getClass().getResource("/controls/close_button.png")));
-        addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        this(true);
     }
 
 
+    public CloseButton(boolean createListener) {
+        setIcon(new ImageIcon(getClass().getResource("/controls/close_button.png")));
+        if (createListener) {
+            addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+        }
+    }
 }

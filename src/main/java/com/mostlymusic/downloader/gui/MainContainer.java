@@ -15,6 +15,8 @@ import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.BackgroundPanel;
 import com.mostlymusic.downloader.gui.components.CloseButton;
 import com.mostlymusic.downloader.gui.components.MoveMouseListener;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.FrameSize;
 
 /**
  * @author ytaras
@@ -49,9 +51,12 @@ public class MainContainer {
     private final DefaultListModel logListModel;
     private final MaximizeRestoreAction maximizeAction;
     private String selectedPanel;
+    private final ConfigurationMapper configurationMapper;
 
     @Inject
-    public MainContainer(final ConfigurationDialog configurationDialog, Items items, final ApplicationModel model) {
+    public MainContainer(final ConfigurationDialog configurationDialog, Items items, final ApplicationModel model,
+                         ConfigurationMapper configurationMapper) {
+        this.configurationMapper = configurationMapper;
         splitPane.setDividerLocation(0.9);
         layout = (CardLayout) cardPanel.getLayout();
         setItems(items);
@@ -170,7 +175,14 @@ public class MainContainer {
         MoveMouseListener moveMouseListener = new MoveMouseListener(container);
         container.addMouseListener(moveMouseListener);
         container.addMouseMotionListener(moveMouseListener);
-        closeButton = new CloseButton();
+        closeButton = new CloseButton(false);
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                configurationMapper.setFrameSize(new FrameSize(getFrame().getSize()));
+                System.exit(0);
+            }
+        });
         buttonBackground = new BackgroundPanel(COLLAPSED_BG_ICON, BackgroundPanel.Style.SCALED);
     }
 

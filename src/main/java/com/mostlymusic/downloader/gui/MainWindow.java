@@ -14,6 +14,8 @@ import javax.swing.border.LineBorder;
 import com.google.inject.Singleton;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.components.ComponentResizer;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
+import com.mostlymusic.downloader.manager.FrameSize;
 
 import static java.lang.Math.floor;
 
@@ -27,11 +29,20 @@ public class MainWindow extends JFrame {
 
     @Inject
     public MainWindow(ApplicationModel applicationModel, JMenuBar menuBar, ProgressGlassPane progressGlassPane,
-                      MainContainer mainContainer, LoginDialog loginDialog) throws HeadlessException {
+                      MainContainer mainContainer, LoginDialog loginDialog, final ConfigurationMapper configurationMapper)
+            throws HeadlessException {
         super("MostlyMusic Download Manager");
         Container contentPane = mainContainer.getContentPane();
         setContentPane(contentPane);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        System.out.println("configurationMapper.getFrameSize() = " + configurationMapper.getFrameSize());
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Dimension size = MainWindow.this.getSize();
+                configurationMapper.setFrameSize(new FrameSize(size));
+                System.exit(0);
+            }
+        });
         setJMenuBar(menuBar);
         menuBar.setVisible(false);
         setGlassPane(progressGlassPane);
@@ -57,7 +68,7 @@ public class MainWindow extends JFrame {
             new Thread() {
                 @Override
                 public void run() {
-                    addTray(MainWindow.this);
+                    addTray(MainWindow.this, configurationMapper);
                 }
             }.start();
         }
@@ -72,7 +83,7 @@ public class MainWindow extends JFrame {
         setIconImages(getIcons());
     }
 
-    private static void addTray(final JFrame frame) {
+    private static void addTray(final JFrame frame, ConfigurationMapper configurationMapper) {
         SystemTray systemTray = SystemTray.getSystemTray();
         Image image = Toolkit.getDefaultToolkit().getImage(Main.class.getResource("/windows7_icon3232.png"));
         ActionListener showWindowAction = new ActionListener() {
@@ -88,7 +99,7 @@ public class MainWindow extends JFrame {
                 });
             }
         };
-        PopupMenu popupMenu = getTrayMenu(showWindowAction, frame);
+        PopupMenu popupMenu = getTrayMenu(showWindowAction, frame, configurationMapper);
 
         TrayIcon trayIcon = new TrayIcon(image, "MostlyMusic Download Manager", popupMenu);
 
@@ -107,7 +118,7 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private static PopupMenu getTrayMenu(ActionListener showWindowAction, final Frame frame) {
+    private static PopupMenu getTrayMenu(ActionListener showWindowAction, final Frame frame, final ConfigurationMapper configurationMapper) {
         PopupMenu popupMenu = new PopupMenu();
         final MenuItem restore = new MenuItem("Restore");
         restore.addActionListener(showWindowAction);
@@ -129,6 +140,8 @@ public class MainWindow extends JFrame {
         exit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Dimension size = frame.getSize();
+                configurationMapper.setFrameSize(new FrameSize(size));
                 System.exit(0);
             }
         });
