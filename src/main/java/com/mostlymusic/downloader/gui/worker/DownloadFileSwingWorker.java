@@ -198,7 +198,7 @@ public class DownloadFileSwingWorker extends AbstractSwingClientWorker<Void, Lon
         }
     }
 
-    private Item getItem() {
+    public Item getItem() {
         Lock lock = configLock.readLock();
         lock.lock();
         try {

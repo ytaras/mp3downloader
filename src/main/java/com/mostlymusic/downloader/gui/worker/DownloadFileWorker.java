@@ -16,4 +16,7 @@ public interface DownloadFileWorker {
     void execute();
 
     void setDownloadData(Item item, @Nullable Artist artist);
+
+    Item getItem();
+
 }

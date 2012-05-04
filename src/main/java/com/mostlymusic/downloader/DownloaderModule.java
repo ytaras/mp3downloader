@@ -12,6 +12,8 @@ import com.mostlymusic.downloader.client.JsonConfigService;
 import com.mostlymusic.downloader.client.JsonItemsService;
 import com.mostlymusic.downloader.client.JsonProductsService;
 import com.mostlymusic.downloader.client.ProductsService;
+import com.mostlymusic.downloader.gui.worker.DownloadFileSwingWorker;
+import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
 import org.apache.http.HttpHost;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.BasicCookieStore;
@@ -45,6 +47,7 @@ public class DownloaderModule extends AbstractModule {
         bind(AuthService.class).to(PostAuthService.class);
         bind(ArtistsService.class).to(JsonArtistsService.class);
         bind(ConfigService.class).to(JsonConfigService.class);
+        bind(DownloadFileWorker.class).to(DownloadFileSwingWorker.class);
     }
 
     private Gson createGson() {

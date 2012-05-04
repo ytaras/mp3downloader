@@ -2,11 +2,9 @@ package com.mostlymusic.downloader.gui;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -17,6 +15,7 @@ import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.gui.worker.FileDownloader;
 import com.mostlymusic.downloader.manager.ArtistMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ItemMapperListener;
@@ -31,11 +30,13 @@ import com.mostlymusic.downloader.manager.ProductMapper;
 public class ItemsTableModel extends AbstractTableModel {
     private final ProductMapper productMapper;
     private final ArtistMapper artistMapper;
+    private final FileDownloader fileDownloader;
     private List<Item> data;
-    private final Set<Long> scheduledForDownload = new HashSet<Long>();
+    // TODO Move to FileDownloader
     private final Map<Long, Long> downloadProgress = new HashMap<Long, Long>();
     private final Map<Long, Product> products = new HashMap<Long, Product>();
     private final Map<Long, Artist> artists = new HashMap<Long, Artist>();
+    // TODO Move to FileDownloader
     private final Map<Long, Long> fileSizes = new HashMap<Long, Long>();
     private static final String ITEM_ID = "Item id";
     private static final String TITLE = "Title";
@@ -50,9 +51,10 @@ public class ItemsTableModel extends AbstractTableModel {
     private final ItemManager itemManager;
 
     @Inject
-    public ItemsTableModel(ItemManager itemManager, ProductMapper productMapper, ArtistMapper artistMapper) {
+    public ItemsTableModel(ItemManager itemManager, ProductMapper productMapper, ArtistMapper artistMapper, FileDownloader fileDownloader) {
         this.productMapper = productMapper;
         this.artistMapper = artistMapper;
+        this.fileDownloader = fileDownloader;
         addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent tableModelEvent) {
@@ -186,7 +188,6 @@ public class ItemsTableModel extends AbstractTableModel {
     }
 
     public void downloadStarted(Item item) {
-        scheduledForDownload.remove(item.getItemId());
         downloadProgress.put(item.getItemId(), 0L);
         fireStatusCellUpdated(item);
     }
@@ -231,21 +232,8 @@ public class ItemsTableModel extends AbstractTableModel {
         return getProduct(getItemAt(selectedRow).getProductId());
     }
 
-    public void setScheduled(Item scheduled) {
-        scheduledForDownload.add(scheduled.getItemId());
-        fireStatusCellUpdated(scheduled);
-    }
-
     public boolean isScheduledItemAt(int row) {
-        return scheduledForDownload.contains(getItemAt(row).getItemId());
-    }
-
-    public boolean isScheduled(Item item) {
-        return scheduledForDownload.contains(item.getItemId());
-    }
-
-    public boolean isDownloading(Item item) {
-        return downloadProgress.containsKey(item.getItemId());
+        return fileDownloader.isScheduled(getItemAt(row));
     }
 
 

@@ -28,6 +28,12 @@ public class Item {
     private boolean dirty = false;
     public static final String AVAILABLE = "available";
 
+    public Item(int id) {
+        this.itemId = id;
+    }
+
+    public Item() {
+    }
 
     public long getItemId() {
         return itemId;

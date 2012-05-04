@@ -36,7 +36,6 @@ public class Items {
     private JButton downloadFileButton;
     private JLabel description;
     private JImagePane image;
-    private JSplitPane splitPane;
     private JPanel leftPanel;
     private JScrollPane descriptionScrollPane;
     private ItemsTableModel itemsTableModel;
@@ -86,11 +85,7 @@ public class Items {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 for (int row : itemsTable.getSelectedRows()) {
-                    if (itemsTableModel.isDownloadingItemAt(row) || itemsTableModel.isScheduledItemAt(row)) {
-                        continue;
-                    }
                     Item item = itemsTableModel.getItemAt(row);
-                    itemsTableModel.setScheduled(item);
                     fileDownloader.scheduleDownload(item, new PropertyChangeListener() {
                         @Override
                         public void propertyChange(PropertyChangeEvent propertyChangeEvent) {

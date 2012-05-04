@@ -2,7 +2,10 @@ package com.mostlymusic.downloader.gui.worker;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -10,13 +13,11 @@ import javax.swing.*;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.Artist;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.ApplicationModel;
-import com.mostlymusic.downloader.gui.ApplicationModelListenerAdapter;
-import com.mostlymusic.downloader.gui.ItemsTableModel;
 import com.mostlymusic.downloader.manager.ArtistMapper;
-import com.mostlymusic.downloader.manager.ConfigurationMapper;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -24,30 +25,23 @@ import org.jetbrains.annotations.Nullable;
  *         Date: 9/22/11
  *         Time: 4:35 PM
  */
+@Singleton
 public class FileDownloader {
     private final Injector injector;
     private final ArtistMapper artistMapper;
     private final Logger logger;
-    private final ItemsTableModel itemsTableModel;
     private AtomicInteger workingThreads = new AtomicInteger(0);
+    private Set<Long> scheduled = Collections.synchronizedSet(new HashSet<Long>());
     private Queue<DownloadFileWorker> waitingQueue = new ConcurrentLinkedQueue<DownloadFileWorker>();
     private int downloadThreadsNumber;
+    private Set<Long> downloading = Collections.synchronizedSet(new HashSet<Long>());
 
     @Inject
     // TODO Move all checks if file is downloading or scheduled to here - this will be the registry
-    public FileDownloader(Injector injector, ArtistMapper artistMapper, Logger logger,
-                          final ConfigurationMapper mapper, ApplicationModel model, ItemsTableModel itemsTableModel) {
+    public FileDownloader(Injector injector, ArtistMapper artistMapper, Logger logger) {
         this.injector = injector;
         this.artistMapper = artistMapper;
         this.logger = logger;
-        this.itemsTableModel = itemsTableModel;
-        downloadThreadsNumber = mapper.getDownloadThreadsNumber();
-        model.addListener(new ApplicationModelListenerAdapter() {
-            @Override
-            public void configurationChanged() {
-                downloadThreadsNumber = mapper.getDownloadThreadsNumber();
-            }
-        });
     }
 
     private DownloadFileWorker createWorker(Item item) {
@@ -57,17 +51,16 @@ public class FileDownloader {
             artist = artistMapper.loadArtist(item.getMainArtistId());
         }
         instance.setDownloadData(item, artist);
-
-
         return instance;
     }
 
     public void scheduleDownload(Item item, @Nullable PropertyChangeListener listener) {
-        if (itemsTableModel.isScheduled(item) || itemsTableModel.isDownloading(item)) {
+        // TODO This is not thread safe
+        if (isScheduled(item) || isDownloading(item)) {
             return;
         }
-        itemsTableModel.setScheduled(item);
-        DownloadFileWorker worker = createWorker(item);
+
+        final DownloadFileWorker worker = createWorker(item);
         if (listener != null) {
             worker.addPropertyChangeListener(listener);
         }
@@ -76,13 +69,34 @@ public class FileDownloader {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ("state".equals(evt.getPropertyName())) {
                     if (SwingWorker.StateValue.DONE == evt.getNewValue()) {
-                        workerDone();
+                        workerDone(worker);
+                    } else if (SwingWorker.StateValue.STARTED == evt.getNewValue()) {
+                        workerStarted(worker);
                     }
                 }
             }
         });
+        scheduled.add(item.getItemId());
         waitingQueue.add(worker);
         startWorkers();
+    }
+
+    @Inject
+    public void setApplicationModel(ApplicationModel applicationModel) {
+    }
+
+    private void workerStarted(DownloadFileWorker worker) {
+        Item item = worker.getItem();
+        scheduled.remove(item.getItemId());
+        downloading.add(item.getItemId());
+    }
+
+    public boolean isDownloading(Item item) {
+        return downloading.contains(item.getItemId());
+    }
+
+    public boolean isScheduled(Item item) {
+        return scheduled.contains(item.getItemId());
     }
 
     private void startWorkers() {
@@ -105,17 +119,23 @@ public class FileDownloader {
         }
     }
 
-    private void workerDone() {
+    private void workerDone(DownloadFileWorker worker) {
         int i = workingThreads.decrementAndGet();
         if (i < 0) {
             logger.severe("Working threads count went below zero!");
             workingThreads.compareAndSet(i, 0);
         }
+        downloading.remove(worker.getItem().getItemId());
         startWorkers();
     }
 
 
     public void scheduleDownload(Item item) {
         scheduleDownload(item, null);
+    }
+
+    public void setDownloadThreadsNumber(int downloadThreadNumber) {
+        this.downloadThreadsNumber = downloadThreadNumber;
+        startWorkers();
     }
 }

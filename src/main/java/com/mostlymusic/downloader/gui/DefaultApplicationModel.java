@@ -10,9 +10,11 @@ import com.google.inject.Singleton;
 import com.mostlymusic.downloader.client.AuthService;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorkerFactory;
+import com.mostlymusic.downloader.gui.worker.FileDownloader;
 import com.mostlymusic.downloader.gui.worker.LoginWorker;
 import com.mostlymusic.downloader.manager.AccountManager;
 import com.mostlymusic.downloader.manager.AccountMapper;
+import com.mostlymusic.downloader.manager.ConfigurationMapper;
 
 /**
  * @author ytaras
@@ -30,7 +32,8 @@ public class DefaultApplicationModel implements ApplicationModel {
     @Inject
     public DefaultApplicationModel(AccountMapper accountMapper, AuthService authService,
                                    final CheckServerUpdatesWorkerFactory workerFactory,
-                                   final AccountManager accountManager, final ItemsTableModel itemsTableModel) {
+                                   final AccountManager accountManager, final ItemsTableModel itemsTableModel,
+                                   final FileDownloader fileDownloader, final ConfigurationMapper mapper) {
         this.accountMapper = accountMapper;
         this.authService = authService;
         this.itemsTableModel = itemsTableModel;
@@ -41,9 +44,7 @@ public class DefaultApplicationModel implements ApplicationModel {
                 accountManager.setCurrentAccount(account);
                 DefaultApplicationModel.this.accountMapper.setLastLoggedIn(account.getUsername());
                 DefaultApplicationModel.this.accountMapper.updateAccount(account);
-                if (!account.isCreated()) {
-                    workerFactory.schedule();
-                }
+                fireConfigurationChanged();
             }
 
             @Override
@@ -53,6 +54,7 @@ public class DefaultApplicationModel implements ApplicationModel {
 
             @Override
             public void configurationChanged() {
+                fileDownloader.setDownloadThreadsNumber(mapper.getDownloadThreadsNumber());
                 workerFactory.schedule();
             }
         });
