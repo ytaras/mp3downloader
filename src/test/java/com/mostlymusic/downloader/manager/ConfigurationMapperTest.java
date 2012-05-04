@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.manager;
 
+import java.awt.*;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
@@ -71,5 +72,11 @@ public class ConfigurationMapperTest extends StoragetTestBase {
 
         // then
         assertThat(configurationMapper.getAutoDownload()).isFalse();
+    }
+
+    @Test
+    public void shouldSaveSize() {
+        configurationMapper.setFrameSize(new FrameSize(new Dimension(1, 2)));
+        assertThat(configurationMapper.getFrameSize().getDimension()).isEqualTo(new Dimension(1, 2));
     }
 }

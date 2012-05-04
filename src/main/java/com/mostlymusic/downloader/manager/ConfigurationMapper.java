@@ -48,5 +48,12 @@ public interface ConfigurationMapper {
     @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN threadCount SMALLINT DEFAULT 5")
     void toVersion2_2();
 
+    @Update("ALTER TABLE " + TABLE_NAME + " ADD COLUMN frameSize char(100)")
+    void toVersion3();
 
+    @Select("SELECT frameSize FROM " + TABLE_NAME)
+    FrameSize getFrameSize();
+
+    @Update("UPDATE " + TABLE_NAME + " SET frameSize = #{frameSize} ")
+    void setFrameSize(FrameSize frameSize);
 }

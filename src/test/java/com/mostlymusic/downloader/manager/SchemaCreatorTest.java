@@ -137,6 +137,26 @@ public class SchemaCreatorTest extends StoragetTestBase {
         }
     }
 
+    @Test
+    public void shouldMigrateToVersion3() throws SQLException {
+        // given
+        SchemaCreator instance = injector.getInstance(SchemaCreator.class);
+        instance.migrateTo(1);
+        instance.migrateTo(2);
+        DataSource dataSource = injector.getInstance(DataSource.class);
+        Connection connection = dataSource.getConnection();
+        String size = "frameSize".toUpperCase();
+        try {
+            assertThat(columnExists(connection, ConfigurationMapper.TABLE_NAME, size)).isFalse();
+            // when
+            instance.migrateTo(3);
+            // then
+            assertThat(columnExists(connection, ConfigurationMapper.TABLE_NAME, size)).isTrue();
+        } finally {
+            connection.close();
+        }
+    }
+
     private void dropTable(Connection connection, String tableName) throws SQLException {
         connection.prepareStatement("DROP TABLE " + tableName).execute();
     }

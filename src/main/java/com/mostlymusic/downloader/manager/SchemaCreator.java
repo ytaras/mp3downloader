@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.manager;
 
+import java.awt.*;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import com.mostlymusic.downloader.DownloadDirectory;
  */
 public class SchemaCreator {
 
-    public static int CURRENT_APP_VERSION = 2;
+    public static int CURRENT_APP_VERSION = 3;
     private final File defaultDownloadPath;
 
     @Inject
@@ -119,10 +120,18 @@ public class SchemaCreator {
             case 2:
                 migrateTo2();
                 break;
+            case 3: 
+                migrateTo3();
+                break;
             default:
                 throw new IllegalArgumentException("Unknown version " + version);
         }
         versionMapper.setVersion(version);
+    }
+
+    private void migrateTo3() {
+        configurationMapper.toVersion3();
+        configurationMapper.setFrameSize(new FrameSize(new Dimension(400, 500)));
     }
 
     private void migrateTo2() {
