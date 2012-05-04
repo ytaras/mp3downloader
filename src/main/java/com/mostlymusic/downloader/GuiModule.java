@@ -12,6 +12,8 @@ import com.mostlymusic.downloader.gui.LoginDialog;
 import com.mostlymusic.downloader.gui.MainContainer;
 import com.mostlymusic.downloader.gui.MainLayout;
 import com.mostlymusic.downloader.gui.MainWindow;
+import com.mostlymusic.downloader.gui.worker.DownloadFileSwingWorker;
+import com.mostlymusic.downloader.gui.worker.DownloadFileWorker;
 
 /**
  * @author ytaras
@@ -28,5 +30,6 @@ public class GuiModule extends AbstractModule {
         bind(MainWindow.class);
         bind(LoginDialog.class).to(JDialogLoginDialog.class);
         bind(ConfigurationDialog.class).asEagerSingleton();
+        bind(DownloadFileWorker.class).to(DownloadFileSwingWorker.class);
     }
 }
