@@ -2,6 +2,7 @@ package com.mostlymusic.downloader.gui.worker;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.Semaphore;
 import javax.swing.*;
 
 import com.google.inject.Inject;
@@ -20,6 +21,7 @@ public class CheckServerUpdatesWorkerFactory {
     private Injector injector;
     private ConfigurationMapper configuration;
     private Timer timer;
+    private Semaphore semaphore = new Semaphore(1);
 
     @Inject
     public void setInjector(Injector injector) {
@@ -40,7 +42,9 @@ public class CheckServerUpdatesWorkerFactory {
             this.timer = new Timer(0, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    getInstance().execute();
+                    if (semaphore.tryAcquire()) {
+                        getInstance().execute();
+                    }
                 }
             });
         } else {
@@ -49,5 +53,9 @@ public class CheckServerUpdatesWorkerFactory {
         this.timer.setDelay(configuration.getRefreshRate() * 60 * 1000);
         timer.setInitialDelay(0);
         timer.start();
+    }
+
+    public void done() {
+        semaphore.release();
     }
 }

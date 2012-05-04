@@ -1,5 +1,6 @@
 package com.mostlymusic.downloader.gui.worker;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -10,6 +11,7 @@ import com.mostlymusic.downloader.client.ConfigService;
 import com.mostlymusic.downloader.client.ItemsService;
 import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.client.ProductsService;
+import com.mostlymusic.downloader.client.exceptions.RequestException;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.dto.ItemsDto;
@@ -31,7 +33,7 @@ import com.mostlymusic.downloader.manager.ProductMapper;
 public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, CheckServerStatusStage> {
 
     private static final String METADATA_FETCHED_FORMAT = "Server has %d new items";
-    private static final String ITEMS_FETCHED_FORMAT = "Fetched %d new items from server";
+    private static final String ITEMS_FETCHED_FORMAT = "Fetching %d new items from server. %d fetched out of total %d";
     private final ItemsService itemsService;
     private final ProductsService productsService;
     private final ProductMapper productMapper;
@@ -43,6 +45,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
     private final ItemManager itemManager;
     private final AccountManager accountManager;
     private final ConfigService configService;
+    private final CheckServerUpdatesWorkerFactory factory;
 
 
     @Inject
@@ -50,7 +53,8 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                                     AccountMapper accountMapper, ProductMapper productMapper, ProductsService productsService,
                                     ArtistsService artistsService, ArtistMapper artistMapper,
                                     ConfigurationMapper configurationMapper, FileDownloader fileDownloader,
-                                    ItemManager itemManager, AccountManager accountManager, ConfigService configService) {
+                                    ItemManager itemManager, AccountManager accountManager, ConfigService configService,
+                                    CheckServerUpdatesWorkerFactory factory) {
         super(applicationModel);
         this.itemsService = itemsService;
         this.accountMapper = accountMapper;
@@ -63,6 +67,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         this.itemManager = itemManager;
         this.accountManager = accountManager;
         this.configService = configService;
+        this.factory = factory;
     }
 
 
@@ -75,13 +80,19 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
         Config config = configService.getConfig();
 
+        int fetchedItems = 0;
         if (0 != ordersMetadata.getTotalItems()) {
             LogEvent metadataFetchedLog = new LogEvent(String.format(METADATA_FETCHED_FORMAT, ordersMetadata.getTotalItems()));
             publish(new CheckServerStatusStage(metadataFetchedLog));
             int pageSize = config.getMaxPageSize();
             for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
-                ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, 10);
-                LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size()));
+                ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, pageSize);
+                fetchedItems += pageSize;
+                if(fetchedItems > ordersMetadata.getTotalItems()) {
+                    fetchedItems = ordersMetadata.getTotalItems();
+                }
+                LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size(),
+                        fetchedItems, ordersMetadata.getTotalItems()));
                 publish(new CheckServerStatusStage(itemsFetchedLog));
 
                 for (Item item : tracks.getItems()) {
@@ -93,63 +104,8 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
         }
 
 
-        // TODO Those two cycles duplicate their logic
-        while (!productMapper.findUnknownProducts().isEmpty()) {
-            List<Long> unknownProducts = productMapper.findUnknownProducts();
-            if (unknownProducts.size() > config.getMaxPageSize()) {
-                unknownProducts = unknownProducts.subList(0, config.getMaxPageSize());
-            }
-
-            LogEvent productToFetchLog = new LogEvent(String.format("Fetching new %d products from server", unknownProducts.size()));
-            publish(new CheckServerStatusStage(productToFetchLog));
-            List<Product> products = productsService.getProducts(unknownProducts);
-            for (Product product : products) {
-                if (productMapper.productExists(product.getProductId())) {
-                    productMapper.updateProduct(product);
-                } else {
-                    productMapper.insertProduct(product);
-                }
-                unknownProducts.remove(product.getProductId());
-            }
-
-            for (long id : unknownProducts) {
-                // We requested server for those IPs but it didn't return
-                // Put stub here
-                if (!productMapper.productExists(id)) {
-                    Product unknownProductStub = new Product();
-                    unknownProductStub.setProductId(id);
-                    unknownProductStub.setName("UNKNOWN");
-                    unknownProductStub.setDescription("UNKNOWN");
-                    productMapper.insertProduct(unknownProductStub);
-                }
-            }
-        }
-
-        while (!artistMapper.findUnknownArtists().isEmpty()) {
-            List<Long> unknownArtists = artistMapper.findUnknownArtists();
-            if (unknownArtists.size() > config.getMaxPageSize()) {
-                unknownArtists = unknownArtists.subList(0, config.getMaxPageSize());
-            }
-            LogEvent artistsToFetchLog = new LogEvent(String.format("Fetching new %d artists from server", unknownArtists.size()));
-            publish(new CheckServerStatusStage(artistsToFetchLog));
-            List<Artist> artists = artistsService.getArtists(unknownArtists);
-            for (Artist artist : artists) {
-                if (artistMapper.artistExists(artist.getArtistId())) {
-                    artistMapper.updateArtist(artist);
-                } else {
-                    artistMapper.insertArtist(artist);
-                }
-                unknownArtists.remove(artist.getArtistId());
-            }
-
-            for (Long id : unknownArtists) {
-                // We requested server for those IPs but it didn't return
-                // Put stub here
-                Artist unknownArtistStub = new Artist();
-                unknownArtistStub.setArtistId(id);
-                artistMapper.insertArtist(unknownArtistStub);
-            }
-        }
+        fetch(config, new ProductFetcherCallback(), "products");
+        fetch(config, new ArtistFetcherCallback(), "artists");
 
         if (configurationMapper.getAutoDownload()) {
             for (Item item : itemManager.findItemByStatus(Item.AVAILABLE)) {
@@ -157,6 +113,33 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             }
         }
         return null;
+    }
+
+    private <E> void fetch(Config config, FetcherCallback<E> callback, String name) throws IOException, RequestException {
+        int totalItems = callback.itemsToFetch().size();
+        int fetchedItems = 0;
+
+        while (!callback.itemsToFetch().isEmpty()) {
+            List<Long> unknownItems = callback.itemsToFetch();
+            if (unknownItems.size() > config.getMaxPageSize()) {
+                unknownItems = unknownItems.subList(0, config.getMaxPageSize());
+            }
+
+            List<E> fetch = callback.fetch(unknownItems);
+            for (E e : fetch) {
+                callback.merge(e);
+                unknownItems.remove(callback.getId(e));
+            }
+
+            for (long id : unknownItems) {
+                // We requested server for those IPs but it didn't return
+                // Put stub here
+                callback.putStub(id);
+            }
+            fetchedItems += unknownItems.size();
+            publish(new CheckServerStatusStage(new LogEvent(String.format("Fetching new %2$d %1$s from server. %3$d fetched out of total %4$d.",
+                    name, unknownItems.size(), fetchedItems, totalItems))));
+        }
     }
 
     @Override
@@ -174,6 +157,92 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
     @Override
     protected void doDone(Void aVoid) {
+        
+        factory.done();
+    }
+
+    private interface FetcherCallback<E> {
+        List<Long> itemsToFetch();
+
+        List<E> fetch(List<Long> unknownItems) throws IOException, RequestException;
+
+        void merge(E e);
+
+        Long getId(E e);
+
+        void putStub(long id);
+    }
+
+    private class ProductFetcherCallback implements FetcherCallback<Product> {
+        @Override
+        public List<Long> itemsToFetch() {
+            return productMapper.findUnknownProducts();
+        }
+
+        @Override
+        public List<Product> fetch(List<Long> unknownItems) throws IOException, RequestException {
+            return productsService.getProducts(unknownItems);
+        }
+
+        @Override
+        public void merge(Product product) {
+            if (productMapper.productExists(product.getProductId())) {
+                productMapper.updateProduct(product);
+            } else {
+                productMapper.insertProduct(product);
+            }
+        }
+
+        @Override
+        public Long getId(Product product) {
+            return product.getProductId();
+        }
+
+        @Override
+        public void putStub(long id) {
+            if (!productMapper.productExists(id)) {
+                Product unknownProductStub = new Product();
+                unknownProductStub.setProductId(id);
+                unknownProductStub.setName("UNKNOWN");
+                unknownProductStub.setDescription("UNKNOWN");
+                productMapper.insertProduct(unknownProductStub);
+            }
+        }
+    }
+
+    private class ArtistFetcherCallback implements FetcherCallback<Artist> {
+        @Override
+        public List<Long> itemsToFetch() {
+            return artistMapper.findUnknownArtists();
+        }
+
+        @Override
+        public List<Artist> fetch(List<Long> unknownItems) throws IOException, RequestException {
+            return artistsService.getArtists(unknownItems);
+        }
+
+        @Override
+        public void merge(Artist artist) {
+            if (artistMapper.artistExists(artist.getArtistId())) {
+                artistMapper.updateArtist(artist);
+            } else {
+                artistMapper.insertArtist(artist);
+            }
+        }
+
+        @Override
+        public Long getId(Artist artist) {
+            return artist.getArtistId();
+        }
+
+        @Override
+        public void putStub(long id) {
+            if (!artistMapper.artistExists(id)) {
+                Artist unknownArtistStub = new Artist();
+                unknownArtistStub.setArtistId(id);
+                artistMapper.insertArtist(unknownArtistStub);
+            }
+        }
     }
 }
 
