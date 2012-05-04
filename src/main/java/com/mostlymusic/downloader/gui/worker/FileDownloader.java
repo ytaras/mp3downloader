@@ -4,9 +4,11 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -35,6 +37,7 @@ public class FileDownloader {
     private Queue<DownloadFileWorker> waitingQueue = new ConcurrentLinkedQueue<DownloadFileWorker>();
     private int downloadThreadsNumber;
     private Set<Long> downloading = Collections.synchronizedSet(new HashSet<Long>());
+    private List<FileDownloaderListener> listeners = new CopyOnWriteArrayList<FileDownloaderListener>();
 
     @Inject
     // TODO Move all checks if file is downloading or scheduled to here - this will be the registry
@@ -78,7 +81,14 @@ public class FileDownloader {
         });
         scheduled.add(item.getItemId());
         waitingQueue.add(worker);
+        fireScheduled(item);
         startWorkers();
+    }
+
+    private void fireScheduled(Item itemId) {
+        for (FileDownloaderListener listener : listeners) {
+            listener.itemScheduled(itemId);
+        }
     }
 
     @Inject
@@ -89,6 +99,9 @@ public class FileDownloader {
         Item item = worker.getItem();
         scheduled.remove(item.getItemId());
         downloading.add(item.getItemId());
+        for (FileDownloaderListener listener : listeners) {
+            listener.itemStartedDownload(item);
+        }
     }
 
     public boolean isDownloading(Item item) {
@@ -126,6 +139,9 @@ public class FileDownloader {
             workingThreads.compareAndSet(i, 0);
         }
         downloading.remove(worker.getItem().getItemId());
+        for (FileDownloaderListener listener : listeners) {
+            listener.itemDownloaded(worker.getItem());
+        }
         startWorkers();
     }
 
@@ -137,5 +153,9 @@ public class FileDownloader {
     public void setDownloadThreadsNumber(int downloadThreadNumber) {
         this.downloadThreadsNumber = downloadThreadNumber;
         startWorkers();
+    }
+
+    public void addListener(FileDownloaderListener listener) {
+        listeners.add(listener);
     }
 }

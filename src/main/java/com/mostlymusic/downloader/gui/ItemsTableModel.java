@@ -16,6 +16,7 @@ import com.mostlymusic.downloader.client.Product;
 import com.mostlymusic.downloader.dto.Account;
 import com.mostlymusic.downloader.dto.Item;
 import com.mostlymusic.downloader.gui.worker.FileDownloader;
+import com.mostlymusic.downloader.gui.worker.FileDownloaderListener;
 import com.mostlymusic.downloader.manager.ArtistMapper;
 import com.mostlymusic.downloader.manager.ItemManager;
 import com.mostlymusic.downloader.manager.ItemMapperListener;
@@ -71,6 +72,22 @@ public class ItemsTableModel extends AbstractTableModel {
             @Override
             public void updatedItem(Item item) {
                 refresh();
+            }
+        });
+        fileDownloader.addListener(new FileDownloaderListener() {
+            @Override
+            public void itemScheduled(Item item) {
+                fireStatusCellUpdated(item);
+            }
+
+            @Override
+            public void itemStartedDownload(Item item) {
+                fireStatusCellUpdated(item);
+            }
+
+            @Override
+            public void itemDownloaded(Item item) {
+                fireStatusCellUpdated(item);
             }
         });
 
