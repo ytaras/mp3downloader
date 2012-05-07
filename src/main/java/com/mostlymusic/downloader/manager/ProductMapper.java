@@ -33,7 +33,7 @@ public interface ProductMapper {
             "mainImage = #{mainImage:VARCHAR} WHERE productId = #{productId:NUMERIC}")
     void updateProduct(Product product);
 
-    @Select("SELECT l.productId FROM " + TABLE_NAME + " p RIGHT OUTER JOIN " +
+    @Select("SELECT DISTINCT l.productId FROM " + TABLE_NAME + " p RIGHT OUTER JOIN " +
             ItemMapper.TABLE_NAME + " l ON l.productId = p.productId WHERE p.productId IS NULL AND l.productId != 0")
     List<Long> findUnknownProducts();
 }

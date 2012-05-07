@@ -86,13 +86,18 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
             publish(new CheckServerStatusStage(metadataFetchedLog));
             int pageSize = config.getMaxPageSize();
             for (int i = 1; (i - 1) * pageSize < ordersMetadata.getTotalItems(); i++) {
+                int itemsToFetch = ordersMetadata.getTotalItems() - (i - 1) * pageSize;
+                if (itemsToFetch > pageSize) {
+                    itemsToFetch = pageSize;
+                }
+                LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, itemsToFetch,
+                        fetchedItems, ordersMetadata.getTotalItems()));
+
                 ItemsDto tracks = itemsService.getTracks(loadedLastOrderId, ordersMetadata.getLastItemId(), i, pageSize);
                 fetchedItems += pageSize;
-                if(fetchedItems > ordersMetadata.getTotalItems()) {
+                if (fetchedItems > ordersMetadata.getTotalItems()) {
                     fetchedItems = ordersMetadata.getTotalItems();
                 }
-                LogEvent itemsFetchedLog = new LogEvent(String.format(ITEMS_FETCHED_FORMAT, tracks.getItems().size(),
-                        fetchedItems, ordersMetadata.getTotalItems()));
                 publish(new CheckServerStatusStage(itemsFetchedLog));
 
                 for (Item item : tracks.getItems()) {
@@ -125,7 +130,11 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                 unknownItems = unknownItems.subList(0, config.getMaxPageSize());
             }
 
+            publish(new CheckServerStatusStage(new LogEvent(String.format("Fetching new %2$d %1$s from server. %3$d fetched out of total %4$d.",
+                    name, unknownItems.size(), fetchedItems, totalItems))));
+
             List<E> fetch = callback.fetch(unknownItems);
+            fetchedItems += unknownItems.size();
             for (E e : fetch) {
                 callback.merge(e);
                 unknownItems.remove(callback.getId(e));
@@ -136,9 +145,6 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
                 // Put stub here
                 callback.putStub(id);
             }
-            fetchedItems += unknownItems.size();
-            publish(new CheckServerStatusStage(new LogEvent(String.format("Fetching new %2$d %1$s from server. %3$d fetched out of total %4$d.",
-                    name, unknownItems.size(), fetchedItems, totalItems))));
         }
     }
 
@@ -157,7 +163,7 @@ public class CheckServerUpdatesWorker extends AbstractSwingClientWorker<Void, Ch
 
     @Override
     protected void doDone(Void aVoid) {
-        
+
         factory.done();
     }
 
