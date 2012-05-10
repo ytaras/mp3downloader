@@ -49,7 +49,9 @@ public class MainWindow extends JFrame {
         getRootPane().setBorder(new LineBorder(getBackground(), 2));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-        setMinimumSize(new Dimension(500, (int) Math.min(floor(screenSize.getWidth()), 720)));
+        int height = (int) Math.min(floor(screenSize.getHeight()), 450);
+        int width = (int) Math.min(floor(screenSize.getWidth()), 600);
+        setMinimumSize(new Dimension(width, height));
         pack();
         configurationManager.load(this);
 
