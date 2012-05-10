@@ -31,13 +31,14 @@ public class MapperConfigurationManager implements ConfigurationManager{
     public void load(JFrame mainWindow) {
         FrameSize frameSize = mapper.getFrameSize();
         if(frameSize == null) {
+            mainWindow.setSize(650, 550);
             return;
         }
         
         if(frameSize.getSize() != null) {
             mainWindow.setSize(frameSize.getSize());
         } else {
-            mainWindow.setSize(590, 550);
+            mainWindow.setSize(650, 550);
         }
         if(frameSize.getLocation() != null) {
             mainWindow.setLocation(frameSize.getLocation());

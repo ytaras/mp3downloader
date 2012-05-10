@@ -121,8 +121,8 @@ public class Items {
         itemsTable.getColumnModel().getColumn(0).setMinWidth(80);
         itemsTable.getColumnModel().getColumn(1).setMinWidth(80);
         itemsTable.getColumnModel().getColumn(2).setMinWidth(120);
-        itemsTable.getColumnModel().getColumn(3).setMaxWidth(80);
-        itemsTable.getColumnModel().getColumn(3).setMinWidth(80);
+        itemsTable.getColumnModel().getColumn(3).setMaxWidth(140);
+        itemsTable.getColumnModel().getColumn(3).setMinWidth(110);
     }
 
     private static void setWidthAsPercentages(JTable table,
