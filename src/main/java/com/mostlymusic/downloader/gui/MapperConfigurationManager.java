@@ -25,7 +25,6 @@ public class MapperConfigurationManager implements ConfigurationManager{
     @Override
     public void save(Frame mainWindow) {
         mapper.setFrameSize(new FrameSize(mainWindow.getSize(), mainWindow.getLocation()));
-        System.out.println("mainWindow.getSize() = " + mainWindow.getSize());
     }
 
     @Override
