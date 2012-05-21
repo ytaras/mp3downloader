@@ -48,7 +48,7 @@ public class ConfigurationDialogTest {
         });
         jDialog.getContentPane().add(execute.getContentPane());
         configDialog = new DialogFixture(jDialog);
-
+        execute.setFrame(mock(MainContainer.class));
         configDialog.show();
     }
 
