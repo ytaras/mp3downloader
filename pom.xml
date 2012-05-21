@@ -72,12 +72,10 @@
                         <inputTemplate>src/jnlp/jnlp_template.xml</inputTemplate>
                     </jnlp>
                     <sign>
-                        <keystore>/home/ytaras/mp3downloader.jks
-                        </keystore>
-                        <keypass>mostlymusic</keypass>
-                        <storepass>mostlymusic</storepass>
+                        <keystore>/home/ytaras/Ubuntu One/mp3downloader_files/cert/keystore.jks</keystore>
+                        <storepass>rokFeljEv5</storepass>
                         <storetype>jks</storetype>
-                        <alias>mp3downloader</alias>
+                        <alias>mostlymusic.com</alias>
                         <verify>true</verify>
                     </sign>
                     <verbose>true</verbose>
