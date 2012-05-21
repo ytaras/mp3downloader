@@ -65,22 +65,24 @@
             <plugin>
                 <groupId>com.pyx4me</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.0.4</version>
+
                 <configuration>
-                    <proguardVersion>4.7</proguardVersion>
+                    <options>
+                        <option>-dontskipnonpubliclibraryclasses</option>
+                        <option>-dontoptimize</option>
+                        <option>-dontskipnonpubliclibraryclasses</option>
+                        <option>-dontskipnonpubliclibraryclassmembers</option>
+                        <option>-keep class com.mostlymusic.downloader.gui.Main</option>
+                    </options>
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>
                         <lib>${java.home}/lib/jsse.jar</lib>
                     </libs>
+                    <inFilter>!com/intellij/**</inFilter>
+
+                    <obfuscate>false</obfuscate>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sf.proguard</groupId>
-                        <artifactId>proguard</artifactId>
-                        <version>4.7</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
+
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo.webstart</groupId>
