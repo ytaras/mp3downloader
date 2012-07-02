@@ -1,12 +1,14 @@
 package com.mostlymusic.downloader.gui;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.mostlymusic.downloader.client.Product;
+import com.mostlymusic.downloader.dto.Item;
+import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
+import com.mostlymusic.downloader.gui.components.JImagePane;
+import com.mostlymusic.downloader.gui.worker.CheckServerUpdatesWorkerFactory;
+import com.mostlymusic.downloader.gui.worker.FileDownloader;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -15,14 +17,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicPanelUI;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.mostlymusic.downloader.client.Product;
-import com.mostlymusic.downloader.dto.Item;
-import com.mostlymusic.downloader.gui.components.ItemStatusRenderer;
-import com.mostlymusic.downloader.gui.components.JImagePane;
-import com.mostlymusic.downloader.gui.worker.FileDownloader;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author ytaras
@@ -38,6 +39,7 @@ public class Items {
     private JImagePane image;
     private JPanel leftPanel;
     private JScrollPane descriptionScrollPane;
+    private JButton refreshButton;
     private ItemsTableModel itemsTableModel;
 
     @Inject
@@ -107,6 +109,16 @@ public class Items {
         MatteBorder border = BorderFactory.createMatteBorder(0, 2, 2, 2, Color.decode("#79ac00"));
         contentPane.setBorder(border);
         leftPanel.setUI(new BasicPanelUI());
+    }
+
+    @Inject
+    public void setCheckServerUpdatesFactory(final CheckServerUpdatesWorkerFactory factory) {
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                factory.schedule();
+            }
+        });
     }
 
     public JPanel getContentPane() {
