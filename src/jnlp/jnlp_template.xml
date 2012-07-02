@@ -17,5 +17,8 @@
         <property name="jnlp.versionEnabled" value="true"/>
         $dependencies
     </resources>
+    <shortcut>
+      <desktop/>
+    </shortcut>
     <application-desc main-class="$mainClass"/>
 </jnlp>
