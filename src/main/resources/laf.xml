@@ -70,15 +70,10 @@
     </style>
 
     <bind style="download_button" key="downloadButton" type="name"/>
+    <bind style="download_button" key="refreshButton" type="name"/>
     <bind style="config_button" key="okButton" type="name"/>
     <bind style="show_chooser_button" key="showChooserButton" type="name"/>
     <bind style="config_button" key="cancelButton" type="name"/>
-    <style id="download_button_background">
-        <state>
-            <color value="RED" type="BACKGROUND"/>
-        </state>
-    </style>
-    <bind style="download_button_background" key="downloadButtonBackground" type="name"/>
     <!-- Login button -->
     <style id="loginButton">
         <imagePainter method="buttonBackground" path="/controls/login_button.jpg" sourceInsets="8 12 8 18"/>
